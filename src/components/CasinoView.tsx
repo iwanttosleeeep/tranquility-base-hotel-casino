@@ -152,7 +152,7 @@ export default function CasinoView() {
           <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/20 flex flex-col gap-6 min-h-[300px]">
             <div className="flex items-center gap-2 border-b border-[#c5a059]/20 pb-3">
               <Trophy className="text-[#c5a059]" size={16} />
-              <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]">
+              <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">
                 Payout Registry
               </span>
             </div>
@@ -171,7 +171,7 @@ export default function CasinoView() {
 
                   {payoutQuote && (
                     <div className="flex flex-col gap-2 p-4 rounded bg-white/5 border border-white/5">
-                      <span className="font-panel text-[8px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1">
+                      <span className="font-panel text-[10px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1">
                         <Star size={8} className="text-[#c5a059]" />
                         Hotel Intercom • Overheard
                       </span>

@@ -61,7 +61,7 @@ export default function ArchiveView() {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="font-panel text-[9px] text-[#f5f2ed]/30 uppercase hidden sm:inline">
+              <span className="font-panel text-[11px] text-[#f5f2ed]/30 uppercase hidden sm:inline">
                 SYS STATUS: CLASSIFIED
               </span>
               <span className="font-panel text-xs text-[#c5a059] bg-[#c5a059]/10 px-2.5 py-0.5 rounded">
@@ -87,7 +87,7 @@ export default function ArchiveView() {
                     <span className="font-panel text-xs font-semibold text-[#d97706] bg-[#d97706]/10 px-3 py-1 rounded border border-[#d97706]/20">
                       {event.date}
                     </span>
-                    <span className="font-panel text-[9px] text-[#c5a059]/60 uppercase tracking-widest border border-[#c5a059]/20 px-2 py-1 rounded">
+                    <span className="font-panel text-[11px] text-[#c5a059]/60 uppercase tracking-widest border border-[#c5a059]/20 px-2 py-1 rounded">
                       {event.category}
                     </span>
                   </div>
@@ -105,7 +105,7 @@ export default function ArchiveView() {
                   {/* Quote block */}
                   {event.quote && event.quote !== "[PLACEHOLDER]" && (
                     <div className="p-4 rounded border border-[#c5a059]/15 bg-black/40 flex flex-col gap-1 max-w-2xl mt-2">
-                      <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/50 flex items-center gap-1">
+                      <span className="font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/50 flex items-center gap-1">
                         <Bookmark size={10} />
                         Archival Quote
                       </span>

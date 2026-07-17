@@ -54,7 +54,7 @@ export default function BallroomView() {
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
         {/* Tour Itinerary List (Left 5 cols) */}
         <div className="md:col-span-5 flex flex-col gap-3">
-          <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50 px-2">
+          <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]/50 px-2">
             Tour Logs (Selected Dates)
           </span>
           {TOUR_SHOWS.map((show) => {
@@ -72,7 +72,7 @@ export default function BallroomView() {
                 <Calendar size={18} className="mt-0.5" />
                 <div className="flex flex-col">
                   <span className="font-serif italic font-semibold">{show.venue}</span>
-                  <span className="font-panel text-[9px] opacity-60">{show.city}, {show.country} • {show.date}</span>
+                  <span className="font-panel text-[11px] opacity-60">{show.city}, {show.country} • {show.date}</span>
                 </div>
               </button>
             );
@@ -98,7 +98,7 @@ export default function BallroomView() {
 
             {/* Setlist Details */}
             <div className="flex flex-col gap-3">
-              <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50">
+              <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]/50">
                 Lounge-era Setlist Highlights
               </span>
               <ul className="grid grid-cols-2 gap-3">
@@ -123,7 +123,7 @@ export default function BallroomView() {
                   referrerPolicy="no-referrer"
                   className="w-full h-32 object-cover filter grayscale sepia opacity-80"
                 />
-                <span className="block text-center font-panel text-[8px] tracking-wider text-black/60 uppercase mt-4">
+                <span className="block text-center font-panel text-[10px] tracking-wider text-black/60 uppercase mt-4">
                   {activeShow.city} • Tour '18
                 </span>
               </div>

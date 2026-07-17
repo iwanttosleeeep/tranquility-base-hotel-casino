@@ -110,7 +110,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen font-sans selection:bg-[#c5a059] selection:text-black bg-[#0a0a0a] text-[#f5f2ed] overflow-x-hidden">
+    <div className="relative min-h-screen font-serif selection:bg-[#c5a059] selection:text-black bg-[#0a0a0a] text-[#f5f2ed] overflow-x-hidden">
       
       {/* Immersive Space Atmosphere Background */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
@@ -244,7 +244,7 @@ export default function App() {
                             className="p-4 rounded border border-white/5 bg-[#120e0a]/40 hover:border-[#c5a059]/30 hover:bg-[#c5a059]/5 transition-all text-left flex flex-col gap-1 cursor-pointer"
                           >
                             <span className="font-serif italic font-semibold text-glow text-[#f5f2ed]">{dir.label}</span>
-                            <span className="text-[10px] font-sans text-[#f5f2ed]/50">{dir.desc}</span>
+                            <span className="text-xs font-serif text-[#f5f2ed]/50">{dir.desc}</span>
                           </button>
                         ))}
                       </div>

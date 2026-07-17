@@ -50,7 +50,7 @@ export default function CinemaView() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Selector Buttons */}
           <div className="flex flex-col gap-3">
-            <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50 px-2">
+            <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]/50 px-2">
               Select Channel (Film Reference)
             </span>
             {FILMS_DATA.map((film) => {
@@ -67,7 +67,7 @@ export default function CinemaView() {
                 >
                   <div className="flex flex-col">
                     <span className="font-serif italic font-semibold">{film.title}</span>
-                    <span className="font-panel text-[8px] opacity-50">Dir: {film.director} • {film.year}</span>
+                    <span className="font-panel text-[10px] opacity-50">Dir: {film.director} • {film.year}</span>
                   </div>
                   <Tv size={16} className={`opacity-40 group-hover:opacity-100 ${isSelected ? "text-[#c5a059]" : ""}`} />
                 </button>
@@ -107,7 +107,7 @@ export default function CinemaView() {
                           CH {selectedFilm.year % 100} • CRT Terminal
                         </span>
                       </div>
-                      <span className="font-panel text-[9px] text-[#f5f2ed]/40 uppercase">
+                      <span className="font-panel text-[11px] text-[#f5f2ed]/40 uppercase">
                         Signal: Locked
                       </span>
                     </div>
@@ -125,7 +125,7 @@ export default function CinemaView() {
                     {/* Info Split */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm leading-relaxed">
                       <div className="flex flex-col gap-2">
-                        <span className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/60">
+                        <span className="font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/60">
                           The Synopsis
                         </span>
                         <p className="font-serif text-[#f5f2ed]/70 text-xs">
@@ -134,7 +134,7 @@ export default function CinemaView() {
                       </div>
 
                       <div className="flex flex-col gap-2">
-                        <span className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/60">
+                        <span className="font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/60">
                           Why It Matters To TBHC
                         </span>
                         <p className="font-serif text-[#f5f2ed]/70 text-xs">
@@ -147,7 +147,7 @@ export default function CinemaView() {
                     {selectedFilm.alexQuote && selectedFilm.alexQuote !== "[PLACEHOLDER]" && (
                       <div className="p-4 rounded border border-[#c5a059]/20 bg-[#c5a059]/5 font-serif italic text-xs text-[#c5a059] leading-relaxed">
                         " {selectedFilm.alexQuote} "
-                        <span className="block text-right font-panel text-[8px] uppercase tracking-widest mt-2 not-italic text-[#c5a059]/50">
+                        <span className="block text-right font-panel text-[10px] uppercase tracking-widest mt-2 not-italic text-[#c5a059]/50">
                           — Alex Turner
                         </span>
                       </div>
@@ -168,7 +168,7 @@ export default function CinemaView() {
                     {/* Visual Motifs & Tracks */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto pt-4 border-t border-[#c5a059]/10">
                       <div className="flex flex-col gap-1.5">
-                        <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/50">
+                        <span className="font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/50">
                           Visual Motifs
                         </span>
                         {selectedFilm.visualMotifs.length > 0 ? (
@@ -176,7 +176,7 @@ export default function CinemaView() {
                             {selectedFilm.visualMotifs.map((motif) => (
                               <span
                                 key={motif}
-                                className="font-panel text-[8px] bg-white/5 border border-white/5 px-2 py-0.5 rounded text-[#f5f2ed]/60"
+                                className="font-panel text-[10px] bg-white/5 border border-white/5 px-2 py-0.5 rounded text-[#f5f2ed]/60"
                               >
                                 {motif}
                               </span>
@@ -188,7 +188,7 @@ export default function CinemaView() {
                       </div>
 
                       <div className="flex flex-col gap-1.5">
-                        <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/50">
+                        <span className="font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/50">
                           Influenced Tracks
                         </span>
                         {selectedFilm.connectedSongs.length > 0 ? (
@@ -196,7 +196,7 @@ export default function CinemaView() {
                             {selectedFilm.connectedSongs.map((songId) => (
                               <span
                                 key={songId}
-                                className="font-panel text-[8px] border border-[#c5a059]/20 text-[#c5a059] px-2 py-0.5 rounded uppercase"
+                                className="font-panel text-[10px] border border-[#c5a059]/20 text-[#c5a059] px-2 py-0.5 rounded uppercase"
                               >
                                 {songId.replace(/-/g, " ")}
                               </span>

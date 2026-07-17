@@ -172,7 +172,7 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
                     <span className="font-serif italic font-semibold text-sm text-[#f5f2ed] truncate group-hover:text-[#c5a059] transition-colors">
                       {res.title}
                     </span>
-                    <span className="font-panel text-[8px] uppercase tracking-wider text-[#c5a059]/50 shrink-0">
+                    <span className="font-panel text-[10px] uppercase tracking-wider text-[#c5a059]/50 shrink-0">
                       {res.category}
                     </span>
                   </div>

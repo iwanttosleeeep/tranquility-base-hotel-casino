@@ -80,10 +80,10 @@ export default function LoungeView() {
                   >
                     <div className="flex justify-between items-baseline mb-1">
                       <span className="font-serif italic font-semibold">{item.publication}</span>
-                      <span className="font-panel text-[9px] opacity-50">{item.date}</span>
+                      <span className="font-panel text-[11px] opacity-50">{item.date}</span>
                     </div>
                     {item.interviewer && (
-                      <p className="text-xs text-[#f5f2ed]/40 font-sans truncate mb-3">
+                      <p className="text-sm text-[#f5f2ed]/40 font-serif truncate mb-3">
                         Interviewer: {item.interviewer}
                       </p>
                     )}
@@ -91,7 +91,7 @@ export default function LoungeView() {
                       {item.topics.slice(0, 3).map((topic) => (
                         <span
                           key={topic}
-                          className="font-panel text-[8px] bg-white/5 text-[#c5a059]/70 px-1.5 py-0.5 rounded"
+                          className="font-panel text-[10px] bg-white/5 text-[#c5a059]/70 px-1.5 py-0.5 rounded"
                         >
                           {topic}
                         </span>
@@ -133,7 +133,7 @@ export default function LoungeView() {
                     </div>
 
                     <div className="flex flex-col">
-                      <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]">
+                      <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">
                         Interactive Audiograph
                       </span>
                       <span className="font-serif italic text-sm text-[#f5f2ed]">
@@ -216,14 +216,14 @@ export default function LoungeView() {
                   {/* Linked Songs */}
                   {selectedInterview.connectedSongs.length > 0 && (
                     <div className="mt-auto pt-4 border-t border-[#c5a059]/10 flex flex-col gap-2">
-                      <span className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/50">
+                      <span className="font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/50">
                         Connected Tracks
                       </span>
                       <div className="flex gap-2">
                         {selectedInterview.connectedSongs.map((songId) => (
                           <span
                             key={songId}
-                            className="font-panel text-[9px] border border-[#c5a059]/30 text-[#c5a059] px-2 py-0.5 rounded uppercase"
+                            className="font-panel text-[11px] border border-[#c5a059]/30 text-[#c5a059] px-2 py-0.5 rounded uppercase"
                           >
                             {songId.replace(/-/g, " ")}
                           </span>

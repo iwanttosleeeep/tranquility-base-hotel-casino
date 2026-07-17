@@ -85,7 +85,7 @@ export default function ReceptionDesk({ guestName, onRegister, onNavigateToRoom 
                   setIsRegistered(false);
                   onRegister("");
                 }}
-                className="text-left font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/60 hover:text-[#c5a059] transition-all"
+                className="text-left font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/60 hover:text-[#c5a059] transition-all"
               >
                 [ Sign out / Change guest profile ]
               </button>
@@ -107,7 +107,7 @@ export default function ReceptionDesk({ guestName, onRegister, onNavigateToRoom 
               <span className="font-panel text-xs text-[#c5a059] bg-[#c5a059]/10 px-2 py-0.5 rounded">05</span>
               <div className="flex flex-col">
                 <span className="font-semibold text-glow cursor-pointer hover:text-[#c5a059]" onClick={() => onNavigateToRoom("LIBRARY")}>The Library</span>
-                <span className="text-xs text-[#f5f2ed]/50 font-sans not-italic">Lyrical repository, full track titles, annotations, and references.</span>
+                <span className="text-sm text-[#f5f2ed]/50 font-serif not-italic">Lyrical repository, full track titles, annotations, and references.</span>
               </div>
             </div>
 
@@ -115,7 +115,7 @@ export default function ReceptionDesk({ guestName, onRegister, onNavigateToRoom 
               <span className="font-panel text-xs text-[#c5a059] bg-[#c5a059]/10 px-2 py-0.5 rounded">02</span>
               <div className="flex flex-col">
                 <span className="font-semibold text-glow cursor-pointer hover:text-[#c5a059]" onClick={() => onNavigateToRoom("LOUNGE")}>The Lounge</span>
-                <span className="text-xs text-[#f5f2ed]/50 font-sans not-italic">Tape archive of press files, memorable quotes, and interview logs.</span>
+                <span className="text-sm text-[#f5f2ed]/50 font-serif not-italic">Tape archive of press files, memorable quotes, and interview logs.</span>
               </div>
             </div>
 
@@ -123,7 +123,7 @@ export default function ReceptionDesk({ guestName, onRegister, onNavigateToRoom 
               <span className="font-panel text-xs text-[#c5a059] bg-[#c5a059]/10 px-2 py-0.5 rounded">03</span>
               <div className="flex flex-col">
                 <span className="font-semibold text-glow cursor-pointer hover:text-[#c5a059]" onClick={() => onNavigateToRoom("CINEMA")}>Hotel Cinema</span>
-                <span className="text-xs text-[#f5f2ed]/50 font-sans not-italic">70s CRT visual database mapping movies and books that shaped the album.</span>
+                <span className="text-sm text-[#f5f2ed]/50 font-serif not-italic">70s CRT visual database mapping movies and books that shaped the album.</span>
               </div>
             </div>
 
@@ -131,7 +131,7 @@ export default function ReceptionDesk({ guestName, onRegister, onNavigateToRoom 
               <span className="font-panel text-xs text-[#c5a059] bg-[#c5a059]/10 px-2 py-0.5 rounded">07</span>
               <div className="flex flex-col">
                 <span className="font-semibold text-glow cursor-pointer hover:text-[#c5a059]" onClick={() => onNavigateToRoom("CASINO")}>Clavius Casino</span>
-                <span className="text-xs text-[#f5f2ed]/50 font-sans not-italic">Interactive moon-casino reel system with hidden sound bites and easter eggs.</span>
+                <span className="text-sm text-[#f5f2ed]/50 font-serif not-italic">Interactive moon-casino reel system with hidden sound bites and easter eggs.</span>
               </div>
             </div>
           </div>

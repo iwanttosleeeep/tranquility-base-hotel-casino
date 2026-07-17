@@ -76,7 +76,7 @@ export default function ObservatoryView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Sector Dial (Left 4 cols) */}
         <div className="lg:col-span-5 flex flex-col gap-3">
-          <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50 px-2">
+          <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]/50 px-2">
             Target Coordinates
           </span>
           {CONCEPTS.map((topic) => {
@@ -97,7 +97,7 @@ export default function ObservatoryView() {
                 </div>
                 <div className="flex flex-col">
                   <span className="font-serif italic font-semibold">{topic.title}</span>
-                  <span className="font-panel text-[9px] opacity-50">{topic.subtitle}</span>
+                  <span className="font-panel text-[11px] opacity-50">{topic.subtitle}</span>
                 </div>
               </button>
             );
@@ -125,7 +125,7 @@ export default function ObservatoryView() {
 
             {/* Core Concept Brief */}
             <div className="flex flex-col gap-2">
-              <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50">
+              <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]/50">
                 Core Concept
               </span>
               <p className="font-serif italic text-sm text-[#f5f2ed]/90 leading-relaxed">
@@ -135,7 +135,7 @@ export default function ObservatoryView() {
 
             {/* Fictional/Lyrical quote card */}
             <div className="p-4 rounded border border-[#c5a059]/15 bg-black/40 flex flex-col gap-2">
-              <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/50">
+              <span className="font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/50">
                 Lyrical Reference • Song: {activeTopic.songTitle}
               </span>
               <p className="font-serif italic text-[#c5a059] text-sm tracking-tight leading-normal whitespace-pre-line">
@@ -145,7 +145,7 @@ export default function ObservatoryView() {
 
             {/* Analytical Commentary */}
             <div className="flex flex-col gap-2">
-              <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50">
+              <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]/50">
                 Observatory Report Analysis
               </span>
               <p className="font-serif text-xs text-[#f5f2ed]/70 leading-relaxed">
