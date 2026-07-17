@@ -81,7 +81,7 @@ export default function RooftopGardenView() {
                     {selectedEssay.title}
                   </h3>
                   
-                  <div className="flex flex-wrap items-center gap-4 text-[10px] font-mono text-[#c5a059]/70 uppercase">
+                  <div className="flex flex-wrap items-center gap-4 text-[10px] font-panel text-[#c5a059]/70 uppercase">
                     <span className="flex items-center gap-1">
                       <User size={12} />
                       {selectedEssay.author}
@@ -107,14 +107,14 @@ export default function RooftopGardenView() {
                 {/* Related Tracks */}
                 {selectedEssay.relatedSongs.length > 0 && (
                   <div className="mt-auto pt-4 border-t border-[#c5a059]/10 flex flex-col gap-2">
-                    <span className="font-mono text-[9px] uppercase tracking-wider text-[#c5a059]/50">
+                    <span className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/50">
                       Connected Album Tracks
                     </span>
                     <div className="flex gap-2">
                       {selectedEssay.relatedSongs.map((songId) => (
                         <span
                           key={songId}
-                          className="font-mono text-[9px] border border-[#c5a059]/30 text-[#c5a059] px-2.5 py-0.5 rounded uppercase"
+                          className="font-panel text-[9px] border border-[#c5a059]/30 text-[#c5a059] px-2.5 py-0.5 rounded uppercase"
                         >
                           {songId.replace(/-/g, " ")}
                         </span>

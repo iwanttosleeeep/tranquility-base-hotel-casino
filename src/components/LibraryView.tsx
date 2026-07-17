@@ -63,7 +63,7 @@ export default function LibraryView() {
                       : "bg-black/20 border-[#c5a059]/10 text-[#f5f2ed]/60 hover:border-[#c5a059]/30 hover:text-[#f5f2ed]"
                   }`}
                 >
-                  <span className="font-mono text-[9px] opacity-40">
+                  <span className="font-panel text-[9px] opacity-40">
                     {(index + 1).toString().padStart(2, "0")}
                   </span>
                   <span className="font-serif italic font-semibold text-sm group-hover:translate-x-1 transition-transform">
@@ -81,7 +81,7 @@ export default function LibraryView() {
             {/* Song Navigation Header */}
             <div className="flex items-center justify-between border-b border-[#c5a059]/20 pb-4 mb-6">
               <div className="flex flex-col">
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[#c5a059]">
+                <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]">
                   TRACK {(selectedSongIndex + 1).toString().padStart(2, "0")} OF 11
                 </span>
                 <h3 className="text-2xl md:text-3xl font-serif italic text-glow text-[#f5f2ed]">
@@ -121,7 +121,7 @@ export default function LibraryView() {
                     href={song.officialLyricsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs font-mono text-[#c5a059] hover:text-[#d97706] border border-[#c5a059]/30 hover:border-[#d97706]/40 px-3 py-1.5 rounded transition-all"
+                    className="inline-flex items-center gap-2 text-xs font-panel text-[#c5a059] hover:text-[#d97706] border border-[#c5a059]/30 hover:border-[#d97706]/40 px-3 py-1.5 rounded transition-all"
                   >
                     <ExternalLink size={12} />
                     <span>View Official Lyrics</span>
@@ -133,7 +133,7 @@ export default function LibraryView() {
                 ref={scrollContainerRef}
                 className="max-h-[500px] overflow-y-auto pr-4 custom-scrollbar flex flex-col gap-4"
               >
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[#c5a059]/50 mb-2">
+                <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50 mb-2">
                   Select an annotated line to view notes:
                 </span>
                 {song.annotatedLines.map((annotated, idx) => {
@@ -151,7 +151,7 @@ export default function LibraryView() {
                       <p className="font-serif italic text-base leading-snug">
                         "{annotated.line}"
                       </p>
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-right self-end opacity-60">
+                      <span className="font-panel text-[8px] uppercase tracking-widest text-right self-end opacity-60">
                         [ Read Annotation ]
                       </span>
                     </button>
@@ -163,7 +163,7 @@ export default function LibraryView() {
                     href={song.officialLyricsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 mt-4 self-start text-xs font-mono text-[#c5a059] hover:text-[#d97706] border border-[#c5a059]/30 hover:border-[#d97706]/40 px-3 py-1.5 rounded transition-all"
+                    className="inline-flex items-center gap-2 mt-4 self-start text-xs font-panel text-[#c5a059] hover:text-[#d97706] border border-[#c5a059]/30 hover:border-[#d97706]/40 px-3 py-1.5 rounded transition-all"
                   >
                     <ExternalLink size={12} />
                     <span>View Official Lyrics</span>
@@ -187,7 +187,7 @@ export default function LibraryView() {
               >
                 <div className="flex items-center gap-2 text-[#d97706]">
                   <Info size={16} />
-                  <span className="font-mono text-[10px] uppercase tracking-wider font-semibold">
+                  <span className="font-panel text-[10px] uppercase tracking-wider font-semibold">
                     Lyrical Annotation
                   </span>
                 </div>
@@ -210,7 +210,7 @@ export default function LibraryView() {
                     href={song.annotatedLines[selectedLineIndex].sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-[9px] uppercase text-[#d97706] hover:underline flex items-center gap-1 mt-1"
+                    className="font-panel text-[9px] uppercase text-[#d97706] hover:underline flex items-center gap-1 mt-1"
                   >
                     <ExternalLink size={10} />
                     <span>Source Document</span>
@@ -220,14 +220,14 @@ export default function LibraryView() {
                 {song.annotatedLines[selectedLineIndex].references &&
                   song.annotatedLines[selectedLineIndex].references!.length > 0 && (
                     <div className="flex flex-col gap-1">
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-[#d97706]/60">
+                      <span className="font-panel text-[8px] uppercase tracking-widest text-[#d97706]/60">
                         Cross References
                       </span>
                       <div className="flex flex-wrap gap-1">
                         {song.annotatedLines[selectedLineIndex].references!.map((ref) => (
                           <span
                             key={ref}
-                            className="font-mono text-[8px] bg-black/40 border border-[#d97706]/20 text-[#d97706] px-1.5 py-0.5 rounded"
+                            className="font-panel text-[8px] bg-black/40 border border-[#d97706]/20 text-[#d97706] px-1.5 py-0.5 rounded"
                           >
                             {ref}
                           </span>
@@ -238,7 +238,7 @@ export default function LibraryView() {
 
                 <button
                   onClick={() => setSelectedLineIndex(null)}
-                  className="font-mono text-[9px] uppercase text-[#d97706]/60 hover:text-[#d97706] text-left transition-colors"
+                  className="font-panel text-[9px] uppercase text-[#d97706]/60 hover:text-[#d97706] text-left transition-colors"
                 >
                   [ Close annotation ]
                 </button>
@@ -250,7 +250,7 @@ export default function LibraryView() {
                 animate={{ opacity: 1 }}
                 className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/20 flex flex-col gap-6"
               >
-                <span className="font-mono text-[9px] uppercase tracking-widest text-[#c5a059]/50">
+                <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]/50">
                   Lyrical Context & References
                 </span>
 
@@ -258,7 +258,7 @@ export default function LibraryView() {
                 <div className="grid grid-cols-1 gap-4">
                   {song.filmReferences && song.filmReferences.length > 0 ? (
                     <div className="flex flex-col gap-1.5">
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-[#c5a059]/40">
+                      <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/40">
                         Film References
                       </span>
                       <div className="flex flex-col gap-1 font-serif italic text-xs text-[#c5a059]">
@@ -277,7 +277,7 @@ export default function LibraryView() {
 
                   {song.literaryReferences && song.literaryReferences.length > 0 ? (
                     <div className="flex flex-col gap-1.5 border-t border-[#c5a059]/10 pt-4">
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-[#c5a059]/40">
+                      <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/40">
                         Literature
                       </span>
                       <div className="flex flex-col gap-1 font-serif text-xs text-[#f5f2ed]/60">
@@ -294,7 +294,7 @@ export default function LibraryView() {
                 {/* Related Essays */}
                 {song.relatedEssays && song.relatedEssays.length > 0 ? (
                   <div className="flex flex-col gap-2 border-t border-[#c5a059]/10 pt-4">
-                    <span className="font-mono text-[8px] uppercase tracking-widest text-[#c5a059]/40">
+                    <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/40">
                       Related Essays
                     </span>
                     <div className="flex items-center gap-1.5 font-serif italic text-xs text-[#c5a059]">

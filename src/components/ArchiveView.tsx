@@ -56,15 +56,15 @@ export default function ArchiveView() {
           <div className="flex items-center justify-between border-b border-[#c5a059]/20 pb-4">
             <div className="flex items-center gap-2 text-[#c5a059]">
               <Terminal size={18} />
-              <span className="font-mono text-xs uppercase tracking-widest">
+              <span className="font-panel text-xs uppercase tracking-widest">
                 LUNAR_TERMINAL_V6.0
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="font-mono text-[9px] text-[#f5f2ed]/30 uppercase hidden sm:inline">
+              <span className="font-panel text-[9px] text-[#f5f2ed]/30 uppercase hidden sm:inline">
                 SYS STATUS: CLASSIFIED
               </span>
-              <span className="font-mono text-xs text-[#c5a059] bg-[#c5a059]/10 px-2.5 py-0.5 rounded">
+              <span className="font-panel text-xs text-[#c5a059] bg-[#c5a059]/10 px-2.5 py-0.5 rounded">
                 EVENT {currentIndex + 1} OF {TIMELINE_DATA.length}
               </span>
             </div>
@@ -84,10 +84,10 @@ export default function ArchiveView() {
                 >
                   {/* Date banner */}
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs font-semibold text-[#d97706] bg-[#d97706]/10 px-3 py-1 rounded border border-[#d97706]/20">
+                    <span className="font-panel text-xs font-semibold text-[#d97706] bg-[#d97706]/10 px-3 py-1 rounded border border-[#d97706]/20">
                       {event.date}
                     </span>
-                    <span className="font-mono text-[9px] text-[#c5a059]/60 uppercase tracking-widest border border-[#c5a059]/20 px-2 py-1 rounded">
+                    <span className="font-panel text-[9px] text-[#c5a059]/60 uppercase tracking-widest border border-[#c5a059]/20 px-2 py-1 rounded">
                       {event.category}
                     </span>
                   </div>
@@ -105,7 +105,7 @@ export default function ArchiveView() {
                   {/* Quote block */}
                   {event.quote && event.quote !== "[PLACEHOLDER]" && (
                     <div className="p-4 rounded border border-[#c5a059]/15 bg-black/40 flex flex-col gap-1 max-w-2xl mt-2">
-                      <span className="font-mono text-[8px] uppercase tracking-widest text-[#c5a059]/50 flex items-center gap-1">
+                      <span className="font-panel text-[8px] uppercase tracking-widest text-[#c5a059]/50 flex items-center gap-1">
                         <Bookmark size={10} />
                         Archival Quote
                       </span>
@@ -121,7 +121,7 @@ export default function ArchiveView() {
                       href={event.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-mono text-[10px] text-[#c5a059] hover:underline flex items-center gap-1.5 self-start mt-2"
+                      className="font-panel text-[10px] text-[#c5a059] hover:underline flex items-center gap-1.5 self-start mt-2"
                     >
                       <ExternalLink size={12} />
                       <span>Verified Source Document</span>
@@ -136,7 +136,7 @@ export default function ArchiveView() {
           <div className="flex items-center justify-between border-t border-[#c5a059]/10 pt-4 mt-auto">
             <button
               onClick={handlePrev}
-              className="font-mono text-[10px] uppercase text-[#c5a059]/60 hover:text-[#c5a059] transition-colors flex items-center gap-1"
+              className="font-panel text-[10px] uppercase text-[#c5a059]/60 hover:text-[#c5a059] transition-colors flex items-center gap-1"
             >
               <ChevronLeft size={14} />
               [ Prev Archive ]
@@ -157,7 +157,7 @@ export default function ArchiveView() {
 
             <button
               onClick={handleNext}
-              className="font-mono text-[10px] uppercase text-[#c5a059]/60 hover:text-[#c5a059] transition-colors flex items-center gap-1"
+              className="font-panel text-[10px] uppercase text-[#c5a059]/60 hover:text-[#c5a059] transition-colors flex items-center gap-1"
             >
               [ Next Archive ]
               <ChevronRight size={14} />

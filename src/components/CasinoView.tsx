@@ -101,14 +101,14 @@ export default function CasinoView() {
             {/* Header / Credits display */}
             <div className="w-full flex justify-between items-center bg-black/60 px-4 py-2.5 rounded border border-[#c5a059]/20">
               <div className="flex flex-col">
-                <span className="font-mono text-[10px] uppercase tracking-wider text-[#c5a059]/50">
+                <span className="font-panel text-[10px] uppercase tracking-wider text-[#c5a059]/50">
                   Lunar Credits
                 </span>
                 <span className="font-tbhc text-xl text-[#d97706] text-glow">
                   ${credits}
                 </span>
               </div>
-              <span className="font-mono text-[11px] uppercase tracking-widest text-[#c5a059]">
+              <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">
                 $10 PER SPIN
               </span>
             </div>
@@ -133,7 +133,7 @@ export default function CasinoView() {
             <button
               onClick={handleSpin}
               disabled={isSpinning || credits < 10}
-              className={`w-full max-w-xs py-4 rounded-lg font-mono text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all ${
+              className={`w-full max-w-xs py-4 rounded-lg font-panel text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all ${
                 isSpinning
                   ? "bg-[#c5a059]/20 border border-[#c5a059]/30 text-[#c5a059]/40 cursor-not-allowed"
                   : credits < 10
@@ -152,7 +152,7 @@ export default function CasinoView() {
           <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/20 flex flex-col gap-6 min-h-[300px]">
             <div className="flex items-center gap-2 border-b border-[#c5a059]/20 pb-3">
               <Trophy className="text-[#c5a059]" size={16} />
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#c5a059]">
+              <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]">
                 Payout Registry
               </span>
             </div>
@@ -171,7 +171,7 @@ export default function CasinoView() {
 
                   {payoutQuote && (
                     <div className="flex flex-col gap-2 p-4 rounded bg-white/5 border border-white/5">
-                      <span className="font-mono text-[8px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1">
+                      <span className="font-panel text-[8px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1">
                         <Star size={8} className="text-[#c5a059]" />
                         Hotel Intercom • Overheard
                       </span>
@@ -196,7 +196,7 @@ export default function CasinoView() {
                   {credits < 10 && (
                     <button
                       onClick={() => setCredits(100)}
-                      className="mt-4 font-mono text-[10px] uppercase text-[#c5a059] hover:text-[#d97706] transition-colors border border-[#c5a059]/20 rounded py-2 text-center"
+                      className="mt-4 font-panel text-[10px] uppercase text-[#c5a059] hover:text-[#d97706] transition-colors border border-[#c5a059]/20 rounded py-2 text-center"
                     >
                       [ Request Complimentary 100 Credits ]
                     </button>

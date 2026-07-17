@@ -57,7 +57,7 @@ export default function LoungeView() {
                 placeholder="Search quotes or topics..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-black/40 border border-[#c5a059]/20 rounded pl-10 pr-4 py-2 font-mono text-xs text-[#f5f2ed] focus:outline-none focus:border-[#c5a059]/50"
+                className="w-full bg-black/40 border border-[#c5a059]/20 rounded pl-10 pr-4 py-2 font-panel text-xs text-[#f5f2ed] focus:outline-none focus:border-[#c5a059]/50"
               />
             </div>
 
@@ -80,7 +80,7 @@ export default function LoungeView() {
                   >
                     <div className="flex justify-between items-baseline mb-1">
                       <span className="font-serif italic font-semibold">{item.publication}</span>
-                      <span className="font-mono text-[9px] opacity-50">{item.date}</span>
+                      <span className="font-panel text-[9px] opacity-50">{item.date}</span>
                     </div>
                     {item.interviewer && (
                       <p className="text-xs text-[#f5f2ed]/40 font-sans truncate mb-3">
@@ -91,7 +91,7 @@ export default function LoungeView() {
                       {item.topics.slice(0, 3).map((topic) => (
                         <span
                           key={topic}
-                          className="font-mono text-[8px] bg-white/5 text-[#c5a059]/70 px-1.5 py-0.5 rounded"
+                          className="font-panel text-[8px] bg-white/5 text-[#c5a059]/70 px-1.5 py-0.5 rounded"
                         >
                           {topic}
                         </span>
@@ -133,7 +133,7 @@ export default function LoungeView() {
                     </div>
 
                     <div className="flex flex-col">
-                      <span className="font-mono text-[9px] uppercase tracking-widest text-[#c5a059]">
+                      <span className="font-panel text-[9px] uppercase tracking-widest text-[#c5a059]">
                         Interactive Audiograph
                       </span>
                       <span className="font-serif italic text-sm text-[#f5f2ed]">
@@ -151,7 +151,7 @@ export default function LoungeView() {
                           onClick={() => {
                             setIsPlayingQuote(isPlayingQuote === quote ? null : quote);
                           }}
-                          className={`p-2 rounded border font-mono text-[10px] flex items-center gap-2 transition-all ${
+                          className={`p-2 rounded border font-panel text-[10px] flex items-center gap-2 transition-all ${
                             isPlayingQuote === quote
                               ? "bg-[#d97706]/20 border-[#d97706] text-[#d97706]"
                               : "bg-white/5 border-white/10 text-[#f5f2ed]/60 hover:text-[#f5f2ed]"
@@ -185,7 +185,7 @@ export default function LoungeView() {
                       <span className="font-serif italic text-2xl text-glow text-[#f5f2ed]">
                         {selectedInterview.publication} Archive
                       </span>
-                      <span className="font-mono text-[10px] text-[#c5a059]/60">
+                      <span className="font-panel text-[10px] text-[#c5a059]/60">
                         {selectedInterview.interviewer ? `By ${selectedInterview.interviewer} • ` : ""}{selectedInterview.date}
                       </span>
                     </div>
@@ -205,7 +205,7 @@ export default function LoungeView() {
                           href={selectedInterview.sourceUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 mt-4 font-mono text-[10px] uppercase text-[#c5a059] border border-[#c5a059]/30 hover:border-[#c5a059]/60 px-3 py-1 rounded transition-colors"
+                          className="inline-flex items-center gap-2 mt-4 font-panel text-[10px] uppercase text-[#c5a059] border border-[#c5a059]/30 hover:border-[#c5a059]/60 px-3 py-1 rounded transition-colors"
                         >
                           [ View Original Source ]
                         </a>
@@ -216,14 +216,14 @@ export default function LoungeView() {
                   {/* Linked Songs */}
                   {selectedInterview.connectedSongs.length > 0 && (
                     <div className="mt-auto pt-4 border-t border-[#c5a059]/10 flex flex-col gap-2">
-                      <span className="font-mono text-[9px] uppercase tracking-wider text-[#c5a059]/50">
+                      <span className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/50">
                         Connected Tracks
                       </span>
                       <div className="flex gap-2">
                         {selectedInterview.connectedSongs.map((songId) => (
                           <span
                             key={songId}
-                            className="font-mono text-[9px] border border-[#c5a059]/30 text-[#c5a059] px-2 py-0.5 rounded uppercase"
+                            className="font-panel text-[9px] border border-[#c5a059]/30 text-[#c5a059] px-2 py-0.5 rounded uppercase"
                           >
                             {songId.replace(/-/g, " ")}
                           </span>

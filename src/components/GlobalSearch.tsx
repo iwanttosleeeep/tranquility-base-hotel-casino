@@ -125,7 +125,7 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
           />
           <button
             onClick={onClose}
-            className="font-mono text-[10px] uppercase text-[#c5a059]/60 hover:text-[#c5a059] px-2 py-1 border border-[#c5a059]/20 rounded"
+            className="font-panel text-[10px] uppercase text-[#c5a059]/60 hover:text-[#c5a059] px-2 py-1 border border-[#c5a059]/20 rounded"
           >
             ESC
           </button>
@@ -142,7 +142,7 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
             </div>
           ) : results.length === 0 ? (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-8 text-[#f5f2ed]/30">
-              <span className="font-mono text-xs uppercase tracking-widest text-red-500/70 mb-2">
+              <span className="font-panel text-xs uppercase tracking-widest text-red-500/70 mb-2">
                 Coordinates Lost
               </span>
               <p className="font-serif italic text-sm">
@@ -172,7 +172,7 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
                     <span className="font-serif italic font-semibold text-sm text-[#f5f2ed] truncate group-hover:text-[#c5a059] transition-colors">
                       {res.title}
                     </span>
-                    <span className="font-mono text-[8px] uppercase tracking-wider text-[#c5a059]/50 shrink-0">
+                    <span className="font-panel text-[8px] uppercase tracking-wider text-[#c5a059]/50 shrink-0">
                       {res.category}
                     </span>
                   </div>
