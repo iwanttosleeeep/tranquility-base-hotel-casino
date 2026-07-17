@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dice5, Trophy, RefreshCw, Star, Info } from "lucide-react";
+import { Trophy, RefreshCw, Star, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 const REEL_ITEMS = [
@@ -10,12 +10,12 @@ const REEL_ITEMS = [
   { char: "🌗", label: "Lunar Surface", bonus: "Take a lift down to Sector 01." }
 ];
 
-const SECRET_QUOTES = [
-  "\"I was sitting at the piano, and the world just faded out...\"",
-  "\"It's a record about looking back, but through a telescope.\"",
-  "\"Mark speaking, please tell me how may I direct your call?\"",
-  "\"I need to spend less time on the moon.\"",
-  "\"Bear with me, man, I've lost my train of thought.\""
+const INTERCOM_LINES = [
+  "Front desk to lobby: the moonlit taqueria is fully booked this evening.",
+  "Reception notice: Mark is currently directing another call. Please hold.",
+  "Housekeeping reports the mirrorball in Suite 505 is spinning unattended.",
+  "Observatory bulletin: Earth-rise viewing begins at the top of the hour.",
+  "The lounge band kindly requests one more round of applause before the encore."
 ];
 
 export default function CasinoView() {
@@ -60,7 +60,7 @@ export default function CasinoView() {
           // Three of a kind!
           setCredits((prev) => prev + 150);
           setWinMsg(`JACKPOT! Three ${finalReels[0].label}s! ${finalReels[0].bonus}`);
-          setPayoutQuote(SECRET_QUOTES[Math.floor(Math.random() * SECRET_QUOTES.length)]);
+          setPayoutQuote(INTERCOM_LINES[Math.floor(Math.random() * INTERCOM_LINES.length)]);
         } else if (
           finalReels[0].char === finalReels[1].char || 
           finalReels[1].char === finalReels[2].char || 
@@ -70,7 +70,7 @@ export default function CasinoView() {
           const matchingReel = finalReels[1].char === finalReels[2].char ? finalReels[1] : finalReels[0];
           setCredits((prev) => prev + 25);
           setWinMsg(`PAIR MATCH! ${matchingReel.bonus}`);
-          setPayoutQuote(SECRET_QUOTES[Math.floor(Math.random() * SECRET_QUOTES.length)]);
+          setPayoutQuote(INTERCOM_LINES[Math.floor(Math.random() * INTERCOM_LINES.length)]);
         }
       }
     }, 100);
@@ -87,7 +87,7 @@ export default function CasinoView() {
           Clavius Casino
         </h2>
         <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
-          "Do you celebrate your dark side?" Try your luck at the Clavius lunar slot machine. Spin the reels to align space-age icons and unlock hidden audio log reels.
+          "Do you celebrate your dark side?" Try your luck at the Clavius lunar slot machine. Spin the reels to align space-age icons and intercept stray transmissions from around the hotel.
         </p>
       </div>
 
@@ -101,14 +101,14 @@ export default function CasinoView() {
             {/* Header / Credits display */}
             <div className="w-full flex justify-between items-center bg-black/60 px-4 py-2.5 rounded border border-[#c5a059]/20">
               <div className="flex flex-col">
-                <span className="font-serif italic text-[10px] uppercase tracking-wider text-[#c5a059]/50">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-[#c5a059]/50">
                   Lunar Credits
                 </span>
-                <span className="font-mono text-xl text-[#d97706] text-glow">
+                <span className="font-tbhc text-xl text-[#d97706] text-glow">
                   ${credits}
                 </span>
               </div>
-              <span className="font-serif italic text-[11px] uppercase tracking-widest text-[#c5a059]">
+              <span className="font-mono text-[11px] uppercase tracking-widest text-[#c5a059]">
                 $10 PER SPIN
               </span>
             </div>
@@ -173,7 +173,7 @@ export default function CasinoView() {
                     <div className="flex flex-col gap-2 p-4 rounded bg-white/5 border border-white/5">
                       <span className="font-mono text-[8px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1">
                         <Star size={8} className="text-[#c5a059]" />
-                        Unlocked Audio Transmit
+                        Hotel Intercom • Overheard
                       </span>
                       <p className="font-serif italic text-sm text-[#f5f2ed]/90">
                         {payoutQuote}
@@ -191,8 +191,8 @@ export default function CasinoView() {
                     <Info size={14} className="mt-0.5 shrink-0" />
                     <span>Spin coordinates rules:</span>
                   </div>
-                  <p>Align any 3 matching icons to trigger a mega jackpot and claim a deluxe 150-credit transmission.</p>
-                  <p>Match any 2 adjacent icons to receive a comfortable 25-credit payout and a random archival audio bite.</p>
+                  <p>Align any 3 matching icons to trigger a mega jackpot and claim a deluxe 150-credit payout.</p>
+                  <p>Match any 2 adjacent icons to receive a comfortable 25-credit payout and a stray intercom transmission.</p>
                   {credits < 10 && (
                     <button
                       onClick={() => setCredits(100)}

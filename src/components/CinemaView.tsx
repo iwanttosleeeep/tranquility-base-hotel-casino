@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FILMS_DATA } from "../data/films";
-import { Tv, Play, Film as FilmIcon, Disc, ExternalLink } from "lucide-react";
+import { Tv, Film as FilmIcon, ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 
 export default function CinemaView() {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TIMELINE_DATA } from "../data/timeline";
-import { Terminal, Calendar, ChevronLeft, ChevronRight, Bookmark, ExternalLink } from "lucide-react";
+import { Terminal, ChevronLeft, ChevronRight, Bookmark, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export default function ArchiveView() {

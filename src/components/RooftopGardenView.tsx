@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { ESSAYS_DATA } from "../data/essays";
-import { Book, Star, Calendar, User, AlignLeft } from "lucide-react";
-import { motion } from "motion/react";
+import { Book, Star, Calendar, User } from "lucide-react";
 
 export default function RooftopGardenView() {
   const [selectedEssay, setSelectedEssay] = useState(

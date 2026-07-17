@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, Compass, LogOut, Radio, Moon, Terminal } from "lucide-react";
+import { Search, Compass, Radio } from "lucide-react";
 import { HotelRoom } from "./types";
 
 // Import custom views

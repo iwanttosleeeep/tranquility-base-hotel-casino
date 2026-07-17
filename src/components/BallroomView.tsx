@@ -102,7 +102,7 @@ export default function BallroomView() {
                 Lounge-era Setlist Highlights
               </span>
               <ul className="grid grid-cols-2 gap-3">
-                {activeShow.setlistHighlights.map((track, idx) => (
+                {activeShow.setlistHighlights.map((track) => (
                   <li
                     key={track}
                     className="flex items-center gap-2 p-3 rounded bg-[#120e0a]/40 border border-[#c5a059]/10 font-serif text-sm text-[#f5f2ed]/80 hover:text-[#f5f2ed] transition-colors"

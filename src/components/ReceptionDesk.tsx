@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { motion } from "motion/react";
-import { BookOpen, MapPin, Key, Radio } from "lucide-react";
+import { BookOpen, Key } from "lucide-react";
 
 interface ReceptionDeskProps {
   guestName: string;

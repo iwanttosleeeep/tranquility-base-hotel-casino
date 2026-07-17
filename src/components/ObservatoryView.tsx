@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Moon, Eye, ShieldAlert, Cpu, Heart, Landmark } from "lucide-react";
-import { motion } from "motion/react";
+import { Moon, Eye, ShieldAlert, Cpu, Heart } from "lucide-react";
 
 interface ThemeTopic {
   id: string;
