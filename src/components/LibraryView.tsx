@@ -4,7 +4,11 @@ import { Music, ChevronLeft, ChevronRight, Info, ExternalLink } from "lucide-rea
 import { motion, AnimatePresence } from "motion/react";
 
 export default function LibraryView() {
-  const [selectedSongIndex, setSelectedSongIndex] = useState(0);
+  const [selectedSongIndex, setSelectedSongIndex] = useState(() => {
+    const parts = window.location.hash.replace(/^#\/?/, "").split("/");
+    const idx = SONGS_DATA.findIndex((s) => s.id === parts[1]);
+    return idx >= 0 ? idx : 0;
+  });
   const [selectedLineIndex, setSelectedLineIndex] = useState<number | null>(null);
   const song = SONGS_DATA[selectedSongIndex];
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -14,6 +18,11 @@ export default function LibraryView() {
       scrollContainerRef.current.scrollTop = 0;
     }
     setSelectedLineIndex(null);
+    const slug = SONGS_DATA[selectedSongIndex]?.id;
+    if (slug) {
+      const target = "#/library/" + slug;
+      if (window.location.hash !== target) window.history.replaceState(null, "", target);
+    }
   }, [selectedSongIndex]);
 
   const handleNextSong = () => {

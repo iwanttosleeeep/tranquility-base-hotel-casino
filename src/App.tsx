@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, Compass, Radio } from "lucide-react";
 import { HotelRoom } from "./types";
@@ -16,6 +16,36 @@ import RooftopGardenView from "./components/RooftopGardenView";
 import ArchiveView from "./components/ArchiveView";
 import GlobalSearch from "./components/GlobalSearch";
 
+// ─── Hash routing: #/library, #/library/star-treatment, #/casino … ───
+const ROOM_SLUGS: Record<HotelRoom, string> = {
+  LOBBY: "lobby",
+  RECEPTION: "reception",
+  LOUNGE: "lounge",
+  CINEMA: "cinema",
+  OBSERVATORY: "observatory",
+  LIBRARY: "library",
+  BALLROOM: "ballroom",
+  CASINO: "casino",
+  ROOFTOP_GARDEN: "rooftop-garden",
+  ARCHIVE: "archive",
+};
+
+const SLUG_TO_ROOM: Record<string, HotelRoom> = Object.fromEntries(
+  Object.entries(ROOM_SLUGS).map(([room, slug]) => [slug, room as HotelRoom])
+) as Record<string, HotelRoom>;
+
+function roomFromHash(): { room: HotelRoom; sub: string | null } {
+  const parts = window.location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  const room = SLUG_TO_ROOM[parts[0]] ?? "LOBBY";
+  return { room, sub: parts[1] ?? null };
+}
+
+function writeHash(room: HotelRoom, sub?: string | null) {
+  const target = "#/" + ROOM_SLUGS[room] + (sub ? "/" + sub : "");
+  if (window.location.hash !== target) window.location.hash = target;
+}
+
+
 const LOBBY_DIRECTORY = [
   { key: "RECEPTION", label: "01. Reception Desk", desc: "Check in & consult directory" },
   { key: "LOUNGE", label: "02. The Lounge", desc: "Browse Turner interviews & quotes" },
@@ -29,7 +59,7 @@ const LOBBY_DIRECTORY = [
 ];
 
 export default function App() {
-  const [currentRoom, setCurrentRoom] = useState<HotelRoom>("LOBBY");
+  const [currentRoom, setCurrentRoom] = useState<HotelRoom>(() => roomFromHash().room);
   const [targetRoom, setTargetRoom] = useState<HotelRoom | null>(null);
   const [isMoving, setIsMoving] = useState(false);
   const [guestName, setGuestName] = useState<string>(() => {
@@ -94,11 +124,22 @@ export default function App() {
 
     setTimeout(() => {
       setCurrentRoom(room);
+      writeHash(room);
       setTargetRoom(null);
       setIsMoving(false);
       playArrivalChime();
     }, 1200); // Fictional elevator lift travel time
   };
+
+  // Browser back/forward + hand-typed hashes drive the elevator too
+  useEffect(() => {
+    const onHashChange = () => {
+      const { room } = roomFromHash();
+      setCurrentRoom((prev) => (prev === room ? prev : room));
+    };
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
   const handleRegister = (name: string) => {
     setGuestName(name);
