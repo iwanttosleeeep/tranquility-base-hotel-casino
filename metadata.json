@@ -1,0 +1,6 @@
+{
+  "name": "Tranquility Base Hotel & Casino",
+  "description": "An immersive lyrical experience through the retro-futuristic world of Arctic Monkeys' sixth studio album.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
