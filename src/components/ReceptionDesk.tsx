@@ -129,7 +129,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
                   placeholder="00000000"
                   value={roomCode}
                   onChange={(event) => { setRoomCode(event.target.value.replace(/\D/g, "")); setRegisterMessage(""); }}
-                  className="w-full max-w-[14rem] bg-black/40 border border-[#c5a059]/30 rounded px-4 py-2 font-tbhc tracking-[0.3em] text-lg text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059] transition-colors"
+                  className="w-full max-w-[12rem] bg-black/40 border border-[#c5a059]/30 rounded px-4 py-2 font-tbhc tracking-[0.3em] text-lg text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059] transition-colors"
                 />
                 {registerMessage && <span className="font-serif text-xs text-[#c5a059]">{registerMessage}</span>}
                 <div className="flex flex-wrap items-center justify-between gap-3">
