@@ -110,7 +110,7 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
               autoComplete="one-time-code"
               maxLength={8}
               autoFocus
-              placeholder="000000"
+              placeholder="00000000"
               value={roomCode}
               onChange={(event) => { setRoomCode(event.target.value.replace(/\D/g, "")); setMessage(""); }}
               className="w-full max-w-sm bg-black/35 border border-[#c5a059]/50 rounded-lg px-5 py-3.5 md:px-6 md:py-4 font-tbhc tracking-[0.3em] text-xl md:text-2xl text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059]"
