@@ -59,7 +59,8 @@ const LOBBY_DIRECTORY = [
   { key: "BALLROOM", label: "06. Grand Ballroom", desc: "Inspect live shows & gig logs" },
   { key: "CASINO", label: "07. Clavius Casino", desc: "Spin the slot machine for secrets" },
   { key: "ARCHIVE", label: "08. Hotel Archive", desc: "View the creation & release timeline" },
-  { key: "ROOFTOP_GARDEN", label: "09. Rooftop Garden", desc: "Read original fan essays" },
+  { key: "ROOFTOP_GARDEN", label: "09. Rooftop Garden", desc: "Share readings, theories, and personal encounters with TBHC" },
+  { key: "TBC", label: "To be continue…", desc: "Further floors are currently being prepared", isPlaceholder: true },
 ];
 
 const ROOM_NAMES: Record<HotelRoom, string> = {
@@ -387,8 +388,13 @@ export default function App() {
                         {LOBBY_DIRECTORY.map((dir) => (
                           <button
                             key={dir.key}
-                            onClick={() => handleRoomChange(dir.key as HotelRoom)}
-                            className="p-4 rounded border border-white/5 bg-[#120e0a]/40 hover:border-[#c5a059]/30 hover:bg-[#c5a059]/5 transition-all text-left flex flex-col gap-1 cursor-pointer"
+                            onClick={() => !dir.isPlaceholder && handleRoomChange(dir.key as HotelRoom)}
+                            disabled={dir.isPlaceholder}
+                            className={`p-4 rounded border text-left flex flex-col gap-1 transition-all ${
+                              dir.isPlaceholder
+                                ? "border-[#c5a059]/15 bg-black/20 text-[#f5f2ed]/35 cursor-default"
+                                : "border-white/5 bg-[#120e0a]/40 hover:border-[#c5a059]/30 hover:bg-[#c5a059]/5 cursor-pointer"
+                            }`}
                           >
                             <span className="font-serif italic font-semibold text-glow text-[#f5f2ed]">{dir.label}</span>
                             <span className="text-xs font-serif text-[#f5f2ed]/50">{dir.desc}</span>
