@@ -420,6 +420,7 @@ export default function App() {
                       guestName={guestName}
                       guestRoom={guestRoom}
                       onRegister={finishRegistration}
+                      onVerifyCode={verifyRoomCode}
                       isAuthenticated={!!session}
                       guestEmail={session?.user.email || ""}
                       userId={session?.user.id || ""}
