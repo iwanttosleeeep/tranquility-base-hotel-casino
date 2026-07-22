@@ -104,7 +104,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-6 min-w-0">
         {/* Guest Register Ledger */}
-        <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 flex flex-col gap-6 bg-black/30 min-w-0">
+        <div className={`${isAwaitingCode ? "w-full max-w-xl self-start" : "w-full"} p-6 rounded-lg glass-panel border border-[#c5a059]/20 flex flex-col gap-6 bg-black/30 min-w-0`}>
           <div className="flex items-center gap-3 border-b border-[#c5a059]/30 pb-4">
             <Key className="text-[#c5a059]" size={20} />
             <h3 className="font-serif italic text-xl text-[#f5f2ed]">

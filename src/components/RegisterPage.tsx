@@ -53,7 +53,7 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
           </p>
         </header>
 
-        <section className="w-full rounded-xl glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 p-6 md:p-8 flex flex-col gap-7">
+        <section className={`${codeSent ? "w-full max-w-3xl" : "w-full"} rounded-xl glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 p-6 md:p-8 flex flex-col gap-7`}>
           <div className="flex items-center gap-4 border-b border-[#c5a059]/30 pb-5">
             <Key className="text-[#c5a059]" size={25} />
             <h2 className="font-serif italic text-2xl md:text-3xl text-[#f5f2ed]">Guest Register Ledger</h2>
