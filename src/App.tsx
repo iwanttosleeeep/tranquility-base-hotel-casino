@@ -15,6 +15,7 @@ import CasinoView from "./components/CasinoView";
 import RooftopGardenView from "./components/RooftopGardenView";
 import ArchiveView from "./components/ArchiveView";
 import GlobalSearch from "./components/GlobalSearch";
+import FrontPage from "./components/FrontPage";
 
 // ─── Hash routing: #/library, #/library/star-treatment, #/casino … ───
 const ROOM_SLUGS: Record<HotelRoom, string> = {
@@ -58,6 +59,19 @@ const LOBBY_DIRECTORY = [
   { key: "ROOFTOP_GARDEN", label: "09. Rooftop Garden", desc: "Read original fan essays" },
 ];
 
+const ROOM_NAMES: Record<HotelRoom, string> = {
+  LOBBY: "The Lobby",
+  RECEPTION: "Reception Desk",
+  LOUNGE: "The Lounge",
+  CINEMA: "Hotel Cinema",
+  OBSERVATORY: "The Observatory",
+  LIBRARY: "The Library",
+  BALLROOM: "Grand Ballroom",
+  CASINO: "Clavius Casino",
+  ROOFTOP_GARDEN: "Rooftop Garden",
+  ARCHIVE: "Hotel Archive",
+};
+
 export default function App() {
   const [currentRoom, setCurrentRoom] = useState<HotelRoom>(() => roomFromHash().room);
   const [targetRoom, setTargetRoom] = useState<HotelRoom | null>(null);
@@ -65,7 +79,12 @@ export default function App() {
   const [guestName, setGuestName] = useState<string>(() => {
     return localStorage.getItem("tbhc_guest_name") || "";
   });
+  const [guestRoom, setGuestRoom] = useState<string>(() => {
+    return localStorage.getItem("tbhc_guest_room") || "505";
+  });
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isFrontPage, setIsFrontPage] = useState(true);
+  const [isElevatorCollapsed, setIsElevatorCollapsed] = useState(false);
 
   // Play synthetic retro bell / chime when floor changes
   const playArrivalChime = () => {
@@ -141,14 +160,41 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  const handleRegister = (name: string) => {
+  const handleRegister = (name: string, room = "505") => {
     setGuestName(name);
     if (name) {
       localStorage.setItem("tbhc_guest_name", name);
+      localStorage.setItem("tbhc_guest_room", room);
+      setGuestRoom(room);
     } else {
       localStorage.removeItem("tbhc_guest_name");
+      localStorage.removeItem("tbhc_guest_room");
+      setGuestRoom("505");
     }
   };
+
+  const openReception = () => {
+    setCurrentRoom("RECEPTION");
+    writeHash("RECEPTION");
+    setIsFrontPage(false);
+  };
+
+  const finishRegistration = (name: string, room: string) => {
+    handleRegister(name, room);
+    setCurrentRoom("LOBBY");
+    writeHash("LOBBY");
+  };
+
+  if (isFrontPage) {
+    return (
+      <FrontPage
+        guestName={guestName}
+        guestRoom={guestRoom}
+        onRegister={openReception}
+        onEnterHotel={() => setIsFrontPage(false)}
+      />
+    );
+  }
 
   return (
     <div className="relative min-h-screen font-serif selection:bg-[#c5a059] selection:text-black bg-[#0a0a0a] text-[#f5f2ed] overflow-x-hidden">
@@ -192,38 +238,42 @@ export default function App() {
             {guestName && (
               <div className="hidden md:flex items-center gap-2 border border-[#c5a059]/20 px-3 py-1 rounded bg-[#c5a059]/5 text-[11px] font-serif italic text-[#c5a059] tracking-wider uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                <span>Suite 505 • {guestName}</span>
+                <span>Suite {guestRoom} • {guestName}</span>
               </div>
             )}
           </div>
         </header>
 
         {/* Dynamic content split with elevator */}
-        <div className="flex-1 w-full max-w-7xl mx-auto p-6 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className={`flex-1 w-full max-w-7xl mx-auto p-6 md:p-10 grid grid-cols-1 gap-8 items-start transition-[grid-template-columns] duration-300 ${
+          isElevatorCollapsed ? "lg:grid-cols-[4.5rem_minmax(0,1fr)]" : "lg:grid-cols-[minmax(28rem,4fr)_minmax(0,8fr)]"
+        }`}>
           
           {/* Left / Elevator Column (4 cols) */}
-          <div className="lg:col-span-4 lg:sticky lg:top-28 flex flex-col gap-6">
+          <div className="lg:sticky lg:top-28 lg:-translate-x-3 flex flex-col gap-6">
             <Elevator
               currentRoom={currentRoom}
               targetRoom={targetRoom}
               onRoomChange={handleRoomChange}
               isMoving={isMoving}
+              isCollapsed={isElevatorCollapsed}
+              onToggleCollapse={() => setIsElevatorCollapsed((collapsed) => !collapsed)}
             />
 
             {/* Fictional Staff Message Card */}
-            <div className="p-4 rounded-lg bg-black/30 border border-white/5 font-serif text-xs text-[#f5f2ed]/50 flex flex-col gap-2">
+            {!isElevatorCollapsed && <div className="p-4 rounded-lg bg-black/30 border border-white/5 font-serif text-xs text-[#f5f2ed]/50 flex flex-col gap-2">
               <div className="flex items-center gap-1.5 font-serif italic text-[11px] uppercase tracking-wider text-[#c5a059]">
                 <Radio size={12} className="animate-pulse" />
                 <span>Reception Broadcast</span>
               </div>
               <p className="italic">
-                "Welcome to Sector 01. Elevators are authorized to navigate floors G to 09. Please maintain contact keys at all times."
+                &quot;Welcome to {ROOM_NAMES[currentRoom]}. Elevators are authorized to navigate floors G to 09. Please maintain contact keys at all times.&quot;
               </p>
-            </div>
+            </div>}
           </div>
 
           {/* Right / Main Room content Column (8 cols) */}
-          <div className="lg:col-span-8 flex flex-col gap-6">
+          <div className="flex flex-col gap-6 min-w-0">
             <AnimatePresence mode="wait">
               {isMoving ? (
                 /* Elevator travel animation screen */
@@ -272,7 +322,7 @@ export default function App() {
                           The Grand Lobby
                         </h2>
                         <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
-                          You have checked into the **Tranquility Base Hotel & Casino** portal. Wander through the retro space lounge floors using the Otis Lift on the left.
+                          You have checked into the <span className="font-semibold text-[#f5f2ed]">Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1">&amp;</span> Casino</span> portal. Wander through the retro space lounge floors using the Otis Lift on the left.
                         </p>
                       </div>
 
@@ -295,8 +345,8 @@ export default function App() {
                   {currentRoom === "RECEPTION" && (
                     <ReceptionDesk
                       guestName={guestName}
-                      onRegister={handleRegister}
-                      onNavigateToRoom={handleRoomChange}
+                      guestRoom={guestRoom}
+                      onRegister={finishRegistration}
                     />
                   )}
 
@@ -305,8 +355,8 @@ export default function App() {
                   {currentRoom === "OBSERVATORY" && <ObservatoryView />}
                   {currentRoom === "LIBRARY" && <LibraryView />}
                   {currentRoom === "BALLROOM" && <BallroomView />}
-                  {currentRoom === "CASINO" && <CasinoView />}
-                  {currentRoom === "ROOFTOP_GARDEN" && <RooftopGardenView />}
+                  {currentRoom === "CASINO" && <CasinoView guestRoom={guestRoom} />}
+                  {currentRoom === "ROOFTOP_GARDEN" && <RooftopGardenView guestName={guestName} guestRoom={guestRoom} onNavigateToRoom={handleRoomChange} />}
                   {currentRoom === "ARCHIVE" && <ArchiveView />}
                 </motion.div>
               )}

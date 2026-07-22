@@ -10,15 +10,15 @@ const REEL_ITEMS = [
   { char: "🌗", label: "Lunar Surface", bonus: "Take a lift down to Sector 01." }
 ];
 
-const INTERCOM_LINES = [
+const intercomLines = (guestRoom: string) => [
   "Front desk to lobby: the moonlit taqueria is fully booked this evening.",
   "Reception notice: Mark is currently directing another call. Please hold.",
-  "Housekeeping reports the mirrorball in Suite 505 is spinning unattended.",
+  `Housekeeping reports the mirrorball in Suite ${guestRoom} is spinning unattended.`,
   "Observatory bulletin: Earth-rise viewing begins at the top of the hour.",
   "The lounge band kindly requests one more round of applause before the encore."
 ];
 
-export default function CasinoView() {
+export default function CasinoView({ guestRoom }: { guestRoom: string }) {
   const [reels, setReels] = useState(["🪐", "🍸", "🤵"]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [winMsg, setWinMsg] = useState<string | null>(null);
@@ -60,7 +60,8 @@ export default function CasinoView() {
           // Three of a kind!
           setCredits((prev) => prev + 150);
           setWinMsg(`JACKPOT! Three ${finalReels[0].label}s! ${finalReels[0].bonus}`);
-          setPayoutQuote(INTERCOM_LINES[Math.floor(Math.random() * INTERCOM_LINES.length)]);
+          const lines = intercomLines(guestRoom);
+          setPayoutQuote(lines[Math.floor(Math.random() * lines.length)]);
         } else if (
           finalReels[0].char === finalReels[1].char || 
           finalReels[1].char === finalReels[2].char || 
@@ -70,7 +71,8 @@ export default function CasinoView() {
           const matchingReel = finalReels[1].char === finalReels[2].char ? finalReels[1] : finalReels[0];
           setCredits((prev) => prev + 25);
           setWinMsg(`PAIR MATCH! ${matchingReel.bonus}`);
-          setPayoutQuote(INTERCOM_LINES[Math.floor(Math.random() * INTERCOM_LINES.length)]);
+          const lines = intercomLines(guestRoom);
+          setPayoutQuote(lines[Math.floor(Math.random() * lines.length)]);
         }
       }
     }, 100);

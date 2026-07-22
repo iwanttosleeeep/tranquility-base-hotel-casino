@@ -90,3 +90,25 @@ body {
   text-transform: uppercase;
   font-style: normal;
 }
+
+.front-action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  border: 1px solid rgba(197, 160, 89, 0.85);
+  background: rgba(197, 160, 89, 0.12);
+  color: #f5f2ed;
+  padding: 0.85rem 1.1rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.front-action-button:hover {
+  background: #c5a059;
+  color: #090704;
+  transform: translateY(-2px);
+}
