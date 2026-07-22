@@ -135,7 +135,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
                   disabled={isSubmitting}
                   className="bg-[#c5a059] hover:bg-[#d97706] text-black font-panel text-xs uppercase tracking-widest px-6 py-2 rounded transition-all active:scale-95"
                 >
-                  {isSubmitting ? "Sending..." : isEditing ? "Save" : "Send magic link"}
+                  {isSubmitting ? "Sending..." : isEditing ? "Save" : "Send room code"}
                 </button>
               </div>
               {isEditing && (

@@ -3,14 +3,17 @@ import { Key } from "lucide-react";
 
 interface RegisterPageProps {
   onRegister: (name: string, room: string, email: string) => Promise<{ success: boolean; message: string }>;
+  onVerifyCode: (email: string, code: string) => Promise<{ success: boolean; message: string }>;
 }
 
-export default function RegisterPage({ onRegister }: RegisterPageProps) {
+export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageProps) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [room, setRoom] = useState("505");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roomCode, setRoomCode] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
 
   const submitRegistration = async (event: FormEvent) => {
     event.preventDefault();
@@ -20,6 +23,19 @@ export default function RegisterPage({ onRegister }: RegisterPageProps) {
     }
     setIsSubmitting(true);
     const result = await onRegister(name.trim(), room, email.trim());
+    setMessage(result.message);
+    setCodeSent(result.success);
+    setIsSubmitting(false);
+  };
+
+  const verifyCode = async (event: FormEvent) => {
+    event.preventDefault();
+    if (!/^\d{6}$/.test(roomCode)) {
+      setMessage("Please enter the six-digit room code from your email.");
+      return;
+    }
+    setIsSubmitting(true);
+    const result = await onVerifyCode(email.trim(), roomCode);
     setMessage(result.message);
     setIsSubmitting(false);
   };
@@ -43,6 +59,7 @@ export default function RegisterPage({ onRegister }: RegisterPageProps) {
             <h2 className="font-serif italic text-2xl md:text-3xl text-[#f5f2ed]">Guest Register Ledger</h2>
           </div>
 
+          {!codeSent ? (
           <form onSubmit={submitRegistration} className="flex flex-col gap-4">
             <label className="text-sm md:text-lg font-panel text-[#c5a059] uppercase tracking-[0.16em]">Reserve a room with your email:</label>
             <input
@@ -76,10 +93,37 @@ export default function RegisterPage({ onRegister }: RegisterPageProps) {
             <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4">
               <span className="font-serif italic text-sm md:text-lg text-[#c5a059] min-h-6">{message}</span>
               <button type="submit" disabled={isSubmitting} className="front-action-button self-end !text-sm md:!text-base !px-8 !py-4 disabled:opacity-50">
-                {isSubmitting ? "Sending..." : "Send magic link"}
+                {isSubmitting ? "Sending..." : "Get room code"}
               </button>
             </div>
           </form>
+          ) : (
+          <form onSubmit={verifyCode} className="flex flex-col gap-5">
+            <div>
+              <span className="text-sm md:text-lg font-panel text-[#c5a059] uppercase tracking-[0.16em]">Your room code has been sent to your email. Please check your inbox.</span>
+              <p className="mt-2 font-serif italic text-sm text-[#f5f2ed]/50">Enter the six-digit code to complete your check-in.</p>
+            </div>
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]{6}"
+              autoComplete="one-time-code"
+              maxLength={6}
+              autoFocus
+              placeholder="000000"
+              value={roomCode}
+              onChange={(event) => { setRoomCode(event.target.value.replace(/\D/g, "")); setMessage(""); }}
+              className="w-full max-w-sm bg-black/35 border border-[#c5a059]/50 rounded-lg px-5 py-3.5 md:px-6 md:py-4 font-tbhc tracking-[0.3em] text-xl md:text-2xl text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059]"
+            />
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4">
+              <span className="font-serif italic text-sm text-[#c5a059] min-h-5">{message}</span>
+              <button type="button" onClick={() => { setCodeSent(false); setRoomCode(""); setMessage(""); }} className="self-start font-panel text-[10px] text-[#f5f2ed]/50 hover:text-[#c5a059]">Use a different email</button>
+              <button type="submit" disabled={isSubmitting} className="front-action-button self-end !text-sm md:!text-base !px-8 !py-4 disabled:opacity-50">
+                {isSubmitting ? "Checking..." : "Check in"}
+              </button>
+            </div>
+          </form>
+          )}
         </section>
       </div>
     </main>

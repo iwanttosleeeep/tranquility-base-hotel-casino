@@ -210,7 +210,7 @@ export default function App() {
       });
       return error
         ? { success: false, message: error.message }
-        : { success: true, message: "Magic link sent. Check your inbox to complete check-in." };
+        : { success: true, message: "Your room code has been sent to your email. Please check your inbox." };
     }
 
     const { error } = await supabase
@@ -238,6 +238,17 @@ export default function App() {
     return result;
   };
 
+  const verifyRoomCode = async (email: string, code: string) => {
+    if (!supabase) return { success: false, message: "Supabase is not configured. Check your .env.local file." };
+    const { error } = await supabase.auth.verifyOtp({ email, token: code, type: "email" });
+    if (error) return { success: false, message: error.message };
+    setIsRegisterPage(false);
+    setIsFrontPage(false);
+    setCurrentRoom("LOBBY");
+    writeHash("LOBBY");
+    return { success: true, message: "Room access granted." };
+  };
+
   if (isFrontPage) {
     return (
       <FrontPage
@@ -250,7 +261,7 @@ export default function App() {
   }
 
   if (isRegisterPage) {
-    return <RegisterPage onRegister={finishRegistration} />;
+    return <RegisterPage onRegister={finishRegistration} onVerifyCode={verifyRoomCode} />;
   }
 
   return (
