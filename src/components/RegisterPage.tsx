@@ -30,8 +30,8 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
 
   const verifyCode = async (event: FormEvent) => {
     event.preventDefault();
-    if (!/^\d{6}$/.test(roomCode)) {
-      setMessage("Please enter the six-digit room code from your email.");
+    if (!/^\d{8}$/.test(roomCode)) {
+      setMessage("Please enter the eight-digit room code from your email.");
       return;
     }
     setIsSubmitting(true);
@@ -101,14 +101,14 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
           <form onSubmit={verifyCode} className="flex flex-col gap-5">
             <div>
               <span className="text-sm md:text-lg font-panel text-[#c5a059] uppercase tracking-[0.16em]">Your room code has been sent to your email. Please check your inbox.</span>
-              <p className="mt-2 font-serif italic text-sm text-[#f5f2ed]/50">Enter the six-digit code to complete your check-in.</p>
+              <p className="mt-2 font-serif italic text-sm text-[#f5f2ed]/50">Enter the eight-digit code to complete your check-in.</p>
             </div>
             <input
               type="text"
               inputMode="numeric"
-              pattern="[0-9]{6}"
+              pattern="[0-9]{8}"
               autoComplete="one-time-code"
-              maxLength={6}
+              maxLength={8}
               autoFocus
               placeholder="000000"
               value={roomCode}
