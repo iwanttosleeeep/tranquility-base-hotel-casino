@@ -104,7 +104,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-6 min-w-0">
         {/* Guest Register Ledger */}
-        <div className={`${isAwaitingCode ? "w-full max-w-md self-start" : "w-full"} p-6 rounded-lg glass-panel border border-[#c5a059]/20 flex flex-col gap-6 bg-black/30 min-w-0`}>
+        <div className="w-full p-6 rounded-lg glass-panel border border-[#c5a059]/20 flex flex-col gap-6 bg-black/30 min-w-0">
           <div className="flex items-center gap-3 border-b border-[#c5a059]/30 pb-4">
             <Key className="text-[#c5a059]" size={20} />
             <h3 className="font-serif italic text-xl text-[#f5f2ed]">
@@ -129,7 +129,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
                   placeholder="00000000"
                   value={roomCode}
                   onChange={(event) => { setRoomCode(event.target.value.replace(/\D/g, "")); setRegisterMessage(""); }}
-                  className="max-w-xs bg-black/40 border border-[#c5a059]/30 rounded px-4 py-2 font-tbhc tracking-[0.3em] text-lg text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059] transition-colors"
+                  className="w-full max-w-[22rem] bg-black/40 border border-[#c5a059]/30 rounded px-4 py-2 font-tbhc tracking-[0.3em] text-lg text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059] transition-colors"
                 />
                 {registerMessage && <span className="font-serif text-xs text-[#c5a059]">{registerMessage}</span>}
                 <div className="flex flex-wrap items-center justify-between gap-3">

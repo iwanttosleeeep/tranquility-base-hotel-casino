@@ -53,7 +53,7 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
           </p>
         </header>
 
-        <section className={`${codeSent ? "w-full max-w-md" : "w-full"} rounded-xl glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 p-6 md:p-8 flex flex-col gap-7`}>
+        <section className="w-full rounded-xl glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 p-6 md:p-8 flex flex-col gap-7">
           <div className="flex items-center gap-4 border-b border-[#c5a059]/30 pb-5">
             <Key className="text-[#c5a059]" size={25} />
             <h2 className="font-serif italic text-2xl md:text-3xl text-[#f5f2ed]">Guest Register Ledger</h2>
@@ -112,7 +112,7 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
               placeholder="00000000"
               value={roomCode}
               onChange={(event) => { setRoomCode(event.target.value.replace(/\D/g, "")); setMessage(""); }}
-              className="w-full max-w-sm bg-black/35 border border-[#c5a059]/50 rounded-lg px-5 py-3.5 md:px-6 md:py-4 font-tbhc tracking-[0.3em] text-xl md:text-2xl text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059]"
+              className="w-full max-w-[22rem] bg-black/35 border border-[#c5a059]/50 rounded-lg px-5 py-3.5 md:px-6 md:py-4 font-tbhc tracking-[0.3em] text-xl md:text-2xl text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059]"
             />
             <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4">
               <span className="font-serif italic text-sm text-[#c5a059] min-h-5">{message}</span>
