@@ -1,9 +1,11 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Book, Edit3, MessageSquare, PenLine, Send, UserRound } from "lucide-react";
 import type { HotelRoom } from "../types";
+import { supabase } from "../lib/supabase";
 
 interface GardenPost {
   id: string;
+  authorId: string;
   author: string;
   title: string;
   body: string;
@@ -13,34 +15,44 @@ interface GardenPost {
 interface RooftopGardenViewProps {
   guestName: string;
   guestRoom: string;
+  userId: string;
   onNavigateToRoom: (room: HotelRoom) => void;
 }
-
-const POSTS_KEY = "tbhc_rooftop_forum_posts";
 
 function formatDate(date: string) {
   return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(new Date(date));
 }
 
-export default function RooftopGardenView({ guestName, guestRoom, onNavigateToRoom }: RooftopGardenViewProps) {
+export default function RooftopGardenView({ guestName, guestRoom, userId, onNavigateToRoom }: RooftopGardenViewProps) {
   const [posts, setPosts] = useState<GardenPost[]>([]);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [postError, setPostError] = useState("");
 
   useEffect(() => {
-    try {
-      const storedPosts = localStorage.getItem(POSTS_KEY);
-      if (storedPosts) setPosts(JSON.parse(storedPosts));
-    } catch {
-      setPosts([]);
-    }
+    const loadPosts = async () => {
+      if (!supabase) return;
+      const { data, error } = await supabase
+        .from("forum_posts")
+        .select("id, author_id, author_name, title, body, created_at")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) {
+        setPostError(error.message);
+        return;
+      }
+      setPosts((data || []).map((post) => ({
+        id: post.id,
+        authorId: post.author_id,
+        author: post.author_name,
+        title: post.title,
+        body: post.body,
+        createdAt: post.created_at,
+      })));
+    };
+    void loadPosts();
   }, []);
-
-  const savePosts = (nextPosts: GardenPost[]) => {
-    setPosts(nextPosts);
-    localStorage.setItem(POSTS_KEY, JSON.stringify(nextPosts));
-  };
 
   const resetComposer = () => {
     setTitle("");
@@ -48,15 +60,34 @@ export default function RooftopGardenView({ guestName, guestRoom, onNavigateToRo
     setEditingId(null);
   };
 
-  const submitPost = (event: FormEvent) => {
+  const submitPost = async (event: FormEvent) => {
     event.preventDefault();
-    if (!guestName || !title.trim() || !body.trim()) return;
+    if (!supabase || !userId || !guestName || !title.trim() || !body.trim()) return;
 
     if (editingId) {
-      savePosts(posts.map((post) => post.id === editingId ? { ...post, title: title.trim(), body: body.trim() } : post));
+      const { error } = await supabase
+        .from("forum_posts")
+        .update({ title: title.trim(), body: body.trim() })
+        .eq("id", editingId)
+        .eq("author_id", userId);
+      if (error) {
+        setPostError(error.message);
+        return;
+      }
+      setPosts(posts.map((post) => post.id === editingId ? { ...post, title: title.trim(), body: body.trim() } : post));
     } else {
-      savePosts([{ id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, author: guestName, title: title.trim(), body: body.trim(), createdAt: new Date().toISOString() }, ...posts]);
+      const { data, error } = await supabase
+        .from("forum_posts")
+        .insert({ author_id: userId, author_name: guestName, title: title.trim(), body: body.trim() })
+        .select("id, author_id, author_name, title, body, created_at")
+        .single();
+      if (error || !data) {
+        setPostError(error?.message || "Unable to publish this transmission.");
+        return;
+      }
+      setPosts([{ id: data.id, authorId: data.author_id, author: data.author_name, title: data.title, body: data.body, createdAt: data.created_at }, ...posts]);
     }
+    setPostError("");
     resetComposer();
   };
 
@@ -93,7 +124,7 @@ export default function RooftopGardenView({ guestName, guestRoom, onNavigateToRo
             <input value={title} onChange={(event) => setTitle(event.target.value)} maxLength={100} required placeholder="Give your transmission a title" className="w-full bg-black/30 border border-[#c5a059]/20 rounded px-4 py-3 font-serif text-[#f5f2ed] placeholder:text-[#f5f2ed]/30 focus:outline-none focus:border-[#c5a059]" />
             <textarea value={body} onChange={(event) => setBody(event.target.value)} maxLength={1600} required rows={5} placeholder="Your reading of the record, a favourite moment, or a thought from the lounge…" className="w-full resize-y bg-black/30 border border-[#c5a059]/20 rounded px-4 py-3 font-serif text-[#f5f2ed] placeholder:text-[#f5f2ed]/30 focus:outline-none focus:border-[#c5a059] leading-relaxed" />
             <div className="flex items-center justify-between gap-4">
-              <span className="font-serif italic text-xs text-[#f5f2ed]/40">Your note will be kept in this browser&apos;s guest ledger.</span>
+              <span className="font-serif italic text-xs text-[#f5f2ed]/40">Your transmission will be recorded in the hotel forum.</span>
               <button type="submit" className="front-action-button !py-2.5 !text-[11px]">
                 <Send size={14} /> {editingId ? "Save transmission" : "Publish transmission"}
               </button>
@@ -111,6 +142,7 @@ export default function RooftopGardenView({ guestName, guestRoom, onNavigateToRo
             <button onClick={() => onNavigateToRoom("RECEPTION")} className="front-action-button !py-2.5 !text-[11px]">Visit Reception</button>
           </div>
         )}
+        {postError && <p className="relative mt-4 font-serif text-xs text-[#d97706]">{postError}</p>}
       </div>
 
       <section className="flex flex-col gap-4">
@@ -132,7 +164,7 @@ export default function RooftopGardenView({ guestName, guestRoom, onNavigateToRo
                 <h4 className="font-serif italic text-2xl text-[#f5f2ed] leading-tight">{post.title}</h4>
                 <div className="mt-2 flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/65"><UserRound size={12} /> {post.author} <span>•</span> {formatDate(post.createdAt)}</div>
               </div>
-              {post.author === guestName && <button onClick={() => editPost(post)} className="shrink-0 flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/70 hover:text-[#c5a059]"><Edit3 size={13} /> Edit</button>}
+              {post.authorId === userId && <button onClick={() => editPost(post)} className="shrink-0 flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/70 hover:text-[#c5a059]"><Edit3 size={13} /> Edit</button>}
             </div>
             <p className="whitespace-pre-wrap font-serif text-[#f5f2ed]/75 leading-relaxed">{post.body}</p>
           </article>

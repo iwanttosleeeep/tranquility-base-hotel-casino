@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, Compass, Radio } from "lucide-react";
 import { HotelRoom } from "./types";
+import { supabase } from "./lib/supabase";
+import type { Session } from "@supabase/supabase-js";
 
 // Import custom views
 import Elevator from "./components/Elevator";
@@ -16,6 +18,7 @@ import RooftopGardenView from "./components/RooftopGardenView";
 import ArchiveView from "./components/ArchiveView";
 import GlobalSearch from "./components/GlobalSearch";
 import FrontPage from "./components/FrontPage";
+import RegisterPage from "./components/RegisterPage";
 
 // ─── Hash routing: #/library, #/library/star-treatment, #/casino … ───
 const ROOM_SLUGS: Record<HotelRoom, string> = {
@@ -76,15 +79,42 @@ export default function App() {
   const [currentRoom, setCurrentRoom] = useState<HotelRoom>(() => roomFromHash().room);
   const [targetRoom, setTargetRoom] = useState<HotelRoom | null>(null);
   const [isMoving, setIsMoving] = useState(false);
-  const [guestName, setGuestName] = useState<string>(() => {
-    return localStorage.getItem("tbhc_guest_name") || "";
-  });
-  const [guestRoom, setGuestRoom] = useState<string>(() => {
-    return localStorage.getItem("tbhc_guest_room") || "505";
-  });
+  const [guestName, setGuestName] = useState("");
+  const [guestRoom, setGuestRoom] = useState("505");
+  const [session, setSession] = useState<Session | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFrontPage, setIsFrontPage] = useState(true);
+  const [isRegisterPage, setIsRegisterPage] = useState(false);
   const [isElevatorCollapsed, setIsElevatorCollapsed] = useState(false);
+
+  useEffect(() => {
+    if (!supabase) return;
+
+    const loadProfile = async (activeSession: Session | null) => {
+      setSession(activeSession);
+      if (!activeSession) {
+        setGuestName("");
+        setGuestRoom("505");
+        return;
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("display_name, room_number")
+        .eq("id", activeSession.user.id)
+        .maybeSingle();
+
+      setGuestName(data?.display_name || activeSession.user.user_metadata.display_name || "Guest");
+      setGuestRoom(data?.room_number || activeSession.user.user_metadata.room_number || "505");
+    };
+
+    void supabase.auth.getSession().then(({ data }) => loadProfile(data.session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, activeSession) => {
+      void loadProfile(activeSession);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Play synthetic retro bell / chime when floor changes
   const playArrivalChime = () => {
@@ -160,29 +190,51 @@ export default function App() {
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
 
-  const handleRegister = (name: string, room = "505") => {
-    setGuestName(name);
-    if (name) {
-      localStorage.setItem("tbhc_guest_name", name);
-      localStorage.setItem("tbhc_guest_room", room);
-      setGuestRoom(room);
-    } else {
-      localStorage.removeItem("tbhc_guest_name");
-      localStorage.removeItem("tbhc_guest_room");
-      setGuestRoom("505");
+  const handleRegister = async (name: string, room = "505", email = "") => {
+    if (!supabase) return { success: false, message: "Supabase is not configured. Check your .env.local file." };
+
+    if (!name) {
+      const { error } = await supabase.auth.signOut();
+      return error ? { success: false, message: error.message } : { success: true, message: "Checked out successfully." };
     }
+
+    if (!session) {
+      if (!email) return { success: false, message: "Please enter an email address." };
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin,
+          data: { display_name: name, room_number: room },
+        },
+      });
+      return error
+        ? { success: false, message: error.message }
+        : { success: true, message: "Magic link sent. Check your inbox to complete check-in." };
+    }
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ display_name: name, room_number: room })
+      .eq("id", session.user.id);
+
+    if (error) return { success: false, message: error.message };
+    setGuestName(name);
+    setGuestRoom(room);
+    return { success: true, message: "Guest profile updated." };
   };
 
   const openReception = () => {
-    setCurrentRoom("RECEPTION");
-    writeHash("RECEPTION");
+    setIsRegisterPage(true);
     setIsFrontPage(false);
   };
 
-  const finishRegistration = (name: string, room: string) => {
-    handleRegister(name, room);
-    setCurrentRoom("LOBBY");
-    writeHash("LOBBY");
+  const finishRegistration = async (name: string, room: string, email?: string) => {
+    const result = await handleRegister(name, room, email);
+    if (result.success && session && name) {
+      setCurrentRoom("LOBBY");
+      writeHash("LOBBY");
+    }
+    return result;
   };
 
   if (isFrontPage) {
@@ -194,6 +246,10 @@ export default function App() {
         onEnterHotel={() => setIsFrontPage(false)}
       />
     );
+  }
+
+  if (isRegisterPage) {
+    return <RegisterPage onRegister={finishRegistration} />;
   }
 
   return (
@@ -347,6 +403,9 @@ export default function App() {
                       guestName={guestName}
                       guestRoom={guestRoom}
                       onRegister={finishRegistration}
+                      isAuthenticated={!!session}
+                      guestEmail={session?.user.email || ""}
+                      userId={session?.user.id || ""}
                     />
                   )}
 
@@ -356,7 +415,7 @@ export default function App() {
                   {currentRoom === "LIBRARY" && <LibraryView />}
                   {currentRoom === "BALLROOM" && <BallroomView />}
                   {currentRoom === "CASINO" && <CasinoView guestRoom={guestRoom} />}
-                  {currentRoom === "ROOFTOP_GARDEN" && <RooftopGardenView guestName={guestName} guestRoom={guestRoom} onNavigateToRoom={handleRoomChange} />}
+                  {currentRoom === "ROOFTOP_GARDEN" && <RooftopGardenView guestName={guestName} guestRoom={guestRoom} userId={session?.user.id || ""} onNavigateToRoom={handleRoomChange} />}
                   {currentRoom === "ARCHIVE" && <ArchiveView />}
                 </motion.div>
               )}

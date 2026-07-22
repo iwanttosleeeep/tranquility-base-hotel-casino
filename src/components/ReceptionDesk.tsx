@@ -1,50 +1,66 @@
 import React, { useEffect, useState } from "react";
 import { Key, PencilLine, LogOut, MessageSquare } from "lucide-react";
+import { supabase } from "../lib/supabase";
 
 interface ReceptionDeskProps {
   guestName: string;
   guestRoom: string;
-  onRegister: (name: string, room: string) => void;
+  guestEmail: string;
+  isAuthenticated: boolean;
+  userId: string;
+  onRegister: (name: string, room: string, email?: string) => Promise<{ success: boolean; message: string }>;
 }
 
-export default function ReceptionDesk({ guestName, guestRoom, onRegister }: ReceptionDeskProps) {
+export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuthenticated, userId, onRegister }: ReceptionDeskProps) {
   const [nameInput, setNameInput] = useState("");
   const [roomInput, setRoomInput] = useState("505");
   const [roomError, setRoomError] = useState("");
+  const [emailInput, setEmailInput] = useState("");
+  const [registerMessage, setRegisterMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [feedbackSent, setFeedbackSent] = useState(false);
   const [isRegistered, setIsRegistered] = useState(!!guestName);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    setIsRegistered(!!guestName);
+    setIsRegistered(isAuthenticated);
     setNameInput(guestName);
     setRoomInput(guestRoom);
-  }, [guestName, guestRoom]);
+    setEmailInput(guestEmail);
+  }, [guestName, guestRoom, guestEmail, isAuthenticated]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (nameInput.trim() && /^\d{3}$/.test(roomInput)) {
-      onRegister(nameInput.trim(), roomInput);
+    if (!/^\d{3}$/.test(roomInput)) {
+      setRoomError("Please enter a three-digit room number.");
+      return;
+    }
+    if (!nameInput.trim()) return;
+
+    setIsSubmitting(true);
+    const result = await onRegister(nameInput.trim(), roomInput, emailInput.trim());
+    setRegisterMessage(result.message);
+    setIsSubmitting(false);
+    if (result.success && isAuthenticated) {
       setIsRegistered(true);
       setIsEditing(false);
       setRoomError("");
-    } else if (!/^\d{3}$/.test(roomInput)) {
-      setRoomError("Please enter a three-digit room number.");
     }
   };
 
-  const submitFeedback = (event: React.FormEvent) => {
+  const submitFeedback = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!feedback.trim()) return;
-    const storedFeedback = JSON.parse(localStorage.getItem("tbhc_guest_feedback") || "[]");
-    storedFeedback.unshift({
-      message: feedback.trim(),
-      guest: guestName || "Unregistered guest",
-      room: guestName ? guestRoom : null,
-      createdAt: new Date().toISOString(),
-    });
-    localStorage.setItem("tbhc_guest_feedback", JSON.stringify(storedFeedback));
+    if (!supabase || !userId) {
+      setFeedbackSent(false);
+      return;
+    }
+    const { error } = await supabase.from("feedback").insert({ author_id: userId, message: feedback.trim() });
+    if (error) {
+      setFeedbackSent(false);
+      return;
+    }
     setFeedback("");
     setFeedbackSent(true);
   };
@@ -80,8 +96,18 @@ export default function ReceptionDesk({ guestName, guestRoom, onRegister }: Rece
           {!isRegistered || isEditing ? (
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <label className="text-xs font-panel text-[#c5a059] uppercase tracking-wider">
-                {isEditing ? "Update guest profile:" : "Please enter your name to register:"}
+                {isEditing ? "Update guest profile:" : "Reserve a room with your email:"}
               </label>
+              {!isAuthenticated && (
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={emailInput}
+                  onChange={(e) => { setEmailInput(e.target.value); setRegisterMessage(""); }}
+                  required
+                  className="min-w-0 bg-black/40 border border-[#c5a059]/30 rounded px-4 py-2 font-serif text-[#f5f2ed] focus:outline-none focus:border-[#c5a059] transition-colors"
+                />
+              )}
               <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_6rem] gap-2 min-w-0">
                 <input
                   type="text"
@@ -102,12 +128,14 @@ export default function ReceptionDesk({ guestName, guestRoom, onRegister }: Rece
                 />
               </div>
               {roomError && <span className="font-serif text-xs text-[#d97706]">{roomError}</span>}
+              {registerMessage && <span className="font-serif text-xs text-[#c5a059]">{registerMessage}</span>}
               <div className="flex justify-end">
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="bg-[#c5a059] hover:bg-[#d97706] text-black font-panel text-xs uppercase tracking-widest px-6 py-2 rounded transition-all active:scale-95"
                 >
-                  {isEditing ? "Save" : "Register"}
+                  {isSubmitting ? "Sending..." : isEditing ? "Save" : "Send magic link"}
                 </button>
               </div>
               {isEditing && (
@@ -127,13 +155,13 @@ export default function ReceptionDesk({ guestName, guestRoom, onRegister }: Rece
                 </span>
               </div>
               <p className="text-xs text-[#f5f2ed]/60 leading-relaxed font-serif">
-                You have been assigned Room {guestRoom} (Tranquility Suite). Your metallic lounge pass has been verified. Use the elevator terminal on the left to change levels at any time.
+                You have been assigned Room {guestRoom}. Your metallic lounge pass has been verified. Use the elevator terminal on the left to change levels at any time.
               </p>
               <div className="flex flex-wrap gap-x-6 gap-y-3 pt-1">
                 <button onClick={() => setIsEditing(true)} className="flex items-center gap-2 text-left font-panel text-[11px] text-[#c5a059]/70 hover:text-[#c5a059] transition-all">
                   <PencilLine size={13} /> Edit guest profile
                 </button>
-                <button onClick={() => { setIsRegistered(false); setIsEditing(false); onRegister("", "505"); }} className="flex items-center gap-2 text-left font-panel text-[11px] text-[#c5a059]/70 hover:text-[#c5a059] transition-all">
+                <button onClick={() => { setIsRegistered(false); setIsEditing(false); void onRegister("", "505"); }} className="flex items-center gap-2 text-left font-panel text-[11px] text-[#c5a059]/70 hover:text-[#c5a059] transition-all">
                   <LogOut size={13} /> Check out
                 </button>
               </div>
@@ -160,8 +188,8 @@ export default function ReceptionDesk({ guestName, guestRoom, onRegister }: Rece
               className="w-full resize-y bg-black/30 border border-[#c5a059]/20 rounded px-4 py-3 font-serif text-sm text-[#f5f2ed] placeholder:text-[#f5f2ed]/30 focus:outline-none focus:border-[#c5a059]"
             />
             <div className="flex items-center justify-between gap-3">
-              <span className="font-serif italic text-xs text-[#f5f2ed]/45">{feedbackSent ? "Your message is saved in our guest ledger." : ""}</span>
-              <button type="submit" className="shrink-0 bg-[#c5a059] hover:bg-[#d97706] text-black font-panel text-[10px] uppercase tracking-widest px-4 py-2 rounded transition-all active:scale-95">Send feedback</button>
+              <span className="font-serif italic text-xs text-[#f5f2ed]/45">{feedbackSent ? "Your message is saved in our guest ledger." : !isAuthenticated ? "Check in to send a note to Reception." : ""}</span>
+              <button type="submit" disabled={!isAuthenticated} className="shrink-0 bg-[#c5a059] hover:bg-[#d97706] disabled:opacity-40 disabled:cursor-not-allowed text-black font-panel text-[10px] uppercase tracking-widest px-4 py-2 rounded transition-all active:scale-95">Send feedback</button>
             </div>
           </form>
         </div>
