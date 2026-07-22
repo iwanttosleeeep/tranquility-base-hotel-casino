@@ -112,7 +112,7 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
               placeholder="00000000"
               value={roomCode}
               onChange={(event) => { setRoomCode(event.target.value.replace(/\D/g, "")); setMessage(""); }}
-              className="w-full max-w-[12rem] bg-black/35 border border-[#c5a059]/50 rounded-lg px-5 py-3.5 md:px-6 md:py-4 font-tbhc tracking-[0.3em] text-xl md:text-2xl text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059]"
+              className="w-full max-w-[13rem] bg-black/35 border border-[#c5a059]/50 rounded-lg px-5 py-3.5 md:px-6 md:py-4 text-center font-tbhc tracking-[0.3em] text-xl md:text-2xl text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059]"
             />
             <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4">
               <span className="font-serif italic text-sm text-[#c5a059] min-h-5">{message}</span>
