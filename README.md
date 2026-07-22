@@ -2,14 +2,21 @@
 
 > *"Mark speaking, please tell me how may I direct your call?"*
 
-Welcome to the digital residence of Arctic Monkeys' 2018 retro-futuristic lounge masterpiece. This immersive fan website functions as a narrative-driven concierge, inviting visitors to check in and explore different "rooms" to discover lyrical annotations, thematic analysis, chronological timelines, and cinema subtexts.
+Welcome to the digital residence of Arctic Monkeys' 2018 retro-futuristic lounge masterpiece. This immersive fan website functions as a narrative-driven concierge: arrive through the G-level Lobby, check in at Reception, and explore different "rooms" for lyrical annotations, thematic analysis, chronological timelines, and cinema subtexts.
 
 ---
+
+## 🏨 Guest Arrival & Stay
+
+- **G-level Lobby**: A full-screen arrival experience built around the album cover, the hotel slogan, and a four-star rating. New visitors are directed to Reception before entering the hotel.
+- **Guest profile**: Reception registers a guest name and a three-digit room number (default: `505`). The selected room follows the guest through relevant parts of the hotel.
+- **Otis Lift**: The enlarged elevator console can collapse into a slim left-hand control rail, giving the current room more space. Its broadcast updates with the selected floor.
+- **Local guest ledgers**: Guest profiles, forum posts, and feedback are stored in the browser's local storage. They persist in that browser but are not shared between devices or visitors.
 
 ## 🏨 Hotel Structure & Rooms
 
 - **Lobby Floor (G)**: Main entrance and interactive concierge directory.
-- **Reception Desk (01)**: Registration ledger. Sign the ledger to retrieve your room key card.
+- **Reception Desk (01)**: Register or edit a guest profile and three-digit room number, check out, or leave a note through the Feedback & Complaints form.
 - **The Lounge (02)**: Historical media archives, press transcripts, and interactive reel-to-reel audio log tapes.
 - **Hotel Cinema (03)**: Retro 70s CRT visual database mapping cinema and literary influences (Fassbinder, Melville, Postman) that shaped the album.
 - **The Observatory (04)**: Technological and media theory analysis sector, diving into corporate space exploration, isolation, and late capitalism.
@@ -17,7 +24,7 @@ Welcome to the digital residence of Arctic Monkeys' 2018 retro-futuristic lounge
 - **Grand Ballroom (06)**: Virtual gig polaroids, tour setlists, and historical arena logs.
 - **Clavius Casino (07)**: Lunar slot machine minigame. Pull the brass lever to match icons and transmit hidden sound bites.
 - **Hotel Archive (08)**: Analogue terminal outlining the detailed writing, recording, and touring chronology of the album era.
-- **The Rooftop Garden (09)**: Quiet reading area holding original long-form essays and deep cultural interpretations of the album.
+- **Rooftop Garden (09)**: A residents' forum for readings, theories, favourite lines, and personal encounters with *Tranquility Base Hotel & Casino*. Registered guests can publish and edit their own transmissions.
 
 ---
 
