@@ -20,6 +20,7 @@ export interface Interview {
   date: string;
   interviewer?: string;
   sourceUrl: string;        // 新增，必填：原文链接，无链接不收录
+  officialRecordingUrl?: string;
   transcript?: string;      // 改为可选：有授权/可引用时才填
   quotes: string[];         // 只收原文短引用
   topics: string[];

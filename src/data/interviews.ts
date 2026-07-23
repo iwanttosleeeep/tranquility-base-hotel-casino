@@ -21,7 +21,7 @@ export const INTERVIEWS_DATA: Interview[] = [
   },
   {
     id: "tbhc-2018-005", title: "I Ended Up Making a World of My Own", publication: "BBC Radio 1", date: "2018-05-10", interviewer: "Annie Mac",
-    sourceUrl: "https://www.youtube.com/watch?v=HgtXRstQhYg", quotes: [], topics: ["piano", "world-building", "continuity"], connectedSongs: []
+    sourceUrl: "https://www.youtube.com/watch?v=HgtXRstQhYg", officialRecordingUrl: "https://www.youtube.com/watch?v=HgtXRstQhYg", quotes: [], topics: ["piano", "world-building", "continuity"], connectedSongs: []
   },
   {
     id: "tbhc-2018-006", title: "Alex Turner Unpacks the New Album", publication: "triple j / ABC", date: "2018-05-11", interviewer: "Linda Marigliano",
@@ -33,11 +33,11 @@ export const INTERVIEWS_DATA: Interview[] = [
   },
   {
     id: "tbhc-2018-008", title: "The Making of Tranquility Base Hotel & Casino", publication: "Apple Music / Beats 1", date: "2018-05 (day unverified)", interviewer: "Zane Lowe",
-    sourceUrl: "https://www.youtube.com/watch?v=S44AQ7Rnt8Y", quotes: [], topics: ["genesis", "demos", "band identity", "risk"], connectedSongs: []
+    sourceUrl: "https://www.youtube.com/watch?v=S44AQ7Rnt8Y", officialRecordingUrl: "https://www.youtube.com/watch?v=S44AQ7Rnt8Y", quotes: [], topics: ["genesis", "demos", "band identity", "risk"], connectedSongs: []
   },
   {
     id: "tbhc-2018-009", title: "Tranquility Base Hotel & Casino: Alex Turner's Definitive Guide", publication: "Radio X X-Posure", date: "2018-05-17", interviewer: "John Kennedy",
-    sourceUrl: "https://www.youtube.com/watch?v=KPgRFgnLHJE", quotes: [], topics: ["lyrics", "arrangement", "film", "technology"], connectedSongs: ["star-treatment", "one-point-perspective", "american-sports", "tranquility-base-hotel-and-casino", "golden-trunks", "four-out-of-five", "the-worlds-first-ever-monster-truck-front-flip", "science-fiction", "she-looks-like-fun", "batphone", "the-ultracheese"]
+    sourceUrl: "https://www.youtube.com/watch?v=KPgRFgnLHJE", officialRecordingUrl: "https://www.youtube.com/watch?v=KPgRFgnLHJE", quotes: [], topics: ["lyrics", "arrangement", "film", "technology"], connectedSongs: ["star-treatment", "one-point-perspective", "american-sports", "tranquility-base-hotel-and-casino", "golden-trunks", "four-out-of-five", "the-worlds-first-ever-monster-truck-front-flip", "science-fiction", "she-looks-like-fun", "batphone", "the-ultracheese"]
   },
   {
     id: "tbhc-2018-010", title: "On the New Album and Returning to the Limelight", publication: "The Sunday Times", date: "2018-05-20", interviewer: "Krissi Murison",
@@ -45,11 +45,11 @@ export const INTERVIEWS_DATA: Interview[] = [
   },
   {
     id: "tbhc-2018-011", title: "Studio Brussel Interview: Arctic Monkeys", publication: "Studio Brussel", date: "2018 (date unverified)", interviewer: "Stijn Van de Voorde",
-    sourceUrl: "https://www.youtube.com/watch?v=OB5VugKAhto", quotes: [], topics: ["evolution", "expectations", "earlier albums"], connectedSongs: []
+    sourceUrl: "https://www.youtube.com/watch?v=OB5VugKAhto", officialRecordingUrl: "https://www.youtube.com/watch?v=OB5VugKAhto", quotes: [], topics: ["evolution", "expectations", "earlier albums"], connectedSongs: []
   },
   {
     id: "tbhc-2018-012", title: "The Past, Present and Future", publication: "Apple Music", date: "2018-08 (day unverified)", interviewer: "Matt Wilkinson",
-    sourceUrl: "https://www.youtube.com/watch?v=C923BX8iGR0", quotes: [], topics: ["live adaptation", "band history", "reception"], connectedSongs: []
+    sourceUrl: "https://www.youtube.com/watch?v=C923BX8iGR0", officialRecordingUrl: "https://www.youtube.com/watch?v=C923BX8iGR0", quotes: [], topics: ["live adaptation", "band history", "reception"], connectedSongs: []
   },
   {
     id: "tbhc-2018-013", title: "I Think a Lot About the Past's Idea of the Future", publication: "WFPK / Louisville Public Media", date: "2018-08-08", interviewer: "Kyle Meredith",
@@ -65,7 +65,7 @@ export const INTERVIEWS_DATA: Interview[] = [
   },
   {
     id: "tbhc-2018-016", title: "Warp Speed Chic", publication: "Arctic Monkeys / Domino", date: "2018-10-16", interviewer: "Ben Chappell (director)",
-    sourceUrl: "https://www.youtube.com/watch?v=PMHHjOi6H3s", quotes: [], topics: ["La Frette", "analogue process", "visual identity", "live identity"], connectedSongs: ["star-treatment"]
+    sourceUrl: "https://www.youtube.com/watch?v=PMHHjOi6H3s", officialRecordingUrl: "https://www.youtube.com/watch?v=PMHHjOi6H3s", quotes: [], topics: ["La Frette", "analogue process", "visual identity", "live identity"], connectedSongs: ["star-treatment"]
   },
   {
     id: "tbhc-2018-017", title: "Matt Helders on TBHC and Drumming with Restraint", publication: "KEXP", date: "2018-10-23", interviewer: "Dusty Henry",

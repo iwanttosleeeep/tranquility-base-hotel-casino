@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { INTERVIEWS_DATA } from "../data/interviews";
-import { Radio, Search, Play, Volume2, BookOpen } from "lucide-react";
-import { motion } from "motion/react";
+import { Radio, Search, ExternalLink, BookOpen } from "lucide-react";
 
 export default function LoungeView() {
   const [selectedInterview, setSelectedInterview] = useState(
     INTERVIEWS_DATA.length > 0 ? INTERVIEWS_DATA[0] : null
   );
   const [searchQuery, setSearchQuery] = useState("");
-  const [isPlayingQuote, setIsPlayingQuote] = useState<string | null>(null);
 
   const hasInterviews = INTERVIEWS_DATA.length > 0;
 
@@ -70,7 +68,6 @@ export default function LoungeView() {
                     key={item.id}
                     onClick={() => {
                       setSelectedInterview(item);
-                      setIsPlayingQuote(null);
                     }}
                     className={`p-4 rounded border text-left transition-all ${
                       isSelected
@@ -113,76 +110,48 @@ export default function LoungeView() {
                 {/* Virtual Reel-To-Reel Recorder */}
                 <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/40 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
                   <div className="flex items-center gap-4">
-                    {/* Spinning Reels */}
+                    {/* Archive reels: a visual source console, not an audio player. */}
                     <div className="flex gap-4">
-                      <motion.div
-                        animate={isPlayingQuote ? { rotate: 360 } : {}}
-                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                      <div
                         className="w-14 h-14 rounded-full border border-[#c5a059]/40 flex items-center justify-center relative bg-gradient-to-tr from-[#120e0a] to-[#26201a]"
                       >
                         <div className="w-10 h-10 rounded-full border-2 border-dashed border-[#c5a059]/20 flex items-center justify-center">
                           <div className="w-4 h-4 rounded-full bg-[#c5a059]/40" />
                         </div>
-                      </motion.div>
-                      <motion.div
-                        animate={isPlayingQuote ? { rotate: -360 } : {}}
-                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                      </div>
+                      <div
                         className="w-14 h-14 rounded-full border border-[#c5a059]/40 flex items-center justify-center relative bg-gradient-to-tr from-[#120e0a] to-[#26201a]"
                       >
                         <div className="w-10 h-10 rounded-full border-2 border-dashed border-[#c5a059]/20 flex items-center justify-center">
                           <div className="w-4 h-4 rounded-full bg-[#c5a059]/40" />
                         </div>
-                      </motion.div>
+                      </div>
                     </div>
 
                     <div className="flex flex-col">
                       <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">
-                        Interactive Audiograph
+                        Archive Signal Console
                       </span>
                       <span className="font-serif italic text-sm text-[#f5f2ed]">
-                        {isPlayingQuote ? "Transmitting audio tape..." : "Tape Deck Idle"}
+                        {selectedInterview.officialRecordingUrl ? "Official recording indexed" : "Tape Deck Idle"}
                       </span>
                     </div>
                   </div>
 
-                  {/* Tap player controls */}
-                  {selectedInterview.quotes.length > 0 && (
-                    <div className="flex gap-2">
-                      {selectedInterview.quotes.map((quote, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => {
-                            setIsPlayingQuote(isPlayingQuote === quote ? null : quote);
-                          }}
-                          className={`p-2 rounded border font-panel text-[10px] flex items-center gap-2 transition-all ${
-                            isPlayingQuote === quote
-                              ? "bg-[#d97706]/20 border-[#d97706] text-[#d97706]"
-                              : "bg-white/5 border-white/10 text-[#f5f2ed]/60 hover:text-[#f5f2ed]"
-                          }`}
-                        >
-                          <Play size={12} />
-                          Tape {idx + 1}
-                        </button>
-                      ))}
-                    </div>
+                  {selectedInterview.officialRecordingUrl && (
+                    <a
+                      href={selectedInterview.officialRecordingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 border border-[#c5a059]/40 px-3 py-2 rounded font-panel text-[10px] uppercase tracking-wider text-[#c5a059] hover:border-[#c5a059] transition-colors"
+                    >
+                      <ExternalLink size={13} /> Open official recording
+                    </a>
                   )}
                 </div>
 
                 {/* Transcript/Document Page */}
                 <div className="p-8 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-6 relative min-h-[400px]">
-                  {isPlayingQuote && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 rounded border border-[#d97706]/30 bg-[#d97706]/5 text-[#d97706] font-serif italic text-sm relative"
-                    >
-                      <div className="absolute top-2 right-2 animate-pulse">
-                        <Volume2 size={16} />
-                      </div>
-                      "{isPlayingQuote}"
-                    </motion.div>
-                  )}
-
                   <div className="flex justify-between items-center border-b border-[#c5a059]/20 pb-4">
                     <div className="flex flex-col">
                       <span className="font-serif italic text-2xl text-glow text-[#f5f2ed]">
