@@ -339,7 +339,7 @@ export default function App() {
                 <span>Reception Broadcast</span>
               </div>
               <p className="italic">
-                &quot;Welcome to {ROOM_NAMES[currentRoom]}. Elevators are authorized to navigate floors G to 09. Please maintain contact keys at all times.&quot;
+                &quot;Welcome to {ROOM_NAMES[currentRoom]}. Elevators are authorized to navigate floors G to 10. Please maintain contact keys at all times.&quot;
               </p>
             </div>}
           </div>
