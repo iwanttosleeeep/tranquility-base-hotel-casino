@@ -1,0 +1,21 @@
+<!--
+  Supabase Auth email template
+  Use for both: "Magic Link or OTP" and "Confirm signup".
+  Subject: Your room code
+-->
+
+<p>Dear guest,</p>
+
+<p>Use the room code below to check in to Tranquility Base Hotel &amp; Casino:</p>
+
+<p style="font-size:28px; letter-spacing:8px; margin:28px 0;">
+  <strong>{{ .Token }}</strong>
+</p>
+
+<p>We look forward to receiving you.</p>
+
+<p style="margin-top:28px;">
+  Yours faithfully,<br>
+  <strong>Mark</strong><br>
+  Tranquility Base Hotel &amp; Casino
+</p>
