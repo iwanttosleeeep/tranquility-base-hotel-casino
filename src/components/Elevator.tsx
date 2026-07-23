@@ -13,12 +13,13 @@ interface ElevatorProps {
 }
 
 const ROOMS: { key: HotelRoom; label: string; floor: string; desc: string }[] = [
-  { key: "ROOFTOP_GARDEN", label: "Rooftop Garden", floor: "09", desc: "Residents' Readings & Transmissions" },
+  { key: "ROOFTOP_GARDEN", label: "Rooftop Garden", floor: "10", desc: "Residents' Readings & Transmissions" },
+  { key: "OBSERVATORY", label: "The Observatory", floor: "09", desc: "Sci-Fi & Space Exploration" },
   { key: "ARCHIVE", label: "Hotel Archive", floor: "08", desc: "Recording & Creation Timeline" },
   { key: "CASINO", label: "Clavius Casino", floor: "07", desc: "Interactive Easter Eggs" },
   { key: "BALLROOM", label: "Grand Ballroom", floor: "06", desc: "Tour & Live Performances" },
   { key: "LIBRARY", label: "The Library", floor: "05", desc: "Songs & Lyrical Annotations" },
-  { key: "OBSERVATORY", label: "The Observatory", floor: "04", desc: "Sci-Fi & Space Exploration" },
+  { key: "COCKTAIL_BAR", label: "Cocktail Bar", floor: "04", desc: "Tutorials & Musical Analysis" },
   { key: "CINEMA", label: "Hotel Cinema", floor: "03", desc: "Cinematic & Film Influences" },
   { key: "LOUNGE", label: "The Lounge", floor: "02", desc: "Press & Interview Archives" },
   { key: "RECEPTION", label: "Reception Desk", floor: "01", desc: "Introduction & Register" },
@@ -30,7 +31,7 @@ export default function Elevator({ currentRoom, targetRoom, onRoomChange, isMovi
   const targetFloorIdx = targetRoom ? ROOMS.findIndex((r) => r.key === targetRoom) : null;
   const currentFloorLabel = ROOMS[currentFloorIdx]?.floor || "G";
 
-  // Since ROOMS are ordered from top floor (idx 0, floor 09) to bottom floor (idx 9, floor G):
+  // Since ROOMS are ordered from top floor (idx 0, floor 10) to bottom floor (idx 10, floor G):
   // Going UP means traveling to a HIGHER floor (so target index is smaller than current index)
   // Going DOWN means traveling to a LOWER floor (so target index is larger than current index)
   const isGoingUp = isMoving && targetFloorIdx !== null && targetFloorIdx < currentFloorIdx;

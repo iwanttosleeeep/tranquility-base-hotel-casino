@@ -10,6 +10,7 @@ import Elevator from "./components/Elevator";
 import ReceptionDesk from "./components/ReceptionDesk";
 import LoungeView from "./components/LoungeView";
 import CinemaView from "./components/CinemaView";
+import CocktailBarView from "./components/CocktailBarView";
 import ObservatoryView from "./components/ObservatoryView";
 import LibraryView from "./components/LibraryView";
 import BallroomView from "./components/BallroomView";
@@ -26,6 +27,7 @@ const ROOM_SLUGS: Record<HotelRoom, string> = {
   RECEPTION: "reception",
   LOUNGE: "lounge",
   CINEMA: "cinema",
+  COCKTAIL_BAR: "cocktail-bar",
   OBSERVATORY: "observatory",
   LIBRARY: "library",
   BALLROOM: "ballroom",
@@ -54,12 +56,13 @@ const LOBBY_DIRECTORY = [
   { key: "RECEPTION", label: "01. Reception Desk", desc: "Check in & consult directory" },
   { key: "LOUNGE", label: "02. The Lounge", desc: "Browse Turner interviews & quotes" },
   { key: "CINEMA", label: "03. Hotel Cinema", desc: "Investigate books & movies database" },
-  { key: "OBSERVATORY", label: "04. The Observatory", desc: "Analyze technological & sci-fi ideas" },
+  { key: "COCKTAIL_BAR", label: "04. Cocktail Bar", desc: "Tutorials & musical analysis" },
   { key: "LIBRARY", label: "05. The Library", desc: "Song archives with interactive annotations" },
   { key: "BALLROOM", label: "06. Grand Ballroom", desc: "Inspect live shows & gig logs" },
   { key: "CASINO", label: "07. Clavius Casino", desc: "Spin the slot machine for secrets" },
   { key: "ARCHIVE", label: "08. Hotel Archive", desc: "View the creation & release timeline" },
-  { key: "ROOFTOP_GARDEN", label: "09. Rooftop Garden", desc: "Share readings, theories, and personal encounters with TBHC" },
+  { key: "OBSERVATORY", label: "09. The Observatory", desc: "Analyze technological & sci-fi ideas" },
+  { key: "ROOFTOP_GARDEN", label: "10. Rooftop Garden", desc: "Share readings, theories, and personal encounters with TBHC" },
   { key: "TBC", label: "To be continue…", desc: "Further floors are currently being prepared", isPlaceholder: true },
 ];
 
@@ -68,6 +71,7 @@ const ROOM_NAMES: Record<HotelRoom, string> = {
   RECEPTION: "Reception Desk",
   LOUNGE: "The Lounge",
   CINEMA: "Hotel Cinema",
+  COCKTAIL_BAR: "Cocktail Bar",
   OBSERVATORY: "The Observatory",
   LIBRARY: "The Library",
   BALLROOM: "Grand Ballroom",
@@ -387,7 +391,7 @@ export default function App() {
                           Ground Floor Suite
                         </span>
                         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
-                          The Grand Lobby
+                          The Lobby
                         </h2>
                         <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
                           You have checked into the <span className="font-semibold text-[#f5f2ed]">Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1">&amp;</span> Casino</span> portal. Wander through the retro space lounge floors using the Otis Lift on the left.
@@ -429,6 +433,7 @@ export default function App() {
 
                   {currentRoom === "LOUNGE" && <LoungeView />}
                   {currentRoom === "CINEMA" && <CinemaView />}
+                  {currentRoom === "COCKTAIL_BAR" && <CocktailBarView />}
                   {currentRoom === "OBSERVATORY" && <ObservatoryView />}
                   {currentRoom === "LIBRARY" && <LibraryView />}
                   {currentRoom === "BALLROOM" && <BallroomView />}

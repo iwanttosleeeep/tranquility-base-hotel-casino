@@ -65,6 +65,7 @@ export type HotelRoom =
   | "RECEPTION"
   | "LOUNGE"
   | "CINEMA"
+  | "COCKTAIL_BAR"
   | "OBSERVATORY"
   | "LIBRARY"
   | "BALLROOM"

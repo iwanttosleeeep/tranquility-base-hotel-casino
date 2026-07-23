@@ -63,7 +63,7 @@ export default function ObservatoryView() {
       {/* Header */}
       <div>
         <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">
-          Floor 04 • Room 04
+          Floor 09 • Room 09
         </span>
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           The Observatory

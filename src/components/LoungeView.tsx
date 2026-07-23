@@ -46,7 +46,7 @@ export default function LoungeView() {
         /* Main Layout */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column: Filter & Interview List */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 min-w-0">
             {/* Search bar */}
             <div className="relative">
               <Search className="absolute left-3 top-2.5 text-[#c5a059]/50" size={16} />
@@ -104,7 +104,7 @@ export default function LoungeView() {
           </div>
 
           {/* Right Columns: Immersive Document Reader & Virtual Tape Deck */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
+          <div className="lg:col-span-2 flex flex-col gap-6 min-w-0">
             {selectedInterview && (
               <>
                 {/* Virtual Reel-To-Reel Recorder */}
@@ -151,7 +151,7 @@ export default function LoungeView() {
                 </div>
 
                 {/* Transcript/Document Page */}
-                <div className="p-8 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-6 relative min-h-[400px]">
+                <div className="min-w-0 p-8 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-6 relative min-h-[400px]">
                   <div className="flex justify-between items-center border-b border-[#c5a059]/20 pb-4">
                     <div className="flex flex-col">
                       <span className="font-serif italic text-2xl text-glow text-[#f5f2ed]">
@@ -191,11 +191,11 @@ export default function LoungeView() {
                       <span className="font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/50">
                         Connected Tracks
                       </span>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2 min-w-0">
                         {selectedInterview.connectedSongs.map((songId) => (
                           <span
                             key={songId}
-                            className="font-panel text-[11px] border border-[#c5a059]/30 text-[#c5a059] px-2 py-0.5 rounded uppercase"
+                            className="max-w-full break-words font-panel text-[11px] border border-[#c5a059]/30 text-[#c5a059] px-2 py-0.5 rounded uppercase"
                           >
                             {songId.replace(/-/g, " ")}
                           </span>

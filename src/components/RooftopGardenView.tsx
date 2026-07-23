@@ -100,7 +100,7 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
       <div>
-        <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 09 • Room 09</span>
+        <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 10 • Room 10</span>
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">Rooftop Garden</h2>
         <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-3xl leading-relaxed">
           A residents&apos; forum for readings, theories, favourite lines, and personal encounters with <span className="italic">Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1">&amp;</span> Casino</span>.
