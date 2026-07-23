@@ -40,6 +40,22 @@ export interface Film {
   sourceUrl?: string;           // 新增：外链出处
 }
 
+export interface CulturalReference {
+  id: string;
+  title: string;
+  creator: string;
+  year: string;
+  category: "Film" | "Book" | "Television" | "Culture & Design";
+  medium: string;
+  evidenceGrade: "A" | "B" | "C";
+  connection: string;
+  evidence: string;
+  confirmingSource: string;
+  sourceUrl: string;
+  topics: string[];
+  connectedSongs: string[];
+}
+
 export interface TimelineEvent {
   id: string;
   date: string;

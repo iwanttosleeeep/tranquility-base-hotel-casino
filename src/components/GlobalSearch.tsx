@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Search, MoveRight, Music, HelpCircle, FileText, Film } from "lucide-react";
 import { SONGS_DATA } from "../data/songs";
 import { INTERVIEWS_DATA } from "../data/interviews";
-import { FILMS_DATA } from "../data/films";
+import { CINEMA_REFERENCES } from "../data/references";
 import { ESSAYS_DATA } from "../data/essays";
 import { HotelRoom } from "../types";
 
 interface SearchResult {
   title: string;
   category: string;
-  type: "Song" | "Interview" | "Film" | "Essay";
+  type: "Song" | "Interview" | "Reference" | "Essay";
   room: HotelRoom;
   snippet: string;
 }
@@ -68,19 +68,17 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
       }
     });
 
-    // Search Films
-    FILMS_DATA.forEach((film) => {
-      const titleMatch = film.title.toLowerCase().includes(lowerQuery);
-      const synMatch = film.synopsis && film.synopsis.toLowerCase().includes(lowerQuery);
-      const mattersMatch = film.whyItMatters && film.whyItMatters.toLowerCase().includes(lowerQuery);
+    // Search verified Cinema references
+    CINEMA_REFERENCES.forEach((reference) => {
+      const matches = `${reference.title} ${reference.creator} ${reference.medium} ${reference.connection} ${reference.evidence} ${reference.topics.join(" ")}`.toLowerCase().includes(lowerQuery);
 
-      if (titleMatch || synMatch || mattersMatch) {
+      if (matches) {
         results.push({
-          title: film.title,
-          category: "Cinematic Database",
-          type: "Film",
+          title: reference.title,
+          category: `Cinema · ${reference.category}`,
+          type: "Reference",
           room: "CINEMA",
-          snippet: `Directed by ${film.director}. ${film.synopsis ? film.synopsis.substring(0, 80) : ""}...`
+          snippet: `${reference.creator} · ${reference.connection}`
         });
       }
     });
@@ -163,7 +161,7 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
                 <div className="p-2 rounded bg-white/5 text-[#c5a059] mt-0.5">
                   {res.type === "Song" && <Music size={16} />}
                   {res.type === "Interview" && <HelpCircle size={16} />}
-                  {res.type === "Film" && <Film size={16} />}
+                  {res.type === "Reference" && <Film size={16} />}
                   {res.type === "Essay" && <FileText size={16} />}
                 </div>
 
