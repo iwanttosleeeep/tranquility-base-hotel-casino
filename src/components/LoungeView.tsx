@@ -13,7 +13,7 @@ export default function LoungeView() {
   const hasInterviews = INTERVIEWS_DATA.length > 0;
 
   const filteredInterviews = INTERVIEWS_DATA.filter((item) => {
-    const searchString = `${item.publication} ${item.interviewer || ""} ${item.transcript || ""} ${item.topics.join(" ")}`.toLowerCase();
+    const searchString = `${item.title} ${item.publication} ${item.interviewer || ""} ${item.transcript || ""} ${item.topics.join(" ")}`.toLowerCase();
     return searchString.includes(searchQuery.toLowerCase());
   });
 
@@ -82,6 +82,9 @@ export default function LoungeView() {
                       <span className="font-serif italic font-semibold">{item.publication}</span>
                       <span className="font-panel text-[11px] opacity-50">{item.date}</span>
                     </div>
+                    <p className="text-sm text-[#f5f2ed]/75 font-serif leading-snug mb-2">
+                      {item.title}
+                    </p>
                     {item.interviewer && (
                       <p className="text-sm text-[#f5f2ed]/40 font-serif truncate mb-3">
                         Interviewer: {item.interviewer}
@@ -183,7 +186,7 @@ export default function LoungeView() {
                   <div className="flex justify-between items-center border-b border-[#c5a059]/20 pb-4">
                     <div className="flex flex-col">
                       <span className="font-serif italic text-2xl text-glow text-[#f5f2ed]">
-                        {selectedInterview.publication} Archive
+                        {selectedInterview.title}
                       </span>
                       <span className="font-panel text-[10px] text-[#c5a059]/60">
                         {selectedInterview.interviewer ? `By ${selectedInterview.interviewer} • ` : ""}{selectedInterview.date}

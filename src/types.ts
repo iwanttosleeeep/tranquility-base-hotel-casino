@@ -15,6 +15,7 @@ export interface Song {
 
 export interface Interview {
   id: string;
+  title: string;
   publication: string;
   date: string;
   interviewer?: string;
