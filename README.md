@@ -4,7 +4,7 @@
 
 An immersive, unofficial fan archive dedicated to Arctic Monkeys' 2018 album *Tranquility Base Hotel & Casino*. Rather than a conventional wiki, the site is built as the hotel itself: guests arrive through the G-level Lobby, check in at Reception, and ride the Otis lift between rooms — each floor holding a different wing of the archive. Every factual record is source-linked and evidence-graded.
 
-**Live site:** (https://tbhc.sehnsucht.uk)
+**Live site:** https://tbhc.sehnsucht.uk
 
 ---
 
