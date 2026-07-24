@@ -48,7 +48,7 @@ export interface CulturalReference {
   title: string;
   creator: string;
   year: string;
-  category: "Film" | "Book" | "Television" | "Culture & Design";
+  category: "Film" | "Book" | "Television" | "Music" | "Culture & Design";
   medium: string;
   evidenceGrade: "A" | "B" | "C";
   connection: string;

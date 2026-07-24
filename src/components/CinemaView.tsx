@@ -4,7 +4,7 @@ import { VIDEO_ANALYSES } from "../data/mvAnalysis";
 import { Film as FilmIcon, ExternalLink, BadgeCheck, Clapperboard, Gauge, Palette, Eye, Link2 } from "lucide-react";
 import { motion } from "motion/react";
 
-const CATEGORIES = ["All", "Film", "Book", "Television", "Culture & Design"] as const;
+const CATEGORIES = ["All", "Film", "Book", "Television", "Music", "Culture & Design"] as const;
 
 const formatTime = (seconds: number) => {
   const minutes = Math.floor(seconds / 60);
