@@ -77,6 +77,24 @@ export interface Essay {
   relatedSongs: string[];
 }
 
+export interface CriticalTheme {
+  title: string;
+  synthesis: string;            // 研究者综述，非创作者陈述
+}
+
+export interface CriticalClaim {
+  id: string;
+  claim: string;                // 只存转述，不存原文段落
+  critic: string;
+  outlet: string;
+  date: string;
+  tier: string[];               // D1 发展性解读 / D2 比较 / D3 编辑性提及
+  theme: number;                // index into CRITICAL_THEMES
+  aspects: string[];            // album-wide / persona / sound / hotel …
+  sourceUrl: string;            // 必填：原文链接，无链接不收录
+  access: "full" | "limited";   // limited = 原页面无法抓取，仅核对索引记录
+}
+
 export type HotelRoom = 
   | "LOBBY"
   | "RECEPTION"
