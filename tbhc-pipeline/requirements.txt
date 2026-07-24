@@ -1,0 +1,6 @@
+faster-whisper
+demucs
+scenedetect[opencv]
+opencv-python-headless
+Pillow
+numpy

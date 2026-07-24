@@ -6,3 +6,5 @@ coverage/
 *.log
 .env*
 !.env.example
+tbhc-pipeline/out/
+tbhc-pipeline/in/
