@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { INTERVIEWS_DATA } from "../data/interviews";
-import { Radio, Search, ExternalLink, BookOpen } from "lucide-react";
+import { Radio, Search, ExternalLink, BookOpen, Quote, UserRound, AlertCircle } from "lucide-react";
 
 export default function LoungeView() {
   const [selectedInterview, setSelectedInterview] = useState(
@@ -11,7 +11,7 @@ export default function LoungeView() {
   const hasInterviews = INTERVIEWS_DATA.length > 0;
 
   const filteredInterviews = INTERVIEWS_DATA.filter((item) => {
-    const searchString = `${item.title} ${item.publication} ${item.interviewer || ""} ${item.transcript || ""} ${item.topics.join(" ")}`.toLowerCase();
+    const searchString = `${item.title} ${item.publication} ${item.interviewee} ${item.interviewer || ""} ${item.quotes.join(" ")} ${item.transcript || ""} ${item.topics.join(" ")}`.toLowerCase();
     return searchString.includes(searchQuery.toLowerCase());
   });
 
@@ -28,6 +28,14 @@ export default function LoungeView() {
         <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
           Settle down with the easy listening and the free-flowing honey. This press archive captures verified interviews, quotes, and cultural reflections of the era.
         </p>
+      </div>
+
+      <div className="p-5 rounded-lg border border-[#d97706]/25 bg-[#d97706]/[0.04] flex gap-3">
+        <AlertCircle size={16} className="text-[#d97706]/80 shrink-0 mt-0.5" />
+        <div className="font-serif text-sm text-[#f5f2ed]/65 leading-relaxed">
+          <span className="font-panel text-[10px] uppercase tracking-widest text-[#d97706]/80 block mb-1.5">Archive correction</span>
+          An earlier version of this archive listed the Mondo Sonoro interview as having no locatable original page. The original has since been found and read. It is the most important single source for reconstructing the recording order: the conversation took place on 7 March 2018, under embargo, and was published on 14 May 2018.
+        </div>
       </div>
 
       {!hasInterviews ? (
@@ -52,7 +60,7 @@ export default function LoungeView() {
               <Search className="absolute left-3 top-2.5 text-[#c5a059]/50" size={16} />
               <input
                 type="text"
-                placeholder="Search quotes or topics..."
+                placeholder="Search interviewee, quotes, topics..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-black/40 border border-[#c5a059]/20 rounded pl-10 pr-4 py-2 font-panel text-xs text-[#f5f2ed] focus:outline-none focus:border-[#c5a059]/50"
@@ -82,9 +90,12 @@ export default function LoungeView() {
                     <p className="text-sm text-[#f5f2ed]/75 font-serif leading-snug mb-2">
                       {item.title}
                     </p>
+                    <p className="font-panel text-[10px] uppercase tracking-wide text-[#c5a059]/70 truncate mb-1">
+                      {item.interviewee}
+                    </p>
                     {item.interviewer && (
-                      <p className="text-sm text-[#f5f2ed]/40 font-serif truncate mb-3">
-                        Interviewer: {item.interviewer}
+                      <p className="text-xs text-[#f5f2ed]/40 font-serif truncate mb-3">
+                        Interviewed by {item.interviewer}
                       </p>
                     )}
                     <div className="flex flex-wrap gap-1 mt-2">
@@ -157,8 +168,14 @@ export default function LoungeView() {
                       <span className="font-serif italic text-2xl text-glow text-[#f5f2ed]">
                         {selectedInterview.title}
                       </span>
-                      <span className="font-panel text-[10px] text-[#c5a059]/60">
-                        {selectedInterview.interviewer ? `By ${selectedInterview.interviewer} • ` : ""}{selectedInterview.date}
+                      <span className="font-panel text-[10px] text-[#c5a059] flex items-center gap-1.5 mt-1">
+                        <UserRound size={11} /> {selectedInterview.interviewee}
+                      </span>
+                      <span className="font-panel text-[10px] text-[#f5f2ed]/45 mt-0.5">
+                        {selectedInterview.publication}
+                        {selectedInterview.interviewer ? ` • ${selectedInterview.interviewer}` : ""}
+                        {` • published ${selectedInterview.date}`}
+                        {selectedInterview.recordedDate ? ` • spoken ${selectedInterview.recordedDate}` : ""}
                       </span>
                     </div>
                     <BookOpen size={24} className="text-[#c5a059]/40" />
@@ -182,6 +199,23 @@ export default function LoungeView() {
                           [ View Original Source ]
                         </a>
                       )}
+                    </div>
+                  )}
+
+                  {/* In their own words */}
+                  {selectedInterview.quotes.length > 0 && (
+                    <div className="flex flex-col gap-3">
+                      <span className="font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/50 flex items-center gap-1.5">
+                        <Quote size={11} /> In their own words
+                      </span>
+                      {selectedInterview.quotes.map((quote) => (
+                        <blockquote key={quote} className="border-l-2 border-[#c5a059]/40 pl-4 font-serif italic text-[#f5f2ed]/80 leading-relaxed text-sm">
+                          &ldquo;{quote}&rdquo;
+                          <footer className="font-panel not-italic text-[10px] text-[#c5a059]/55 mt-1.5">
+                            {selectedInterview.interviewee}, {selectedInterview.publication}
+                          </footer>
+                        </blockquote>
+                      ))}
                     </div>
                   )}
 

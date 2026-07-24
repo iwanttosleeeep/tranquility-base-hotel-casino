@@ -16,9 +16,11 @@ export interface Song {
 
 export interface Interview {
   id: string;
+  interviewee: string;      // 新增：受访者，而非采访者
   title: string;
   publication: string;
-  date: string;
+  date: string;             // 刊登日期
+  recordedDate?: string;    // 新增：对话实际发生的日期，与刊登日期不同时才填
   interviewer?: string;
   sourceUrl: string;        // 新增，必填：原文链接，无链接不收录
   officialRecordingUrl?: string;
@@ -61,9 +63,10 @@ export interface TimelineEvent {
   id: string;
   date: string;
   title: string;
-  category: "Inspiration" | "Writing" | "Recording" | "Release" | "Tour" | "Retrospective";
+  category: "Inspiration" | "Writing" | "Recording" | "Artwork" | "Press" | "Release" | "Tour" | "Retrospective";
   description: string;
   quote?: string;
+  confidence?: string;          // 新增：证据强度，说明该条目锚定得有多牢
   sourceUrl?: string;           // 新增：外链出处
 }
 

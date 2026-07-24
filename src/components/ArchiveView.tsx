@@ -115,6 +115,13 @@ export default function ArchiveView() {
                     </div>
                   )}
 
+                  {/* Evidence strength */}
+                  {event.confidence && (
+                    <p className="font-panel text-[10px] text-[#f5f2ed]/40 leading-relaxed max-w-2xl border-l border-[#c5a059]/20 pl-3">
+                      EVIDENCE: {event.confidence}
+                    </p>
+                  )}
+
                   {/* Source link */}
                   {event.sourceUrl && event.sourceUrl !== "[PLACEHOLDER]" && (
                     <a
