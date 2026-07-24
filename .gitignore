@@ -8,3 +8,4 @@ coverage/
 !.env.example
 tbhc-pipeline/out/
 tbhc-pipeline/in/
+tbhc-pipeline/__pycache__/
