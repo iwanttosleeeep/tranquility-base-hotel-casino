@@ -53,16 +53,16 @@ function writeHash(room: HotelRoom, sub?: string | null) {
 
 
 const LOBBY_DIRECTORY = [
-  { key: "RECEPTION", label: "01. Reception Desk", desc: "Check in & consult directory" },
-  { key: "LOUNGE", label: "02. The Lounge", desc: "Browse Turner interviews & quotes" },
-  { key: "CINEMA", label: "03. Hotel Cinema", desc: "Investigate books & movies database" },
-  { key: "COCKTAIL_BAR", label: "04. Cocktail Bar", desc: "Tutorials & musical analysis" },
-  { key: "LIBRARY", label: "05. The Library", desc: "Song archives with interactive annotations" },
-  { key: "BALLROOM", label: "06. Grand Ballroom", desc: "Inspect live shows & gig logs" },
-  { key: "CASINO", label: "07. Clavius Casino", desc: "Spin the slot machine for secrets" },
-  { key: "ARCHIVE", label: "08. Hotel Archive", desc: "View the creation & release timeline" },
-  { key: "OBSERVATORY", label: "09. The Observatory", desc: "Analyze technological & sci-fi ideas" },
-  { key: "ROOFTOP_GARDEN", label: "10. Rooftop Garden", desc: "Share readings, theories, and personal encounters with TBHC" },
+  { key: "RECEPTION", label: "01. Reception Desk", desc: "Guest register, room keys & house welcome" },
+  { key: "LOUNGE", label: "02. The Lounge", desc: "Chronological interview archive with sourced quotes" },
+  { key: "CINEMA", label: "03. Hotel Cinema", desc: "Music-video projection room & viewing notes" },
+  { key: "COCKTAIL_BAR", label: "04. Cocktail Bar", desc: "Instrument tutorials & arrangement readouts" },
+  { key: "LIBRARY", label: "05. The Library", desc: "Song dossiers cross-linked to sources & official lyrics" },
+  { key: "BALLROOM", label: "06. Grand Ballroom", desc: "Tour polaroids, setlists & live recordings" },
+  { key: "CASINO", label: "07. Clavius Casino", desc: "Spin the lunar slot machine for stray transmissions" },
+  { key: "ARCHIVE", label: "08. Hotel Archive", desc: "Creation timeline & verified reference catalogue" },
+  { key: "OBSERVATORY", label: "09. The Observatory", desc: "Ten conceptual frameworks, fully referenced" },
+  { key: "ROOFTOP_GARDEN", label: "10. Rooftop Garden", desc: "Residents' readings, theories & personal encounters" },
   { key: "TBC", label: "To be continue…", desc: "Further floors are currently being prepared", isPlaceholder: true },
 ];
 

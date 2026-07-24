@@ -2,75 +2,86 @@
 
 > *"Mark speaking, please tell me how may I direct your call?"*
 
-Welcome to the digital residence of Arctic Monkeys' 2018 retro-futuristic lounge masterpiece. This immersive fan website functions as a narrative-driven concierge: arrive through the G-level Lobby, check in at Reception, and explore different "rooms" for lyrical annotations, thematic analysis, chronological timelines, and cinema subtexts.
+An immersive, unofficial fan archive dedicated to Arctic Monkeys' 2018 album *Tranquility Base Hotel & Casino*. Rather than a conventional wiki, the site is built as the hotel itself: guests arrive through the G-level Lobby, check in at Reception, and ride the Otis lift between rooms — each floor holding a different wing of the archive. Every factual record is source-linked and evidence-graded.
+
+**Live site:** https://iwanttosleeeep.github.io/tranquility-base-hotel-casino/
 
 ---
 
 ## 🏨 Guest Arrival & Stay
 
-- **G-level Lobby**: A full-screen arrival experience built around the album cover, the hotel slogan, and a four-star rating. New visitors are directed to Reception before entering the hotel.
-- **Guest profile**: Reception registers a guest name and a three-digit room number (default: `505`). The selected room follows the guest through relevant parts of the hotel.
-- **Otis Lift**: The enlarged elevator console can collapse into a slim left-hand control rail, giving the current room more space. Its broadcast updates with the selected floor.
-- **Guest ledgers**: Guest profiles, forum posts, and feedback are stored through Supabase, allowing authenticated residents to return to their own records.
+- **G-level Lobby**: full-screen arrival experience with the concierge directory. Each floor links directly via hash routes (e.g. `#/archive`, `#/library/star-treatment`), so any room can be shared or bookmarked.
+- **Guest profile**: Reception registers a guest name and a three-digit room number (default `505`), verified by an eight-digit room code sent by email. Profiles, forum posts, and feedback are stored through Supabase; the hotel remains fully browsable without checking in.
+- **Otis Lift**: the elevator console navigates all floors, collapses into a slim control rail, and answers the browser's back/forward buttons.
 
 ## 🏨 Hotel Structure & Rooms
 
-- **Lobby Floor (G)**: Main entrance and interactive concierge directory.
-- **Reception Desk (01)**: Register or edit a guest profile and three-digit room number, check out, or leave a note through the Feedback & Complaints form.
-- **The Lounge (02)**: Chronological interview archive with source links, connected tracks, and official-recording links where available.
-- **Hotel Cinema (03)**: Retro 70s CRT visual database mapping cinema and literary influences (Fassbinder, Melville, Postman) that shaped the album.
-- **Cocktail Bar (04)**: Tutorial links and a forthcoming musical-analysis service.
-- **The Library (05)**: Fully interactive tracklist index featuring selective verified annotations, cross-references, and direct links to official lyrics.
-- **Grand Ballroom (06)**: Virtual gig polaroids, tour setlists, and historical arena logs.
-- **Clavius Casino (07)**: Lunar slot machine minigame. Pull the brass lever to match icons and transmit hidden sound bites.
-- **Hotel Archive (08)**: Analogue terminal outlining the detailed writing, recording, and touring chronology of the album era.
-- **The Observatory (09)**: Technological and media theory analysis sector, diving into corporate space exploration, isolation, and late capitalism.
-- **Rooftop Garden (10)**: A residents' forum for readings, theories, favourite lines, and personal encounters with *Tranquility Base Hotel & Casino*. Registered guests can publish and edit their own transmissions.
+- **Lobby (G)** — main entrance and interactive concierge directory.
+- **Reception Desk (01)** — guest register, room keys, house welcome, and the Feedback & Complaints form.
+- **The Lounge (02)** — chronological interview archive: publication, date, sourced quotes, connected tracks, and official-recording links where available.
+- **Hotel Cinema (03)** — the projection room: machine-read shot rhythm and colour analysis of the album's music videos, with timecoded viewing notes and source-linked context.
+- **Cocktail Bar (04)** — instrument tutorial shelves (piano, guitar, bass, drums) and the Arrangement Service: signal-derived stem-energy scores for each track. Private measurements only; no stems are hosted.
+- **The Library (05)** — one dossier per song: verified annotations, cross-references into the interview archive and reference catalogue, and links to official lyrics. No full lyric texts are reproduced.
+- **Grand Ballroom (06)** — tour polaroids, setlists, and historical arena logs.
+- **Clavius Casino (07)** — lunar slot machine minigame. Match icons to intercept stray hotel-intercom transmissions (in-universe flavour text, not archival audio).
+- **Hotel Archive (08)** — the analogue terminal: the album era's writing, recording, release, and touring chronology, followed by the **Verified Reference Catalogue** — evidence-graded records of the books, films, television, and visual culture documented around the album.
+- **The Observatory (09)** — ten conceptual frameworks for reading retro-futurist culture (media ecology, cognitive estrangement, the attention economy, and more), each with a full academic reference list. Academic correspondence is not treated as evidence of creative influence.
+- **Rooftop Garden (10)** — residents' forum for readings, theories, favourite lines, and personal encounters with the record. Registered guests can publish and edit their own transmissions.
+
+## 🧾 Evidence Grades
+
+Records in the Verified Reference Catalogue carry a grade describing **documentation, not influence**:
+
+- **A** — a first-hand, source-linked statement (e.g. an Alex Turner interview) establishes the connection.
+- **C** — a professional attribution or verified association (e.g. official event curation, production notes) establishes context only.
+
+Ungraded or unsourced material is not indexed.
 
 ---
 
-## 🛠️ Local Development & Scripts
+## 🛠️ Local Development
 
-This is a clean, dependency-minimized static React application powered by Vite, Tailwind CSS, and Motion.
+A static React application: Vite · React 19 · TypeScript · Tailwind CSS v4 · Motion. Supabase powers the optional guest system.
 
-### Commands
-
-Install dependencies:
 ```bash
-npm install
+npm install        # install dependencies
+npm run dev        # local dev server (port 3000)
+npm run lint       # TypeScript checks (tsc --noEmit)
+npm run build      # production build → ./dist/
 ```
 
-Start local development server (binds to port `3000`):
-```bash
-npm run dev
+### Environment
+
+Guest check-in requires a Supabase project. Copy `.env.example` to `.env.local` and fill in:
+
+```
+VITE_SUPABASE_URL=
+VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-Build static production-ready assets (emitted to `./dist/`):
-```bash
-npm run build
-```
+Never place a `service_role` / secret key in any `VITE_` variable. Without these values the site runs normally with check-in disabled.
 
-Run TypeScript syntax checks:
-```bash
-npm run lint
-```
+### Deployment
+
+Pushes to `main` build and deploy automatically to GitHub Pages via `.github/workflows/deploy.yml` (type-check → build → publish). The same two Supabase values must be added as repository **Actions secrets** for the production build.
 
 ---
 
-## 📜 Content Contribution & Moderation Rules
+## 📜 Content Contribution Rules
 
-To ensure total accuracy and preserve the high conceptual caliber of the archive, all content contributions are governed by strict verification protocols.
+All content is governed by strict verification protocols.
 
-### 1. Absolute Prohibition of AI-Generated Content
-- Under no circumstances will AI-generated interview transcriptions, essays, dates, or quotes be accepted. 
-- All factual data files (found in `src/data/`) use `[PLACEHOLDER]` skeletons. Fill these in manually with authentic text.
+1. **No AI-generated factual content.** AI-generated interview transcriptions, quotes, dates, or essays are never accepted — in data files *or* in UI copy. `[PLACEHOLDER]` skeletons are filled in manually with authentic text.
+2. **Mandatory citation.** Every interview quote, timeline milestone, or catalogue record must carry a verifiable `sourceUrl`. Song dossiers link to official lyric pages via `officialLyricsUrl` instead of reproducing lyric texts.
+3. **Workflow.** Locate the data file in `src/data/` (`songs.ts`, `interviews.ts`, `references.ts`, `timeline.ts`, `liveArchive.ts`, `criticism.ts`, `mvAnalysis.ts`, `audioAnalysis.ts`, `observatory.ts`, `essays.ts`, `films.ts`) → replace placeholders with curated text → attach precise source URLs → confirm empty states still render gracefully → `npm run lint`.
 
-### 2. Mandatory Citation & Sources
-- Every interview quote, timeline milestone, or media quote must have a verifiable `sourceUrl`.
-- Songs in `songs.ts` must use real, official lyric link URLs (e.g. Genius, or official band publications) in `officialLyricsUrl`. Unverified or unsourced entries will not be indexed.
+---
 
-### 3. Contribution Workflow
-1. Locate the correct data file in `src/data/` (`songs.ts`, `interviews.ts`, `films.ts`, `timeline.ts`, `essays.ts`).
-2. Replace `[PLACEHOLDER]` fields with curated text.
-3. Attach the precise reference URL to the `sourceUrl` or `officialLyricsUrl` fields.
-4. Ensure the React components display empty states or preparation cues gracefully.
+## 🪪 Credits & Disclaimer
+
+An unofficial fan project with no affiliation to Arctic Monkeys, Domino Recording Co., or their representatives. Album artwork, lyrics, and recordings remain the property of their rights holders; this site documents and links to sources rather than reproducing protected material.
+
+- Elevator icon: [SVG Repo](https://www.svgrepo.com/) (elevator-scroll).
+- Display typeface: fan-made *Tranquility New Bold* webfont; body typeface: [Cormorant Garamond](https://fonts.google.com/specimen/Cormorant+Garamond).
+
+*"Four stars out of five."*
