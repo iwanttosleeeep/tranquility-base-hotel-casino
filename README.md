@@ -4,7 +4,7 @@
 
 An immersive, unofficial fan archive dedicated to Arctic Monkeys' 2018 album *Tranquility Base Hotel & Casino*. Rather than a conventional wiki, the site is built as the hotel itself: guests arrive through the G-level Lobby, check in at Reception, and ride the Otis lift between rooms — each floor holding a different wing of the archive. Every factual record is source-linked and evidence-graded.
 
-**Live site:** https://iwanttosleeeep.github.io/tranquility-base-hotel-casino/
+**Live site:** (https://tbhc.sehnsucht.uk)
 
 ---
 
@@ -32,10 +32,13 @@ An immersive, unofficial fan archive dedicated to Arctic Monkeys' 2018 album *Tr
 
 Records in the Verified Reference Catalogue carry a grade describing **documentation, not influence**:
 
-- **A** — a first-hand, source-linked statement (e.g. an Alex Turner interview) establishes the connection.
-- **C** — a professional attribution or verified association (e.g. official event curation, production notes) establishes context only.
+- **A — central:** TBHC is the main subject and the source contains extensive first-hand detail.
+- **B — substantial:** TBHC is a major subject, but the interview has a wider frame or a shorter running time.
+- **C — passing but useful:** a later retrospective supplies a discrete new insight about TBHC, without being mainly about the album.
 
-Ungraded or unsourced material is not indexed.
+- **D1 — developed critical interpretation:** a critic advances an argument about theme, narrative, persona or social meaning and anchors it in identifiable features of the released work.
+- **D2 — critical comparison:** a critic uses another work, artist or genre to describe the album, song or video. This establishes reception history, not creative influence.
+- **D3 — editorial notice:** a brief but attributable description or comparison with limited supporting argument.
 
 ---
 
