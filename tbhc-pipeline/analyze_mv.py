@@ -59,14 +59,20 @@ def palette_metrics(frame: Any) -> tuple[list[str], float, float]:
     return palette, brightness, saturation
 
 
-def read_frame(capture: Any, time_s: float) -> Any:
+def read_frame(capture: Any, time_s: float, fps: float, frame_count: float) -> Any:
     import cv2
 
-    capture.set(cv2.CAP_PROP_POS_MSEC, max(0, time_s) * 1000)
-    success, frame = capture.read()
-    if not success or frame is None:
-        raise RuntimeError(f"could not decode frame at {time_s:.3f}s")
-    return frame
+    # OpenCV random seeking can fail for a frame close to the end of a long-GOP
+    # stream. Retrying a few earlier frame positions keeps reference export
+    # resilient without changing the shot's recorded timecodes.
+    max_time = max(0.0, (frame_count - 1) / fps)
+    for offset in (0.0, -0.04, -0.12, -0.25, -0.50, -1.0):
+        target = min(max(0.0, time_s + offset), max_time)
+        capture.set(cv2.CAP_PROP_POS_FRAMES, round(target * fps))
+        success, frame = capture.read()
+        if success and frame is not None:
+            return frame
+    raise RuntimeError(f"could not decode a frame near {time_s:.3f}s")
 
 
 def save_frame(frame: Any, destination: Path) -> None:
@@ -140,12 +146,12 @@ def analyse_video(source: Path, out_dir: Path, threshold: float, export_frames: 
             end = min(end, duration)
             length = max(0.001, end - start)
             moments = {"start": start + length * 0.10, "mid": start + length * 0.50, "end": start + length * 0.90}
-            mid_frame = read_frame(capture, moments["mid"])
+            mid_frame = read_frame(capture, moments["mid"], fps, frame_count)
             palette, brightness, saturation = palette_metrics(mid_frame)
             shots.append({"index": index, "start_s": rounded(start), "end_s": rounded(end), "length_s": rounded(length), "palette": palette, "brightness": rounded(brightness, 1), "saturation": rounded(saturation, 1)})
             if export_frames:
                 for label, moment in moments.items():
-                    frame = mid_frame if label == "mid" else read_frame(capture, moment)
+                    frame = mid_frame if label == "mid" else read_frame(capture, moment, fps, frame_count)
                     save_frame(frame, frames_dir / f"shot{index:04d}_{label}.jpg")
         payload = {"source": source.name, "fps": rounded(fps, 3), "duration_s": rounded(duration), "shot_count": len(shots), "shots": shots}
         json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
