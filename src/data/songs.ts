@@ -176,5 +176,15 @@ export const SONGS_DATA: Song[] = [
     filmReferences: [],
     literaryReferences: [],
     relatedEssays: []
+  },
+  {
+    id: "anyways",
+    title: "Anyways",
+    releaseCategory: "B-side",
+    officialLyricsUrl: "[PLACEHOLDER]",
+    annotatedLines: [],
+    filmReferences: [],
+    literaryReferences: [],
+    relatedEssays: []
   }
 ];

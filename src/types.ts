@@ -1,6 +1,7 @@
 export interface Song {
   id: string;
   title: string;
+  releaseCategory?: "Album" | "B-side";
   officialLyricsUrl?: string;   // 新增：外链官方歌词渠道
   annotatedLines: {             // 替代整段 lyrics：只存被注释的行
     line: string;
