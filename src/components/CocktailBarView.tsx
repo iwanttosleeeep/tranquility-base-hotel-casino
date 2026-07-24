@@ -1,73 +1,24 @@
+import { useState } from "react";
 import { ExternalLink, Music2, Martini, Wrench } from "lucide-react";
+import { ARRANGEMENT_SCORES, STEM_ORDER, type StemName } from "../data/audioAnalysis";
 
 const TUTORIAL_PLAYLISTS = [
-  {
-    name: "Piano",
-    listId: "PLY-HuGVAXY1koMpNamtePjuSD5al1JN5w",
-    url: "https://youtube.com/playlist?list=PLY-HuGVAXY1koMpNamtePjuSD5al1JN5w&si=aKmZZmvgtQBttHFo"
-  },
-  {
-    name: "Guitar",
-    listId: "PL4nYsJ3tuKTkbvyNoDBpAAevWX4mx5jUz",
-    url: "https://youtube.com/playlist?list=PL4nYsJ3tuKTkbvyNoDBpAAevWX4mx5jUz&si=BhxhmYK1vIbQ4w9F",
-    note: "Compiled from multiple creators; tutorial formats and difficulty vary by song."
-  },
-  {
-    name: "Bass",
-    listId: "PLda-GhTIiuF1ul_A-Al0rrQBAwuh6AdGK",
-    url: "https://youtube.com/playlist?list=PLda-GhTIiuF1ul_A-Al0rrQBAwuh6AdGK&si=zZadqfhghxHTsgIZ"
-  },
-  {
-    name: "Drums",
-    listId: "PL2QGx4SN31i_VDf4Lk6JGZAt88vmVfiRC",
-    url: "https://youtube.com/playlist?list=PL2QGx4SN31i_VDf4Lk6JGZAt88vmVfiRC&si=Mv62xURgTolM6m8i",
-    note: "Recreated drum tracks for practice; not official isolated stems or Matt Helders’ original drum recordings."
-  }
+  { name: "Piano", listId: "PLY-HuGVAXY1koMpNamtePjuSD5al1JN5w", url: "https://youtube.com/playlist?list=PLY-HuGVAXY1koMpNamtePjuSD5al1JN5w&si=aKmZZmvgtQBttHFo" },
+  { name: "Guitar", listId: "PL4nYsJ3tuKTkbvyNoDBpAAevWX4mx5jUz", url: "https://youtube.com/playlist?list=PL4nYsJ3tuKTkbvyNoDBpAAevWX4mx5jUz&si=BhxhmYK1vIbQ4w9F", note: "Compiled from multiple creators; tutorial formats and difficulty vary by song." },
+  { name: "Bass", listId: "PLda-GhTIiuF1ul_A-Al0rrQBAwuh6AdGK", url: "https://youtube.com/playlist?list=PLda-GhTIiuF1ul_A-Al0rrQBAwuh6AdGK&si=zZadqfhghxHTsgIZ" },
+  { name: "Drums", listId: "PL2QGx4SN31i_VDf4Lk6JGZAt88vmVfiRC", url: "https://youtube.com/playlist?list=PL2QGx4SN31i_VDf4Lk6JGZAt88vmVfiRC&si=Mv62xURgTolM6m8i", note: "Recreated drum tracks for practice; not official isolated stems or Matt Helders’ original drum recordings." }
 ];
 
+const STEM_LABELS: Record<StemName, string> = { vocals: "Vocals", drums: "Drums", bass: "Bass", guitar: "Guitar", piano: "Piano", other: "Other" };
+
 export default function CocktailBarView() {
-  return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">
-      <div>
-        <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 04 • Room 04</span>
-        <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">Cocktail Bar</h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
-          A low-lit service counter for learning the arrangements: tutorials, instrumental details, and the changing mechanics of the record.
-        </p>
-      </div>
-
-      <section className="p-5 md:p-7 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-3 text-[#c5a059]"><Martini size={21} /><span className="font-serif italic text-xl text-[#f5f2ed]">Tutorial Pour</span></div>
-          <p className="font-serif text-sm leading-relaxed text-[#f5f2ed]/60 max-w-2xl">A curated shelf of external performance and instrument tutorials for guests who want to learn their way around the bar.</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-          {TUTORIAL_PLAYLISTS.map((playlist) => (
-            <article key={playlist.listId} className="rounded border border-[#c5a059]/15 bg-black/25 overflow-hidden flex flex-col">
-              <div className="px-4 pt-4 pb-3 flex items-center justify-between gap-3">
-                <h3 className="font-serif italic text-lg text-[#f5f2ed]">{playlist.name}</h3>
-                <a href={playlist.url} target="_blank" rel="noreferrer" className="font-panel text-[9px] uppercase tracking-wide text-[#c5a059] hover:text-[#f5f2ed] inline-flex items-center gap-1 shrink-0">Open on YouTube <ExternalLink size={10} /></a>
-              </div>
-              <iframe
-                className="w-full aspect-video border-y border-[#c5a059]/10 bg-black"
-                src={`https://www.youtube-nocookie.com/embed/videoseries?list=${playlist.listId}`}
-                title={`${playlist.name} tutorial playlist`}
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
-              {playlist.note && <p className="px-4 py-3 font-serif text-xs leading-relaxed text-[#f5f2ed]/50">{playlist.note}</p>}
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-4">
-        <div className="flex items-center gap-3 text-[#c5a059]"><Music2 size={21} /><span className="font-serif italic text-xl text-[#f5f2ed]">Arrangement Service</span></div>
-        <p className="font-serif text-sm leading-relaxed text-[#f5f2ed]/60">Future analysis of rhythm, melody, vocals, instruments, and the way each part changes the whole arrangement.</p>
-        <div className="flex items-center gap-2 font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/60"><Wrench size={12} /> Signal calibration in progress</div>
-      </section>
-    </div>
-  );
+  const [scoreId, setScoreId] = useState(ARRANGEMENT_SCORES[0].id);
+  const score = ARRANGEMENT_SCORES.find((item) => item.id === scoreId) ?? ARRANGEMENT_SCORES[0];
+  const minutes = Math.floor(score.durationS / 60);
+  const seconds = Math.round(score.durationS % 60).toString().padStart(2, "0");
+  return <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">
+    <div><span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 04 • Room 04</span><h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">Cocktail Bar</h2><p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">A low-lit service counter for learning the arrangements: tutorials, instrumental details, and the changing mechanics of the record.</p></div>
+    <section className="p-5 md:p-7 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-6"><div className="flex flex-col gap-2"><div className="flex items-center gap-3 text-[#c5a059]"><Martini size={21}/><span className="font-serif italic text-xl text-[#f5f2ed]">Tutorial Pour</span></div><p className="font-serif text-sm leading-relaxed text-[#f5f2ed]/60 max-w-2xl">A curated shelf of external performance and instrument tutorials for guests who want to learn their way around the bar.</p></div><div className="grid grid-cols-1 lg:grid-cols-2 gap-5">{TUTORIAL_PLAYLISTS.map((playlist) => <article key={playlist.listId} className="rounded border border-[#c5a059]/15 bg-black/25 overflow-hidden flex flex-col"><div className="px-4 pt-4 pb-3 flex items-center justify-between gap-3"><h3 className="font-serif italic text-lg text-[#f5f2ed]">{playlist.name}</h3><a href={playlist.url} target="_blank" rel="noreferrer" className="font-panel text-[9px] uppercase tracking-wide text-[#c5a059] hover:text-[#f5f2ed] inline-flex items-center gap-1 shrink-0">Open on YouTube <ExternalLink size={10}/></a></div><iframe className="w-full aspect-video border-y border-[#c5a059]/10 bg-black" src={`https://www.youtube-nocookie.com/embed/videoseries?list=${playlist.listId}`} title={`${playlist.name} tutorial playlist`} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/>{playlist.note && <p className="px-4 py-3 font-serif text-xs leading-relaxed text-[#f5f2ed]/50">{playlist.note}</p>}</article>)}</div></section>
+    <section className="p-5 md:p-7 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col gap-5"><div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4"><div><div className="flex items-center gap-3 text-[#c5a059]"><Music2 size={21}/><span className="font-serif italic text-xl text-[#f5f2ed]">Arrangement Service</span></div><p className="font-serif text-sm leading-relaxed text-[#f5f2ed]/60 mt-2 max-w-2xl">A signal-derived score of the album's six private analysis stems. Brighter cells indicate relatively higher energy within that stem.</p></div><label className="font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/70">Select a room service <select value={scoreId} onChange={(event) => setScoreId(event.target.value)} className="block mt-2 bg-black/40 border border-[#c5a059]/30 rounded px-3 py-2 text-[#f5f2ed] font-serif normal-case tracking-normal"><>{ARRANGEMENT_SCORES.map((item) => <option value={item.id} key={item.id}>{item.title}</option>)}</></select></label></div><div className="border-y border-[#c5a059]/15 py-3 flex flex-wrap gap-x-6 gap-y-2 font-panel text-[10px] uppercase tracking-widest text-[#c5a059]/70"><span>{score.tempoBpm.toFixed(1)} BPM estimated</span><span>{minutes}:{seconds} duration</span><span>5 second intervals</span></div><div className="flex flex-col gap-2">{STEM_ORDER.map((stem) => <div className="grid grid-cols-[64px_minmax(0,1fr)] gap-3 items-center" key={stem}><span className="font-panel text-[9px] uppercase tracking-widest text-[#f5f2ed]/55">{STEM_LABELS[stem]}</span><div className="h-7 flex gap-px bg-black/30">{score.levels[stem].split("").map((level, index) => <span key={index} className="flex-1 min-w-0 bg-[#c5a059] transition-opacity" style={{ opacity: Math.max(0.08, Number(level) / 9) }} />)}</div></div>)}</div><div className="flex justify-between font-panel text-[9px] uppercase tracking-widest text-[#f5f2ed]/35 pl-[76px]"><span>00:00</span><span>{minutes}:{seconds}</span></div><div className="flex items-center gap-2 font-serif text-xs leading-relaxed text-[#f5f2ed]/40"><Wrench size={12} className="text-[#c5a059] shrink-0"/>Private signal measurements only; not official stems or a definitive arrangement transcription.</div></section>
+  </div>;
 }
