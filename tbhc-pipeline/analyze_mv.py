@@ -112,7 +112,7 @@ def detect_scenes(source: Path, threshold: float, duration: float) -> list[tuple
     manager = SceneManager()
     manager.add_detector(ContentDetector(threshold=threshold))
     manager.detect_scenes(video)
-    scenes = [(start.get_seconds(), end.get_seconds()) for start, end in manager.get_scene_list()]
+    scenes = [(start.seconds, end.seconds) for start, end in manager.get_scene_list()]
     return scenes or [(0.0, duration)]
 
 
