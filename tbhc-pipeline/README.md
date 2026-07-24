@@ -61,3 +61,14 @@ sudo bash setup.sh
 7. Verify results locally, then destroy a temporary instance rather than merely stopping it.
 
 The music-video analysis script will be added alongside these music tools.
+
+## Music-video structure — `analyze_mv.py`
+
+Detects shots with PySceneDetect, then writes timecodes, five-colour palettes, brightness and saturation measures, three private reference frames per shot, and a palette barcode PNG.
+
+```bash
+source .venv/bin/activate
+python analyze_mv.py /opt/tbhc-pipeline/incoming --out /opt/tbhc-pipeline/output/analyze-mv
+```
+
+Use `--no-frames` to keep only the JSON and palette barcode. Reference JPEGs are for private analysis and must not be published.
