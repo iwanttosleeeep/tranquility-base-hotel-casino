@@ -17,6 +17,17 @@ On the current CPU-only worker, expect several minutes per song. The script dete
 
 **Stems are for private analysis only. Do not publish or redistribute separated audio.**
 
+## Audio feature register — `analyze_audio.py`
+
+Reads a six-stem directory created by `separate.py` and produces one compact JSON document per song: drum-derived beat times and estimated tempo, per-stem energy windows, onset counts, spectral-centroid summaries, and a conservative arrangement-energy profile.
+
+```bash
+source .venv/bin/activate
+python analyze_audio.py /opt/tbhc-pipeline/output/separate --out /opt/tbhc-pipeline/output/audio-analysis
+```
+
+The JSON contains signal-derived measurements, not official stems, lyrics, or definitive musicological claims. It is intended as private evidence for later human and AI-assisted analysis.
+
 ## Output contract
 
 For `song.flac`, the default output is:
@@ -41,7 +52,7 @@ sudo bash setup.sh
 
 ## Vultr runbook
 
-1. Provision an Ubuntu 24.04 instance. A GPU is optional; it speeds up transcription and separation, while video shot analysis is fine on CPU.
+1. Provision an Ubuntu 24.04 instance. A GPU is optional; it speeds up music separation, while video shot analysis is fine on CPU.
 2. Clone this repository, enter `tbhc-pipeline`, and run `sudo bash setup.sh`.
 3. Activate the environment with `source .venv/bin/activate`.
 4. Upload authorised source material: `rsync -avP ./sources/ root@IP:/opt/tbhc-pipeline/incoming/`.
@@ -49,4 +60,4 @@ sudo bash setup.sh
 6. Download structured results: `rsync -avP root@IP:/opt/tbhc-pipeline/output/ ./out/`.
 7. Verify results locally, then destroy a temporary instance rather than merely stopping it.
 
-Transcription and music-video analysis scripts will be added alongside this music tool.
+The music-video analysis script will be added alongside these music tools.
