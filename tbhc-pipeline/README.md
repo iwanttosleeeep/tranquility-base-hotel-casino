@@ -72,3 +72,5 @@ python analyze_mv.py /opt/tbhc-pipeline/incoming --out /opt/tbhc-pipeline/output
 ```
 
 Use `--no-frames` to keep only the JSON and palette barcode. Reference JPEGs are for private analysis and must not be published.
+
+AV1 sources are automatically converted to a private H.264 working copy in `out/analyze-mv/.work/` before analysis, because the worker's OpenCV decoder cannot read AV1 reliably. The working copy is not website data and should remain server-side.

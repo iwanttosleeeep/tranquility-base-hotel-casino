@@ -7,6 +7,7 @@ import argparse
 import json
 import math
 import shutil
+import subprocess
 import time
 from pathlib import Path
 from typing import Any
@@ -119,6 +120,44 @@ def outputs_ready(base: Path, export_frames: bool) -> bool:
     return (base.with_suffix(".shots.json")).is_file() and (base.with_suffix(".palette.png")).is_file() and (not export_frames or base.with_suffix(".frames")).is_dir()
 
 
+def video_codec(source: Path) -> str:
+    """Return the first video stream's codec, using the installed FFmpeg tools."""
+    probe = subprocess.run(
+        ["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=codec_name", "-of", "default=nokey=1:noprint_wrappers=1", str(source)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    codec = probe.stdout.strip().lower()
+    if not codec:
+        raise RuntimeError("could not determine the video codec")
+    return codec
+
+
+def decoder_safe_source(source: Path, work_dir: Path) -> Path:
+    """Make an H.264 working copy when OpenCV cannot reliably decode AV1."""
+    if video_codec(source) != "av1":
+        return source
+
+    work_dir.mkdir(parents=True, exist_ok=True)
+    transcoded = work_dir / f"{source.stem}.h264.mp4"
+    if transcoded.is_file() and transcoded.stat().st_size > 0:
+        return transcoded
+    command = [
+        "ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
+        "-i", str(source), "-map", "0:v:0", "-an",
+        "-vf", "scale=min(1280\\,iw):-2:force_original_aspect_ratio=decrease",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+        "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(transcoded),
+    ]
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as error:
+        transcoded.unlink(missing_ok=True)
+        raise RuntimeError("could not create an H.264 working copy with FFmpeg") from error
+    return transcoded
+
+
 def analyse_video(source: Path, out_dir: Path, threshold: float, export_frames: bool, force: bool) -> None:
     import cv2
 
@@ -130,7 +169,8 @@ def analyse_video(source: Path, out_dir: Path, threshold: float, export_frames: 
         raise FileExistsError("SKIP")
     if force and frames_dir.exists():
         shutil.rmtree(frames_dir)
-    capture = cv2.VideoCapture(str(source))
+    analysis_source = decoder_safe_source(source, out_dir / ".work")
+    capture = cv2.VideoCapture(str(analysis_source))
     if not capture.isOpened():
         raise RuntimeError("could not open video")
     try:
@@ -142,7 +182,7 @@ def analyse_video(source: Path, out_dir: Path, threshold: float, export_frames: 
         if export_frames:
             frames_dir.mkdir(parents=True, exist_ok=True)
         shots: list[dict[str, object]] = []
-        for index, (start, end) in enumerate(detect_scenes(source, threshold, duration)):
+        for index, (start, end) in enumerate(detect_scenes(analysis_source, threshold, duration)):
             end = min(end, duration)
             length = max(0.001, end - start)
             moments = {"start": start + length * 0.10, "mid": start + length * 0.50, "end": start + length * 0.90}
