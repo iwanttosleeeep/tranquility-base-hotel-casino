@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { INTERVIEWS_DATA } from "../data/interviews";
-import { Radio, Search, ExternalLink, BookOpen, Quote, UserRound, AlertCircle } from "lucide-react";
+import { Radio, Search, ExternalLink, BookOpen, Quote, UserRound } from "lucide-react";
 
 export default function LoungeView() {
   const [selectedInterview, setSelectedInterview] = useState(
@@ -28,14 +28,6 @@ export default function LoungeView() {
         <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
           Settle down with the easy listening and the free-flowing honey. This press archive captures verified interviews, quotes, and cultural reflections of the era.
         </p>
-      </div>
-
-      <div className="p-5 rounded-lg border border-[#d97706]/25 bg-[#d97706]/[0.04] flex gap-3">
-        <AlertCircle size={16} className="text-[#d97706]/80 shrink-0 mt-0.5" />
-        <div className="font-serif text-sm text-[#f5f2ed]/65 leading-relaxed">
-          <span className="font-panel text-[10px] uppercase tracking-widest text-[#d97706]/80 block mb-1.5">Archive correction</span>
-          An earlier version of this archive listed the Mondo Sonoro interview as having no locatable original page. The original has since been found and read. It is the most important single source for reconstructing the recording order: the conversation took place on 7 March 2018, under embargo, and was published on 14 May 2018.
-        </div>
       </div>
 
       {!hasInterviews ? (

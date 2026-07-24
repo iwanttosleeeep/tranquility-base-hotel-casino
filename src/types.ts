@@ -2,16 +2,6 @@ export interface Song {
   id: string;
   title: string;
   releaseCategory?: "Album" | "B-side";
-  officialLyricsUrl?: string;   // 新增：外链官方歌词渠道
-  annotatedLines: {             // 替代整段 lyrics：只存被注释的行
-    line: string;
-    annotation: string;
-    references?: string[];
-    sourceUrl?: string;         // 注释若引用采访，附出处
-  }[];
-  filmReferences: string[];
-  literaryReferences: string[];
-  relatedEssays: string[];
 }
 
 export interface Interview {
