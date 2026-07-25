@@ -5,6 +5,7 @@ import ElevatorIcon from "./ElevatorIcon";
 
 interface ElevatorProps {
   currentRoom: HotelRoom;
+  guestRoom: string;
   targetRoom: HotelRoom | null;
   onRoomChange: (room: HotelRoom) => void;
   isMoving: boolean;
@@ -12,7 +13,11 @@ interface ElevatorProps {
   onToggleCollapse: () => void;
 }
 
-const ROOMS: { key: HotelRoom; label: string; floor: string; desc: string }[] = [
+type FloorEntry = { key: HotelRoom; label: string; floor: string; desc: string };
+
+// The guest suite has no floor of its own — it takes the empty cell beside the
+// Lobby and wears the guest's own room number on its brass tag.
+const buildRooms = (guestRoom: string): FloorEntry[] => [
   { key: "ROOFTOP_GARDEN", label: "Rooftop Garden", floor: "10", desc: "Residents' Readings & Transmissions" },
   { key: "OBSERVATORY", label: "The Observatory", floor: "09", desc: "Conceptual Frameworks & Theory" },
   { key: "ARCHIVE", label: "Hotel Archive", floor: "08", desc: "Timeline & Reference Catalogue" },
@@ -24,9 +29,11 @@ const ROOMS: { key: HotelRoom; label: string; floor: string; desc: string }[] = 
   { key: "LOUNGE", label: "The Lounge", floor: "02", desc: "Press & Interview Archives" },
   { key: "RECEPTION", label: "Reception Desk", floor: "01", desc: "Guest Register & Welcome" },
   { key: "LOBBY", label: "The Lobby", floor: "G", desc: "Main Entrance & Directory" },
+  { key: "SUITE", label: "Your Suite", floor: guestRoom, desc: "Private Key • Kept Papers" },
 ];
 
-export default function Elevator({ currentRoom, targetRoom, onRoomChange, isMoving, isCollapsed, onToggleCollapse }: ElevatorProps) {
+export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomChange, isMoving, isCollapsed, onToggleCollapse }: ElevatorProps) {
+  const ROOMS = buildRooms(guestRoom);
   const currentFloorIdx = ROOMS.findIndex((r) => r.key === currentRoom);
   const targetFloorIdx = targetRoom ? ROOMS.findIndex((r) => r.key === targetRoom) : null;
   const currentFloorLabel = ROOMS[currentFloorIdx]?.floor || "G";

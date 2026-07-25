@@ -90,6 +90,7 @@ export interface CriticalClaim {
 
 export type HotelRoom = 
   | "LOBBY"
+  | "SUITE"
   | "RECEPTION"
   | "LOUNGE"
   | "CINEMA"

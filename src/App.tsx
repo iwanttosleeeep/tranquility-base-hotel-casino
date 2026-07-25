@@ -20,10 +20,12 @@ import ArchiveView from "./components/ArchiveView";
 import GlobalSearch from "./components/GlobalSearch";
 import FrontPage from "./components/FrontPage";
 import RegisterPage from "./components/RegisterPage";
+import SuiteView from "./components/SuiteView";
 
 // ─── Hash routing: #/library, #/library/star-treatment, #/casino … ───
 const ROOM_SLUGS: Record<HotelRoom, string> = {
   LOBBY: "lobby",
+  SUITE: "suite",
   RECEPTION: "reception",
   LOUNGE: "lounge",
   CINEMA: "cinema",
@@ -53,6 +55,7 @@ function writeHash(room: HotelRoom, sub?: string | null) {
 
 
 const LOBBY_DIRECTORY = [
+  { key: "SUITE", label: "G. Your Suite", desc: "Your private room, night counter & kept papers" },
   { key: "RECEPTION", label: "01. Reception Desk", desc: "Guest register, room keys & house welcome" },
   { key: "LOUNGE", label: "02. The Lounge", desc: "Chronological interview archive with sourced quotes" },
   { key: "CINEMA", label: "03. Hotel Cinema", desc: "Music-video projection room & viewing notes" },
@@ -68,6 +71,7 @@ const LOBBY_DIRECTORY = [
 
 const ROOM_NAMES: Record<HotelRoom, string> = {
   LOBBY: "The Lobby",
+  SUITE: "Your Suite",
   RECEPTION: "Reception Desk",
   LOUNGE: "The Lounge",
   CINEMA: "Hotel Cinema",
@@ -200,7 +204,12 @@ export default function App() {
 
     if (!name) {
       const { error } = await supabase.auth.signOut();
-      return error ? { success: false, message: error.message } : { success: true, message: "Checked out successfully." };
+      if (error) return { success: false, message: error.message };
+      setCurrentRoom("LOBBY");
+      writeHash("LOBBY");
+      setIsRegisterPage(false);
+      setIsFrontPage(true);
+      return { success: true, message: "Checked out successfully." };
     }
 
     if (!session) {
@@ -325,6 +334,7 @@ export default function App() {
           <div className="lg:sticky lg:top-28 lg:-translate-x-3 flex flex-col gap-6">
             <Elevator
               currentRoom={currentRoom}
+              guestRoom={guestRoom}
               targetRoom={targetRoom}
               onRoomChange={handleRoomChange}
               isMoving={isMoving}
@@ -417,6 +427,14 @@ export default function App() {
                         ))}
                       </div>
                     </div>
+                  )}
+
+                  {currentRoom === "SUITE" && (
+                    <SuiteView
+                      guestName={guestName}
+                      guestRoom={guestRoom}
+                      onNavigateToRoom={handleRoomChange}
+                    />
                   )}
 
                   {currentRoom === "RECEPTION" && (
