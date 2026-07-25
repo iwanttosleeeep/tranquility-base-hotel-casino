@@ -28,26 +28,18 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
     const results: SearchResult[] = [];
     const lowerQuery = query.toLowerCase();
 
-    // Search Songs
+    // Search Songs — the Library is a source desk, not a lyrics site, so songs
+    // are indexed by title only. Anything said *about* a song is reachable
+    // through the interview and reference results below.
     SONGS_DATA.forEach((song) => {
-      const titleMatch = song.title.toLowerCase().includes(lowerQuery);
-      const lineMatch = song.annotatedLines.find(
-        (al) =>
-          al.line.toLowerCase().includes(lowerQuery) ||
-          al.annotation.toLowerCase().includes(lowerQuery)
-      );
-
-      if (titleMatch || lineMatch) {
-        results.push({
-          title: song.title,
-          category: "Lyrics & Annotations",
-          type: "Song",
-          room: "LIBRARY",
-          snippet: lineMatch
-            ? `"...${lineMatch.line.trim()}..." — ${lineMatch.annotation.substring(0, 60)}...`
-            : "Explore track pages and commentary."
-        });
-      }
+      if (!song.title.toLowerCase().includes(lowerQuery)) return;
+      results.push({
+        title: song.title,
+        category: song.releaseCategory === "B-side" ? "B-side dossier" : "Song dossier",
+        type: "Song",
+        room: "LIBRARY",
+        snippet: "Open the source dossier for this track in the Library."
+      });
     });
 
     // Search Interviews
