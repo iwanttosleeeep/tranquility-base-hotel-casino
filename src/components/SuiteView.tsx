@@ -3,7 +3,7 @@ import { KeyRound, Hourglass, ArrowUpRight } from "lucide-react";
 import { HotelRoom } from "../types";
 import { formatGuestNight, guestNight } from "../lib/guestTime";
 import RoomServicePanel from "./RoomServicePanel";
-import KeptPapers from "./KeptPapers";
+import KeptReceipts from "./KeptReceipts";
 
 interface SuiteViewProps {
   guestName: string;
@@ -75,7 +75,7 @@ export default function SuiteView({ guestName, guestRoom, userId, checkedInAt, o
             Counted from the night the register was first signed. Check-out does not stop the house clock.
           </p>
         </div>
-        <KeptPapers userId={userId} checkedInAt={checkedInAt} refreshToken={keptRevision} />
+        <KeptReceipts userId={userId} checkedInAt={checkedInAt} refreshToken={keptRevision} />
         <div className="md:col-span-2">
           <RoomServicePanel
             userId={userId}

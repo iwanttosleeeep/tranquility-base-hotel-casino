@@ -2,6 +2,8 @@
 
 Small, resumable batch tools for producing structured research data from media that you have permission to process. This directory is not a public web service and does not publish raw media or derived audio.
 
+> **Machine-analysis disclosure:** every audio and video analytical readout produced from this pipeline and published by the site is entirely machine/AI generated. No human musicologist, audio engineer, cinematographer, or film scholar authors, verifies, or corrects those readouts. Demucs performs AI source separation; the remaining audio and image features are calculated automatically. Outputs describe detected features only and may be wrong. They do not establish artistic intent, meaning, quality, influence, or causation.
+
 ## Music analysis — `separate.py`
 
 Creates four private Demucs stems (`vocals`, `drums`, `bass`, `other`) from an authorised local audio file or all supported files in a directory. The script is idempotent: a complete existing stem directory prints `SKIP` unless `--force` is supplied.
@@ -26,7 +28,7 @@ source .venv/bin/activate
 python analyze_audio.py /opt/tbhc-pipeline/output/separate --out /opt/tbhc-pipeline/output/audio-analysis
 ```
 
-The JSON contains signal-derived measurements, not official stems, lyrics, or definitive musicological claims. It is intended as private evidence for later human and AI-assisted analysis.
+The JSON contains machine-generated, signal-derived measurements, not official stems, lyrics, or definitive musicological claims. The public readout is generated from these measurements without human expert interpretation.
 
 ## Website data — `build_site_data.py`
 
@@ -74,7 +76,7 @@ sudo bash setup.sh
 
 ## Music-video structure — `analyze_mv.py`
 
-Detects shots with PySceneDetect, then writes timecodes, five-colour palettes, brightness and saturation measures, three private reference frames per shot, and a palette barcode PNG.
+Automatically detects shots with PySceneDetect, then writes timecodes, five-colour palettes, brightness and saturation measures, three private reference frames per shot, and a palette barcode PNG. These outputs are machine-generated measurements, not cinematographic interpretation.
 
 ```bash
 source .venv/bin/activate

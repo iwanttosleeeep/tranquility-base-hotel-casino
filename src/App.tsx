@@ -43,31 +43,30 @@ const SLUG_TO_ROOM: Record<string, HotelRoom> = Object.fromEntries(
   Object.entries(ROOM_SLUGS).map(([room, slug]) => [slug, room as HotelRoom])
 ) as Record<string, HotelRoom>;
 
-function roomFromHash(): { room: HotelRoom; sub: string | null } {
+function roomFromHash(): HotelRoom {
   const parts = window.location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  const room = SLUG_TO_ROOM[parts[0]] ?? "LOBBY";
-  return { room, sub: parts[1] ?? null };
+  return SLUG_TO_ROOM[parts[0]] ?? "LOBBY";
 }
 
-function writeHash(room: HotelRoom, sub?: string | null) {
-  const target = "#/" + ROOM_SLUGS[room] + (sub ? "/" + sub : "");
+function writeHash(room: HotelRoom) {
+  const target = "#/" + ROOM_SLUGS[room];
   if (window.location.hash !== target) window.location.hash = target;
 }
 
 
 const LOBBY_DIRECTORY = [
-  { key: "SUITE", label: "Your Suite", desc: "Your private room, night counter & kept receipts" },
+  { key: "SUITE", label: "Your Suite", desc: "Private room, night counter, Room Service & kept receipts" },
   { key: "LOBBY", label: "G. The Lobby", desc: "Main entrance & hotel directory" },
   { key: "RECEPTION", label: "01. Reception Desk", desc: "Guest register, room keys & house welcome" },
-  { key: "LOUNGE", label: "02. The Lounge", desc: "Chronological interview archive with sourced quotes" },
+  { key: "LOUNGE", label: "02. The Lounge", desc: "Chronological interview archive & official recordings" },
   { key: "CINEMA", label: "03. Hotel Cinema", desc: "Music-video projection room & viewing notes" },
   { key: "COCKTAIL_BAR", label: "04. Cocktail Bar", desc: "Instrument tutorials & arrangement readouts" },
-  { key: "LIBRARY", label: "05. The Library", desc: "Song dossiers cross-linked to sources & official lyrics" },
-  { key: "BALLROOM", label: "06. Grand Ballroom", desc: "Tour polaroids, setlists & live recordings" },
+  { key: "LIBRARY", label: "05. The Library", desc: "Song dossiers cross-linked to interviews & sources" },
+  { key: "BALLROOM", label: "06. Grand Ballroom", desc: "Tour chronology, setlists & performance records" },
   { key: "CASINO", label: "07. Clavius Casino", desc: "Spin the lunar slot machine for stray transmissions" },
   { key: "ARCHIVE", label: "08. Hotel Archive", desc: "Creation timeline & verified reference catalogue" },
   { key: "OBSERVATORY", label: "09. The Observatory", desc: "Ten conceptual frameworks, fully referenced" },
-  { key: "ROOFTOP_GARDEN", label: "10. Rooftop Garden", desc: "Residents' readings, theories & personal encounters" },
+  { key: "ROOFTOP_GARDEN", label: "10. Rooftop Garden", desc: "Critical reception & residents' guest book" },
   { key: "TBC", label: "To be continue…", desc: "Further floors are currently being prepared", isPlaceholder: true },
 ];
 
@@ -87,7 +86,7 @@ const ROOM_NAMES: Record<HotelRoom, string> = {
 };
 
 export default function App() {
-  const [currentRoom, setCurrentRoom] = useState<HotelRoom>(() => roomFromHash().room);
+  const [currentRoom, setCurrentRoom] = useState<HotelRoom>(() => roomFromHash());
   const [targetRoom, setTargetRoom] = useState<HotelRoom | null>(null);
   const [isMoving, setIsMoving] = useState(false);
   const [guestName, setGuestName] = useState("");
@@ -199,7 +198,7 @@ export default function App() {
   // Browser back/forward + hand-typed hashes drive the elevator too
   useEffect(() => {
     const onHashChange = () => {
-      const { room } = roomFromHash();
+      const room = roomFromHash();
       setCurrentRoom((prev) => (prev === room ? prev : room));
     };
     window.addEventListener("hashchange", onHashChange);
@@ -395,10 +394,10 @@ export default function App() {
                   
                   <div className="flex flex-col gap-1.5">
                     <span className="font-serif italic text-[11px] uppercase tracking-[0.35em] text-[#d97706] text-glow animate-pulse">
-                      Lift Cabin Traveling...
+                      Lift Cabin Travelling...
                     </span>
                     <span className="font-serif italic text-sm text-[#f5f2ed]/50">
-                      "Please remain comfortable. We are ascending to your selected floor suite."
+                      "Please remain comfortable. We are travelling to your selected room."
                     </span>
                   </div>
                 </motion.div>
@@ -416,7 +415,7 @@ export default function App() {
                     <div className="flex flex-col gap-8">
                       <div>
                         <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">
-                          Ground Floor Suite
+                          Ground Floor • Lobby
                         </span>
                         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
                           The Lobby

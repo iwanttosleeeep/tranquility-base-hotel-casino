@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TIMELINE_DATA } from "../data/timeline";
 import { Terminal, ChevronLeft, ChevronRight, Bookmark, ExternalLink, Film as FilmIcon, BadgeCheck } from "lucide-react";
 import { CINEMA_REFERENCES } from "../data/references";
@@ -46,7 +46,7 @@ export default function ArchiveView() {
           Hotel Archive
         </h2>
         <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
-          The Hotel Archive houses the chronological record of Tranquility Base — from early writing sessions to the touring era — together with the verified reference catalogue of books, films, television, and visual culture behind the album.
+          The Hotel Archive houses the chronological record of Tranquility Base — from early writing sessions to the touring era — together with a verified catalogue of film, literature, television, music, and design documented around the album.
         </p>
       </div>
 
@@ -205,7 +205,7 @@ export default function ArchiveView() {
             Room Being Prepared
           </span>
           <p className="font-serif italic text-xs text-[#f5f2ed]/50 max-w-md leading-relaxed">
-            "The Cinema reference catalogue is currently being restored. Please consult Reception for future programme notes."
+            "The Hotel Archive reference catalogue is currently being restored. Please consult Reception for future catalogue notes."
           </p>
         </div>
       ) : (

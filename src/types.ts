@@ -20,19 +20,6 @@ export interface Interview {
   connectedSongs: string[];
 }
 
-export interface Film {
-  id: string;
-  title: string;
-  director: string;
-  year: number;
-  synopsis: string;
-  whyItMatters: string;
-  alexQuote?: string;
-  visualMotifs: string[];
-  connectedSongs: string[];
-  sourceUrl?: string;           // 新增：外链出处
-}
-
 export interface CulturalReference {
   id: string;
   title: string;
@@ -58,16 +45,6 @@ export interface TimelineEvent {
   quote?: string;
   confidence?: string;          // 新增：证据强度，说明该条目锚定得有多牢
   sourceUrl?: string;           // 新增：外链出处
-}
-
-export interface Essay {
-  id: string;
-  title: string;
-  author: string;
-  date: string;
-  summary: string;
-  content: string;
-  relatedSongs: string[];
 }
 
 export interface CriticalTheme {

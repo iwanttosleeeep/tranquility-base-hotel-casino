@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, Key, PencilLine, LogOut, MessageSquare } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import AdminFeedbackPanel from "./AdminFeedbackPanel";
@@ -35,7 +35,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
     if (isAuthenticated) setIsAwaitingCode(false);
   }, [guestName, guestRoom, guestEmail, isAuthenticated]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!/^\d{3}$/.test(roomInput)) {
       setRoomError("Please enter a three-digit room number.");
@@ -57,7 +57,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
     }
   };
 
-  const handleVerifyCode = async (event: React.FormEvent) => {
+  const handleVerifyCode = async (event: FormEvent) => {
     event.preventDefault();
     if (!/^\d{8}$/.test(roomCode)) {
       setRegisterMessage("Please enter the eight-digit room code from your email.");
@@ -69,7 +69,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
     setIsSubmitting(false);
   };
 
-  const submitFeedback = async (event: React.FormEvent) => {
+  const submitFeedback = async (event: FormEvent) => {
     event.preventDefault();
     if (!feedback.trim()) return;
     if (!supabase || !userId) {

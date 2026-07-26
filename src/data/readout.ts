@@ -58,7 +58,7 @@ function list(items: string[]): string {
 
 const pct = (value: number) => `${Math.round(value * 100)}%`;
 
-function extremes(score: ArrangementScore, pick: (stem: StemName) => number) {
+function extremes(pick: (stem: StemName) => number) {
   const ranked = [...NAMED_STEMS].sort((left, right) => pick(right) - pick(left));
   return { highest: ranked[0], lowest: ranked[ranked.length - 1] };
 }
@@ -117,7 +117,7 @@ export function buildReadout(score: ArrangementScore): ReadoutLine[] {
   }
 
   // ── Event density ────────────────────────────────────────────────────────
-  const density = extremes(score, (stem) => score.stems[stem].onsetsPerMin);
+  const density = extremes((stem) => score.stems[stem].onsetsPerMin);
   const top = score.stems[density.highest].onsetsPerMin;
   const bottom = score.stems[density.lowest].onsetsPerMin;
   lines.push({
@@ -130,7 +130,7 @@ export function buildReadout(score: ArrangementScore): ReadoutLine[] {
   });
 
   // ── Spectral placement ───────────────────────────────────────────────────
-  const spectrum = extremes(score, (stem) => score.stems[stem].centroidHz);
+  const spectrum = extremes((stem) => score.stems[stem].centroidHz);
   lines.push({
     tag: "spectrum",
     text:
@@ -141,7 +141,7 @@ export function buildReadout(score: ArrangementScore): ReadoutLine[] {
   });
 
   // ── Internal dynamic range ───────────────────────────────────────────────
-  const dynamics = extremes(score, (stem) => score.stems[stem].crest);
+  const dynamics = extremes((stem) => score.stems[stem].crest);
   lines.push({
     tag: "dynamics",
     text:
