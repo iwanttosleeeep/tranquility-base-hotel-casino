@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
 import { ArrowRight, KeyRound } from "lucide-react";
-import albumCover from "../../assets/TBHC.png";
+import albumCoverAvif from "../../assets/TBHC.avif";
+import albumCoverWebp from "../../assets/TBHC.webp";
+import albumCoverPng from "../../assets/TBHC.png";
 
 interface FrontPageProps {
   guestName: string;
@@ -26,10 +28,20 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
   return (
     <main className="front-page min-h-screen text-[#f5f2ed] relative overflow-hidden">
       <div className="absolute inset-0 bg-[#070604]" />
-      <div
-        className="absolute inset-0 bg-cover bg-[center_60%] opacity-55 scale-105"
-        style={{ backgroundImage: `url(${albumCover})` }}
-      />
+      <picture className="absolute inset-0 block opacity-55 scale-105">
+        <source srcSet={albumCoverAvif} type="image/avif" />
+        <source srcSet={albumCoverWebp} type="image/webp" />
+        <img
+          src={albumCoverPng}
+          alt=""
+          aria-hidden="true"
+          width="1000"
+          height="1000"
+          decoding="async"
+          fetchPriority="high"
+          className="h-full w-full object-cover object-[center_60%]"
+        />
+      </picture>
       <div className="absolute inset-0 bg-gradient-to-r from-[#080705]/95 via-[#080705]/72 to-[#080705]/25" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#080705] via-transparent to-[#080705]/45" />
       <div className="absolute inset-0 signal-interference bg-white/5 mix-blend-overlay opacity-20" />
