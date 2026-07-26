@@ -9,6 +9,7 @@ interface ElevatorProps {
   targetRoom: HotelRoom | null;
   onRoomChange: (room: HotelRoom) => void;
   isMoving: boolean;
+  canAccessSuite: boolean;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
 }
@@ -17,7 +18,7 @@ type FloorEntry = { key: HotelRoom; label: string; floor: string; desc: string }
 
 // The guest suite has no floor of its own — it takes the empty cell beside the
 // Lobby and wears the guest's own room number on its brass tag.
-const buildRooms = (guestRoom: string): FloorEntry[] => [
+const buildRooms = (guestRoom: string, canAccessSuite: boolean): FloorEntry[] => [
   { key: "ROOFTOP_GARDEN", label: "Rooftop Garden", floor: "10", desc: "Critical Reception & Guest Book" },
   { key: "OBSERVATORY", label: "The Observatory", floor: "09", desc: "Conceptual Frameworks & Theory" },
   { key: "ARCHIVE", label: "Hotel Archive", floor: "08", desc: "Timeline & Reference Catalogue" },
@@ -29,11 +30,11 @@ const buildRooms = (guestRoom: string): FloorEntry[] => [
   { key: "LOUNGE", label: "The Lounge", floor: "02", desc: "Press & Interview Archives" },
   { key: "RECEPTION", label: "Reception Desk", floor: "01", desc: "Guest Register & Welcome" },
   { key: "LOBBY", label: "The Lobby", floor: "G", desc: "Main Entrance & Directory" },
-  { key: "SUITE", label: "Your Suite", floor: guestRoom, desc: "Private Key • Kept Receipts" },
+  { key: "SUITE", label: "Your Suite", floor: canAccessSuite ? guestRoom : "KEY", desc: canAccessSuite ? "Private Key • Kept Receipts" : "Check In Required" },
 ];
 
-export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomChange, isMoving, isCollapsed, onToggleCollapse }: ElevatorProps) {
-  const ROOMS = buildRooms(guestRoom);
+export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomChange, isMoving, canAccessSuite, isCollapsed, onToggleCollapse }: ElevatorProps) {
+  const ROOMS = buildRooms(guestRoom, canAccessSuite);
   const currentFloorIdx = ROOMS.findIndex((r) => r.key === currentRoom);
   const targetFloorIdx = targetRoom ? ROOMS.findIndex((r) => r.key === targetRoom) : null;
   const currentFloorLabel = ROOMS[currentFloorIdx]?.floor || "G";

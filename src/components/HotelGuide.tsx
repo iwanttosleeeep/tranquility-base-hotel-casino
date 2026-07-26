@@ -57,7 +57,7 @@ export default function HotelGuide({ onClose }: { onClose: () => void }) {
           <section>
             <div className="mb-4 flex items-center gap-3"><KeyRound size={16} className="text-[#c5a059]" /><h3 className="font-serif italic text-xl text-[#f5f2ed]">Your stay</h3></div>
             <p className="max-w-3xl font-serif text-sm leading-relaxed text-[#f5f2ed]/60">
-              An email check-in is required to enter the hotel. It gives you a three-digit room key, a private Suite, Room Service, Kept Receipts and permission to sign the Garden guest book. Your Suite number can be changed at Reception.
+              Day visitors may browse the Lobby and every public floor without registering. Email check-in adds a three-digit room key, a private Suite, Room Service, Kept Receipts and permission to sign the Garden guest book. Your Suite number can be changed at Reception.
             </p>
           </section>
 

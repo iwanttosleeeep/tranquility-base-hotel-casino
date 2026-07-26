@@ -122,6 +122,27 @@ body {
   transform: translateY(-2px);
 }
 
+.front-visitor-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.45);
+  color: rgba(245, 242, 237, 0.72);
+  padding: 0.85rem 0.2rem;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.8rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.front-visitor-button:hover {
+  color: #c5a059;
+  border-color: #c5a059;
+  transform: translateY(-2px);
+}
+
 /* Reading scale for room content. Instrument labels stay compact, while prose,
    captions and archive controls no longer fall below a comfortable size. */
 .hotel-content .font-serif.text-xs {
@@ -159,4 +180,87 @@ body {
   max-width: 85ch;
   font-size: clamp(1.05rem, 0.98rem + 0.32vw, 1.22rem);
   line-height: 1.65;
+}
+
+/* ── Front page: arrival sequence ─────────────────────────────────────── */
+
+/* Ambient drift on the lobby backdrop — one slow settle, no loop. */
+@keyframes lobby-settle {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1.03); }
+}
+.lobby-drift {
+  animation: lobby-settle 14s ease-out both;
+}
+
+/* Hotel-stationery frame around the viewport. */
+.lobby-frame {
+  border: 1px solid rgba(197, 160, 89, 0.22);
+}
+.lobby-frame::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(197, 160, 89, 0.09);
+}
+
+/* Title glow blooms in after the lines land. */
+@keyframes glow-bloom-in {
+  from { text-shadow: 0 0 0 rgba(197, 160, 89, 0); }
+  to   { text-shadow: 0 0 15px rgba(197, 160, 89, 0.3), 0 0 45px rgba(197, 160, 89, 0.12); }
+}
+.glow-bloom {
+  animation: glow-bloom-in 1.6s ease-out 1.1s both;
+}
+
+/* Oversized engraved quote mark behind the slogan. */
+.lobby-quote-mark {
+  position: absolute;
+  left: -0.55em;
+  top: -0.42em;
+  font-size: 2.6em;
+  line-height: 1;
+  color: rgba(197, 160, 89, 0.28);
+  font-style: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Four lit stars carry a faint neon warmth. */
+.star-lit svg {
+  filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.55));
+}
+
+/* The fifth star: faulty neon. It tries to light, buzzes, and gives up —
+   then re-attempts every so often. Four stars out of five, kinetically. */
+@keyframes star-fail {
+  0%   { opacity: 0.3;  filter: none; }
+  2%   { opacity: 1;    filter: drop-shadow(0 0 7px rgba(197, 160, 89, 0.9)); }
+  3.5% { opacity: 0.2;  filter: none; }
+  5%   { opacity: 0.85; filter: drop-shadow(0 0 6px rgba(197, 160, 89, 0.7)); }
+  6.5% { opacity: 0.28; filter: none; }
+  8%   { opacity: 0.55; filter: none; }
+  9.5% { opacity: 0.3;  filter: none; }
+  88%  { opacity: 0.3;  filter: none; }
+  90%  { opacity: 0.65; filter: drop-shadow(0 0 4px rgba(197, 160, 89, 0.4)); }
+  92%  { opacity: 0.3;  filter: none; }
+  100% { opacity: 0.3;  filter: none; }
+}
+.star-faulty svg {
+  animation: star-fail 11s ease-in-out 2.3s infinite;
+  opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lobby-drift,
+  .glow-bloom,
+  .star-faulty svg {
+    animation: none;
+  }
+  .glow-bloom {
+    text-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+  }
+  .star-faulty svg {
+    opacity: 0.45;
+  }
 }

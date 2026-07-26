@@ -180,7 +180,8 @@ export default function App() {
     }
   };
 
-  const handleRoomChange = (room: HotelRoom) => {
+  const handleRoomChange = (requestedRoom: HotelRoom) => {
+    const room = requestedRoom === "SUITE" && !session ? "RECEPTION" : requestedRoom;
     setTargetRoom(room);
     setIsMoving(true);
     // Synthetic mechanical click sound
@@ -210,12 +211,14 @@ export default function App() {
   // Browser back/forward + hand-typed hashes drive the elevator too
   useEffect(() => {
     const onHashChange = () => {
-      const room = roomFromHash();
+      const requestedRoom = roomFromHash();
+      const room = requestedRoom === "SUITE" && !session ? "RECEPTION" : requestedRoom;
+      if (room !== requestedRoom) writeHash(room);
       setCurrentRoom((prev) => (prev === room ? prev : room));
     };
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, []);
+  }, [session]);
 
   const handleRegister = async (name: string, room = "505", email = "") => {
     if (!supabase) return { success: false, message: "Supabase is not configured. Check your .env.local file." };
@@ -288,6 +291,11 @@ export default function App() {
         isGuestLoading={isGuestLoading}
         onRegister={openReception}
         onEnterHotel={() => setIsFrontPage(false)}
+        onVisitHotel={() => {
+          setCurrentRoom("LOBBY");
+          writeHash("LOBBY");
+          setIsFrontPage(false);
+        }}
       />
     );
   }
@@ -367,6 +375,7 @@ export default function App() {
               targetRoom={targetRoom}
               onRoomChange={handleRoomChange}
               isMoving={isMoving}
+              canAccessSuite={!!session}
               isCollapsed={isElevatorCollapsed}
               onToggleCollapse={() => setIsElevatorCollapsed((collapsed) => !collapsed)}
             />
@@ -434,7 +443,7 @@ export default function App() {
                           The Lobby
                         </h2>
                         <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
-                          You have checked into the <span className="font-semibold text-[#f5f2ed]">Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1">&amp;</span> Casino</span> portal. Wander through the retro space lounge floors using the Otis Lift on the left.
+                          {session ? "You have checked into" : "You are visiting"} the <span className="font-semibold text-[#f5f2ed]">Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1">&amp;</span> Casino</span> {session ? "portal" : "public archive"}. Wander through the retro space lounge floors using the Otis Lift on the left.
                         </p>
                       </div>
 
@@ -452,7 +461,9 @@ export default function App() {
                             }`}
                           >
                             <span className="font-serif italic font-semibold text-glow text-[#f5f2ed]">{dir.label}</span>
-                            <span className="text-xs font-serif text-[#f5f2ed]/50">{dir.desc}</span>
+                            <span className="text-xs font-serif text-[#f5f2ed]/50">
+                              {dir.key === "SUITE" && !session ? "Check in at Reception to receive a private key" : dir.desc}
+                            </span>
                           </button>
                         ))}
                       </div>
@@ -513,7 +524,7 @@ export default function App() {
             {guestName ? (
               <span>Guest: {guestName} • Clavius Room Key: ACTIVE</span>
             ) : (
-              <span>Unregistered Guest • Consult Reception</span>
+              <span>Day Visitor • Resident Services Require Check-In</span>
             )}
           </div>
         </footer>

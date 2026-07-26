@@ -11,7 +11,7 @@ An immersive, unofficial fan archive dedicated to Arctic Monkeys' 2018 album *Tr
 ## 🏨 Guest Arrival & Stay
 
 - **G-level Lobby**: full-screen arrival experience with the concierge directory. Each floor links directly via hash routes (e.g. `#/archive`, `#/library/star-treatment`), so any room can be shared or bookmarked.
-- **Guest profile**: an email check-in is required to enter the hotel. Reception registers a guest name and a three-digit room number (default `505`), verified by an eight-digit room code sent by email. Profiles, Garden entries, feedback, Room Service orders, and Casino receipts are stored through Supabase.
+- **Day Visitor & Guest profile**: day visitors can browse the Lobby and every public floor without registering. Email check-in unlocks a private Suite and resident actions; Reception assigns a three-digit room number (default `505`) after verification by an eight-digit room code. Profiles, Garden entries, feedback, Room Service orders, and Casino receipts are stored through Supabase.
 - **Otis Lift**: the elevator console navigates all floors, collapses into a slim control rail, and answers the browser's back/forward buttons.
 - **Hotel Guide & Search Terminal**: the Lobby header opens a short guide to the rooms and guest systems, while the search terminal scans song dossiers, interview records, and Hotel Archive references.
 
@@ -46,7 +46,7 @@ Records in the Verified Reference Catalogue carry a grade describing **documenta
 
 ## 🛠️ Local Development
 
-A static React application: Vite · React 19 · TypeScript · Tailwind CSS v4 · Motion. Supabase powers the required email check-in and resident features.
+A static React application: Vite · React 19 · TypeScript · Tailwind CSS v4 · Motion. Supabase powers email check-in and resident features; public archive browsing remains available without it.
 
 ```bash
 npm install        # install dependencies
@@ -64,7 +64,7 @@ VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
 ```
 
-Never place a `service_role` / secret key in any `VITE_` variable. Without these public values the interface can build, but email check-in is unavailable and visitors cannot enter the hotel.
+Never place a `service_role` / secret key in any `VITE_` variable. Without these public values the public archive remains browsable in Day Visitor mode, but check-in and resident features are unavailable.
 
 ### Database
 
