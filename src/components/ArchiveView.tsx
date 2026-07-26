@@ -74,7 +74,7 @@ export default function ArchiveView() {
             <div className="flex items-center gap-2 text-[#c5a059]">
               <Terminal size={18} />
               <span className="font-panel text-xs uppercase tracking-widest">
-                LUNAR_TERMINAL_V6.0
+                LUNAR_TERMINAL
               </span>
             </div>
             <div className="flex items-center gap-4">

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { KeyRound, ConciergeBell, Hourglass, BookMarked, ArrowUpRight } from "lucide-react";
+import { KeyRound, Hourglass, BookMarked, ArrowUpRight } from "lucide-react";
 import { HotelRoom } from "../types";
 import { formatGuestNight, guestNight } from "../lib/guestTime";
+import RoomServicePanel from "./RoomServicePanel";
 
 interface SuiteViewProps {
   guestName: string;
   guestRoom: string;
+  userId: string;
   checkedInAt: string | null;
   onNavigateToRoom: (room: HotelRoom) => void;
 }
@@ -34,7 +36,7 @@ function PendingPanel({
   );
 }
 
-export default function SuiteView({ guestName, guestRoom, checkedInAt, onNavigateToRoom }: SuiteViewProps) {
+export default function SuiteView({ guestName, guestRoom, userId, checkedInAt, onNavigateToRoom }: SuiteViewProps) {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const nextMidnight = new Date(now);
@@ -43,9 +45,8 @@ export default function SuiteView({ guestName, guestRoom, checkedInAt, onNavigat
     return () => window.clearTimeout(timeout);
   }, [now]);
 
-  const nightLabel = checkedInAt
-    ? formatGuestNight(guestNight(new Date(checkedInAt), now))
-    : "NIGHT ---";
+  const currentNight = checkedInAt ? guestNight(new Date(checkedInAt), now) : null;
+  const nightLabel = currentNight ? formatGuestNight(currentNight) : "NIGHT ---";
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
@@ -97,16 +98,12 @@ export default function SuiteView({ guestName, guestRoom, checkedInAt, onNavigat
           </p>
         </div>
         <PendingPanel
-          icon={ConciergeBell}
-          title="Room Service"
-          note="The kitchen is not yet taking calls from this floor. Three covers a day when it opens."
+          icon={BookMarked}
+          title="Kept Papers"
+          note="Menus you decide to keep, and anything worth remembering from the Clavius Casino, will be filed in this drawer."
         />
         <div className="md:col-span-2">
-          <PendingPanel
-            icon={BookMarked}
-            title="Kept Papers"
-            note="Menus you decide to keep, and anything worth remembering from the Clavius Casino, will be filed in this drawer."
-          />
+          <RoomServicePanel userId={userId} guestRoom={guestRoom} currentNight={currentNight} />
         </div>
       </div>
     </div>

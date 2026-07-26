@@ -20,3 +20,12 @@ export function guestNight(checkedInAt: Date, now: Date): number {
 export function formatGuestNight(night: number): string {
   return `NIGHT ${night.toString().padStart(3, "0")}`;
 }
+
+/** Bounds of the browser's current local calendar day, serialized as instants. */
+export function guestDayWindow(now: Date): { start: Date; end: Date } {
+  const start = new Date(now);
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+  return { start, end };
+}

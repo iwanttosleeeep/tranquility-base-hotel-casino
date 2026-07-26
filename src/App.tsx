@@ -439,6 +439,7 @@ export default function App() {
                     <SuiteView
                       guestName={guestName}
                       guestRoom={guestRoom}
+                      userId={session?.user.id ?? ""}
                       checkedInAt={session?.user.created_at ?? null}
                       onNavigateToRoom={handleRoomChange}
                     />
