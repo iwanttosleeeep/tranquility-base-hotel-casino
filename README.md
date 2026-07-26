@@ -68,6 +68,28 @@ Never place a `service_role` / secret key in any `VITE_` variable. Without these
 
 Pushes to `main` build and deploy automatically to GitHub Pages via `.github/workflows/deploy.yml` (type-check → build → publish). The same two Supabase values must be added as repository **Actions secrets** for the production build.
 
+### Audio Analysis Data
+
+`src/data/audioAnalysis.ts` is a generated build artefact. Do not edit it by hand. It is a compact, public-safe derivative of private measurements; neither source audio nor separated stems belong in this repository.
+
+Generate it in this order:
+
+```bash
+# On the private analysis worker
+python tbhc-pipeline/analyze_audio.py /opt/tbhc-pipeline/output/separate \
+  --out /opt/tbhc-pipeline/output/audio-analysis-v2
+
+# From the repository's tbhc-pipeline directory
+python build_site_data.py /opt/tbhc-pipeline/output/audio-analysis-v2 \
+  --out ../src/data/audioAnalysis.ts
+
+# Then validate the generated site data before committing it
+npm run lint
+npm run build
+```
+
+The complete private-media runbook and measurement contract live in [`tbhc-pipeline/README.md`](tbhc-pipeline/README.md).
+
 ---
 
 ## 📜 Content Contribution Rules
@@ -76,7 +98,7 @@ All content is governed by strict verification protocols.
 
 1. **No AI-generated factual content.** AI-generated interview transcriptions, quotes, dates, or essays are never accepted — in data files *or* in UI copy. `[PLACEHOLDER]` skeletons are filled in manually with authentic text.
 2. **Mandatory citation.** Every interview quote, timeline milestone, or catalogue record must carry a verifiable `sourceUrl`. Song dossiers link to official lyric pages via `officialLyricsUrl` instead of reproducing lyric texts.
-3. **Workflow.** Locate the data file in `src/data/` (`songs.ts`, `interviews.ts`, `references.ts`, `timeline.ts`, `liveArchive.ts`, `criticism.ts`, `mvAnalysis.ts`, `audioAnalysis.ts`, `observatory.ts`, `essays.ts`, `films.ts`) → replace placeholders with curated text → attach precise source URLs → confirm empty states still render gracefully → `npm run lint`.
+3. **Workflow.** Locate the relevant hand-maintained file in `src/data/` (`songs.ts`, `interviews.ts`, `references.ts`, `timeline.ts`, `liveArchive.ts`, `criticism.ts`, `mvAnalysis.ts`, `observatory.ts`, `essays.ts`, `films.ts`) → replace placeholders with curated text → attach precise source URLs → confirm empty states still render gracefully → `npm run lint`. `audioAnalysis.ts` is excluded because it must be regenerated through the pipeline above.
 
 ---
 

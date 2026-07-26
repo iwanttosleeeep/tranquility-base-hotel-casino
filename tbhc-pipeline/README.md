@@ -28,6 +28,18 @@ python analyze_audio.py /opt/tbhc-pipeline/output/separate --out /opt/tbhc-pipel
 
 The JSON contains signal-derived measurements, not official stems, lyrics, or definitive musicological claims. It is intended as private evidence for later human and AI-assisted analysis.
 
+## Website data — `build_site_data.py`
+
+Converts the private version-2 analysis JSON into the compact TypeScript dataset used by the Cocktail Bar. The destination file is generated and must never be edited manually.
+
+```bash
+source .venv/bin/activate
+python build_site_data.py /opt/tbhc-pipeline/output/audio-analysis-v2 \
+  --out ../src/data/audioAnalysis.ts
+```
+
+The required order is `analyze_audio.py` → `build_site_data.py` → copy or write `src/data/audioAnalysis.ts` into the website checkout → run `npm run lint` and `npm run build` → commit the generated file. Keep analysis JSON, stems, and source media private.
+
 ## Output contract
 
 For `song.flac`, the default output is:
@@ -59,8 +71,6 @@ sudo bash setup.sh
 5. Run the tools over `incoming/`; outputs accumulate in `output/` or the `--out` directory you choose.
 6. Download structured results: `rsync -avP root@IP:/opt/tbhc-pipeline/output/ ./out/`.
 7. Verify results locally, then destroy a temporary instance rather than merely stopping it.
-
-The music-video analysis script will be added alongside these music tools.
 
 ## Music-video structure — `analyze_mv.py`
 
