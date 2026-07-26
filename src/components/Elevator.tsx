@@ -120,7 +120,7 @@ export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomCha
       </div>
 
       {/* Floor Buttons */}
-      <div className="grid grid-cols-2 gap-3 max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[420px] sm:max-h-[360px] overflow-y-auto pr-2 custom-scrollbar">
         {ROOMS.map(({ key, label, floor, desc }) => {
           const isActive = currentRoom === key;
           return (
@@ -132,19 +132,19 @@ export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomCha
                 }
               }}
               disabled={isMoving}
-              className={`group flex items-center justify-between p-3.5 rounded border text-left transition-all ${
+              className={`group grid grid-cols-[minmax(0,1fr)_2.75rem] items-center gap-3 p-3.5 rounded border text-left transition-all ${
                 isActive
                   ? "bg-[#c5a059]/10 border-[#c5a059] text-[#c5a059]"
                   : "bg-black/20 border-[#c5a059]/20 text-[#f5f2ed]/60 hover:border-[#c5a059]/50 hover:text-[#f5f2ed]"
               }`}
             >
-              <div className="flex flex-col">
-                <span className="text-sm md:text-[15px] leading-tight font-serif italic truncate max-w-[150px]">{label}</span>
+              <div className="min-w-0 flex flex-col">
+                <span className="text-sm md:text-[15px] leading-tight font-serif italic sm:truncate">{label}</span>
                 <span className="text-[11px] md:text-xs leading-snug font-serif italic opacity-40 group-hover:opacity-100 transition-opacity">
                   {desc}
                 </span>
               </div>
-              <span className={`font-tbhc text-lg px-2.5 py-1 rounded ${
+              <span className={`w-11 justify-self-end text-center font-tbhc text-lg px-1 py-1 rounded ${
                 isActive ? "bg-[#c5a059]/20" : "bg-white/5"
               }`}>
                 {floor}
