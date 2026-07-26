@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Key } from "lucide-react";
+import { ArrowLeft, Key } from "lucide-react";
 
 interface RegisterPageProps {
   onRegister: (name: string, room: string, email: string) => Promise<{ success: boolean; message: string }>;
@@ -116,10 +116,14 @@ export default function RegisterPage({ onRegister, onVerifyCode }: RegisterPageP
             />
             <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4">
               <span className="font-serif italic text-sm text-[#c5a059] min-h-5">{message}</span>
-              <button type="button" onClick={() => { setCodeSent(false); setRoomCode(""); setMessage(""); }} className="self-start font-panel text-[10px] text-[#f5f2ed]/50 hover:text-[#c5a059]">Use a different email</button>
-              <button type="submit" disabled={isSubmitting} className="front-action-button self-end !text-sm md:!text-base !px-8 !py-4 disabled:opacity-50">
-                {isSubmitting ? "Checking..." : "Check in"}
-              </button>
+              <div className="self-end flex items-center gap-3">
+                <button type="button" onClick={() => { setCodeSent(false); setRoomCode(""); setMessage(""); }} className="front-action-button !bg-transparent !text-[#c5a059] !border-[#c5a059]/35 !text-sm md:!text-base !px-5 !py-4">
+                  <ArrowLeft size={16} /> Back
+                </button>
+                <button type="submit" disabled={isSubmitting} className="front-action-button !text-sm md:!text-base !px-8 !py-4 disabled:opacity-50">
+                  {isSubmitting ? "Checking..." : "Check in"}
+                </button>
+              </div>
             </div>
           </form>
           )}

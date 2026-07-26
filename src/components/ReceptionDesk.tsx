@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Key, PencilLine, LogOut, MessageSquare } from "lucide-react";
+import { ArrowLeft, Key, PencilLine, LogOut, MessageSquare } from "lucide-react";
 import { supabase } from "../lib/supabase";
+import AdminFeedbackPanel from "./AdminFeedbackPanel";
 
 interface ReceptionDeskProps {
   guestName: string;
@@ -132,8 +133,10 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
                   className="w-full max-w-[13rem] bg-black/40 border border-[#c5a059]/30 rounded px-4 py-2 text-center font-tbhc tracking-[0.3em] text-lg text-[#f5f2ed] placeholder:text-[#f5f2ed]/25 focus:outline-none focus:border-[#c5a059] transition-colors"
                 />
                 {registerMessage && <span className="font-serif text-xs text-[#c5a059]">{registerMessage}</span>}
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <button type="button" onClick={() => { setIsAwaitingCode(false); setRoomCode(""); setRegisterMessage(""); }} className="font-panel text-[10px] text-[#f5f2ed]/50 hover:text-[#c5a059]">Use a different email</button>
+                <div className="flex flex-wrap items-center justify-end gap-3">
+                  <button type="button" onClick={() => { setIsAwaitingCode(false); setRoomCode(""); setRegisterMessage(""); }} className="inline-flex items-center gap-2 border border-[#c5a059]/25 px-4 py-2 rounded font-panel text-[10px] uppercase tracking-wider text-[#c5a059]/75 hover:text-[#c5a059] hover:border-[#c5a059]/45">
+                    <ArrowLeft size={13} /> Back
+                  </button>
                   <button type="submit" disabled={isSubmitting} className="bg-[#c5a059] hover:bg-[#d97706] text-black font-panel text-xs uppercase tracking-widest px-6 py-2 rounded transition-all active:scale-95">
                     {isSubmitting ? "Checking..." : "Check in"}
                   </button>
@@ -240,6 +243,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
             </div>
           </form>
         </div>
+        <AdminFeedbackPanel userId={userId} />
         </div>
 
       </div>

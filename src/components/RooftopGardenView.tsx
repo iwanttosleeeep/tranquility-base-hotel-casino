@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { Book, ChevronDown, Edit3, ExternalLink, MessageSquare, PenLine, Quote, Send, UserRound } from "lucide-react";
+import { Book, ChevronDown, Edit3, ExternalLink, MessageSquare, PenLine, Quote, Send, Trash2, UserRound } from "lucide-react";
 import type { HotelRoom } from "../types";
 import { CRITICAL_CLAIMS, CRITICAL_THEMES } from "../data/criticism";
 import { supabase } from "../lib/supabase";
@@ -29,6 +29,7 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [postError, setPostError] = useState("");
   const [openTheme, setOpenTheme] = useState<number | null>(null);
 
@@ -107,6 +108,25 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
     setEditingId(post.id);
     setTitle(post.title);
     setBody(post.body);
+  };
+
+  const deletePost = async (post: GardenPost) => {
+    if (!supabase || !userId || post.authorId !== userId || deletingId) return;
+    if (!window.confirm("Remove this entry from the Garden guest book? This cannot be undone.")) return;
+    setDeletingId(post.id);
+    setPostError("");
+    const { error } = await supabase
+      .from("forum_posts")
+      .delete()
+      .eq("id", post.id)
+      .eq("author_id", userId);
+    if (error) {
+      setPostError(error.message);
+    } else {
+      setPosts((current) => current.filter((entry) => entry.id !== post.id));
+      if (editingId === post.id) resetComposer();
+    }
+    setDeletingId(null);
   };
 
   return (
@@ -238,7 +258,12 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
                 <h4 className="font-serif italic text-2xl text-[#f5f2ed] leading-tight">{post.title}</h4>
                 <div className="mt-2 flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/65"><UserRound size={12} /> {post.author} <span>•</span> {formatDate(post.createdAt)}</div>
               </div>
-              {post.authorId === userId && <button onClick={() => editPost(post)} className="shrink-0 flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/70 hover:text-[#c5a059]"><Edit3 size={13} /> Edit</button>}
+              {post.authorId === userId && (
+                <div className="shrink-0 flex items-center gap-3">
+                  <button onClick={() => editPost(post)} className="flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/70 hover:text-[#c5a059]"><Edit3 size={13} /> Edit</button>
+                  <button onClick={() => void deletePost(post)} disabled={deletingId === post.id} className="flex items-center gap-2 font-panel text-[10px] text-[#f5f2ed]/40 hover:text-[#d97706] disabled:opacity-35"><Trash2 size={13} /> {deletingId === post.id ? "Removing" : "Delete"}</button>
+                </div>
+              )}
             </div>
             <p className="whitespace-pre-wrap font-serif text-[#f5f2ed]/75 leading-relaxed">{post.body}</p>
           </article>
