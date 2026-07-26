@@ -80,7 +80,15 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
           </motion.div>
         </section>
 
-        <footer className="flex items-center border-t border-[#e9d8bd]/20 pt-5 font-panel text-[9px] md:text-[10px] text-[#f5f2ed]/45">
+        <footer className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-t border-[#e9d8bd]/20 pt-5 font-panel text-[9px] md:text-[10px] text-[#f5f2ed]/45">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c5a059] animate-pulse" />
+              Transmitting Secure Line
+            </span>
+            <span>|</span>
+            <span>Terminal: The Moon</span>
+          </div>
           <span>Reception Desk · Floor 01</span>
         </footer>
       </div>

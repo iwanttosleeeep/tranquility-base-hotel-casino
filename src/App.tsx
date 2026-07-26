@@ -492,7 +492,7 @@ export default function App() {
               Transmitting Secure Line
             </span>
             <span>|</span>
-            <span>Terminal: TBHC-G9</span>
+            <span>Terminal: The Moon</span>
           </div>
 
           <div className="flex items-center gap-4">
