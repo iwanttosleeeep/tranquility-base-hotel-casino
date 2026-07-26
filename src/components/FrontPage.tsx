@@ -104,9 +104,16 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
               </span>
             </h1>
 
-            <motion.p {...rise(1.15)} className="relative font-serif italic text-xl md:text-3xl leading-snug text-[#f5f2ed]/85 max-w-xl">
-              “Hotel room Holy Bible / Hotel room free love revival”
-            </motion.p>
+            <motion.blockquote
+              {...rise(1.15)}
+              aria-label="Hotel room Holy Bible. Hotel room free love revival."
+              className="lobby-slogan font-serif italic leading-snug text-[#f5f2ed]/85"
+            >
+              <span aria-hidden="true" className="lobby-slogan-mark lobby-slogan-mark-open">“</span>
+              <span className="block whitespace-nowrap">Hotel room Holy Bible</span>
+              <span className="block whitespace-nowrap">Hotel room free love revival</span>
+              <span aria-hidden="true" className="lobby-slogan-mark lobby-slogan-mark-close">”</span>
+            </motion.blockquote>
 
             <div className="mt-10 flex items-center gap-1.5 text-[#c5a059]" aria-label="Four stars out of five">
               {[0, 1, 2, 3].map((star) => (
