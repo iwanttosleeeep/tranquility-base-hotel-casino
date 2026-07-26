@@ -20,6 +20,7 @@ export interface RoomServiceOrder {
   courses: RoomServiceCourses;
   bill: RoomServiceBill;
   kept: boolean;
+  discarded: boolean;
 }
 
 const APPETIZER_TREATMENTS = [

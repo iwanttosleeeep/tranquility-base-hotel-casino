@@ -29,7 +29,7 @@ const buildRooms = (guestRoom: string): FloorEntry[] => [
   { key: "LOUNGE", label: "The Lounge", floor: "02", desc: "Press & Interview Archives" },
   { key: "RECEPTION", label: "Reception Desk", floor: "01", desc: "Guest Register & Welcome" },
   { key: "LOBBY", label: "The Lobby", floor: "G", desc: "Main Entrance & Directory" },
-  { key: "SUITE", label: "Your Suite", floor: guestRoom, desc: "Private Key • Kept Papers" },
+  { key: "SUITE", label: "Your Suite", floor: guestRoom, desc: "Private Key • Kept Receipts" },
 ];
 
 export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomChange, isMoving, isCollapsed, onToggleCollapse }: ElevatorProps) {

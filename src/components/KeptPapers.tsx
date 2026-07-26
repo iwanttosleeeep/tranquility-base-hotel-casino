@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BookMarked, ChevronDown, ConciergeBell, Trophy } from "lucide-react";
+import { BookMarked, ChevronDown, ConciergeBell, Trash2, Trophy } from "lucide-react";
 import { CasinoRecord, CASINO_SYMBOL_LABELS } from "../data/casinoRecords";
 import { RoomServiceOrder } from "../data/roomService";
 import { formatGuestNight, guestNight } from "../lib/guestTime";
@@ -28,6 +28,7 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
   const [menus, setMenus] = useState<RoomServiceOrder[]>([]);
   const [casinoRecords, setCasinoRecords] = useState<CasinoRecord[]>([]);
   const [isLoading, setIsLoading] = useState(Boolean(userId));
+  const [deletingKey, setDeletingKey] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
 
   const loadPapers = useCallback(async () => {
@@ -43,9 +44,10 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
     const [menuResult, casinoResult] = await Promise.all([
       supabase
         .from("room_service_orders")
-        .select("id, ordered_at, courses, bill, kept")
+        .select("id, ordered_at, courses, bill, kept, discarded")
         .eq("user_id", userId)
         .eq("kept", true)
+        .eq("discarded", false)
         .order("ordered_at", { ascending: false }),
       supabase
         .from("casino_records")
@@ -72,12 +74,32 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
     ...casinoRecords.map((record): KeptPaper => ({ kind: "casino", timestamp: record.spun_at, record })),
   ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()), [menus, casinoRecords]);
 
+  const deleteReceipt = async (paper: KeptPaper) => {
+    if (!supabase || !userId || deletingKey) return;
+    if (!window.confirm("Discard this receipt? This cannot be undone.")) return;
+    const key = `${paper.kind}-${paper.record.id}`;
+    setDeletingKey(key);
+    setNotice("");
+    const operation = paper.kind === "menu"
+      ? supabase.from("room_service_orders").update({ kept: false, discarded: true }).eq("id", paper.record.id).eq("user_id", userId)
+      : supabase.from("casino_records").delete().eq("id", paper.record.id).eq("user_id", userId);
+    const { error } = await operation;
+    if (error) {
+      setNotice(error.message);
+    } else if (paper.kind === "menu") {
+      setMenus((current) => current.filter((record) => record.id !== paper.record.id));
+    } else {
+      setCasinoRecords((current) => current.filter((record) => record.id !== paper.record.id));
+    }
+    setDeletingKey(null);
+  };
+
   return (
     <section className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/20 flex flex-col gap-4 min-h-full">
       <div className="flex items-center justify-between gap-3 border-b border-[#c5a059]/20 pb-3">
         <div className="flex items-center gap-3">
           <BookMarked className="text-[#c5a059]" size={18} />
-          <h3 className="font-serif italic text-lg text-[#f5f2ed]/80">Kept Papers</h3>
+          <h3 className="font-serif italic text-lg text-[#f5f2ed]/80">Kept Receipts</h3>
         </div>
         <span className="font-panel text-[9px] uppercase tracking-[0.2em] text-[#c5a059]/45">
           {papers.length.toString().padStart(2, "0")} filed
@@ -97,8 +119,9 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
             const title = isMenu
               ? paper.record.courses.cocktail.name
               : `${paper.record.outcome === "jackpot" ? "Jackpot" : "Pair"} · ${paper.record.reels.map((reel) => CASINO_SYMBOL_LABELS[reel] || reel).join(" / ")}`;
+            const receiptKey = `${paper.kind}-${paper.record.id}`;
             return (
-              <details key={`${paper.kind}-${paper.record.id}`} className="group border border-[#c5a059]/15 bg-[#0d0b09]/75 px-4 py-3">
+              <details key={receiptKey} className="group border border-[#c5a059]/15 bg-[#0d0b09]/75 px-4 py-3">
                 <summary className="list-none cursor-pointer flex items-start justify-between gap-3">
                   <div className="min-w-0 flex items-start gap-3">
                     {isMenu ? <ConciergeBell size={14} className="mt-0.5 shrink-0 text-[#c5a059]/70" /> : <Trophy size={14} className="mt-0.5 shrink-0 text-[#c5a059]/70" />}
@@ -125,6 +148,14 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
                 ) : (
                   <p className="mt-4 border-t border-[#c5a059]/10 pt-3 font-serif italic text-xs leading-relaxed text-[#f5f2ed]/50">{paper.record.message}</p>
                 )}
+                <button
+                  type="button"
+                  onClick={() => void deleteReceipt(paper)}
+                  disabled={deletingKey === receiptKey}
+                  className="mt-4 inline-flex items-center gap-2 border-t border-[#c5a059]/10 pt-3 font-panel text-[8px] uppercase tracking-wider text-[#f5f2ed]/35 hover:text-[#d97706] disabled:opacity-35"
+                >
+                  <Trash2 size={11} /> {deletingKey === receiptKey ? "Discarding" : "Discard receipt"}
+                </button>
               </details>
             );
           })}

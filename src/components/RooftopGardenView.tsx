@@ -3,6 +3,7 @@ import { Book, ChevronDown, Edit3, ExternalLink, MessageSquare, PenLine, Quote, 
 import type { HotelRoom } from "../types";
 import { CRITICAL_CLAIMS, CRITICAL_THEMES } from "../data/criticism";
 import { supabase } from "../lib/supabase";
+import { useHotelAdmin } from "../hooks/useHotelAdmin";
 
 interface GardenPost {
   id: string;
@@ -25,6 +26,7 @@ function formatDate(date: string) {
 }
 
 export default function RooftopGardenView({ guestName, guestRoom, userId, onNavigateToRoom }: RooftopGardenViewProps) {
+  const isAdmin = useHotelAdmin(userId);
   const [posts, setPosts] = useState<GardenPost[]>([]);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -111,15 +113,17 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
   };
 
   const deletePost = async (post: GardenPost) => {
-    if (!supabase || !userId || post.authorId !== userId || deletingId) return;
+    const ownsPost = post.authorId === userId;
+    if (!supabase || !userId || (!ownsPost && !isAdmin) || deletingId) return;
     if (!window.confirm("Remove this entry from the Garden guest book? This cannot be undone.")) return;
     setDeletingId(post.id);
     setPostError("");
-    const { error } = await supabase
+    let deletion = supabase
       .from("forum_posts")
       .delete()
-      .eq("id", post.id)
-      .eq("author_id", userId);
+      .eq("id", post.id);
+    if (!isAdmin) deletion = deletion.eq("author_id", userId);
+    const { error } = await deletion;
     if (error) {
       setPostError(error.message);
     } else {
@@ -258,9 +262,9 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
                 <h4 className="font-serif italic text-2xl text-[#f5f2ed] leading-tight">{post.title}</h4>
                 <div className="mt-2 flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/65"><UserRound size={12} /> {post.author} <span>•</span> {formatDate(post.createdAt)}</div>
               </div>
-              {post.authorId === userId && (
+              {(post.authorId === userId || isAdmin) && (
                 <div className="shrink-0 flex items-center gap-3">
-                  <button onClick={() => editPost(post)} className="flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/70 hover:text-[#c5a059]"><Edit3 size={13} /> Edit</button>
+                  {post.authorId === userId && <button onClick={() => editPost(post)} className="flex items-center gap-2 font-panel text-[10px] text-[#c5a059]/70 hover:text-[#c5a059]"><Edit3 size={13} /> Edit</button>}
                   <button onClick={() => void deletePost(post)} disabled={deletingId === post.id} className="flex items-center gap-2 font-panel text-[10px] text-[#f5f2ed]/40 hover:text-[#d97706] disabled:opacity-35"><Trash2 size={13} /> {deletingId === post.id ? "Removing" : "Delete"}</button>
                 </div>
               )}

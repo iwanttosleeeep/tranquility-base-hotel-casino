@@ -11,7 +11,7 @@ interface RoomServicePanelProps {
   onKept?: () => void;
 }
 
-const ORDER_FIELDS = "id, ordered_at, courses, bill, kept";
+const ORDER_FIELDS = "id, ordered_at, courses, bill, kept, discarded";
 const DAILY_LIMIT = 3;
 
 function formatCredits(value: number): string {
@@ -67,7 +67,7 @@ export default function RoomServicePanel({ userId, guestRoom, currentNight, onKe
     [orders],
   );
   const latestOrder = orders[0] ?? null;
-  const currentOrder = latestOrder && !latestOrder.kept ? latestOrder : null;
+  const currentOrder = latestOrder && !latestOrder.kept && !latestOrder.discarded ? latestOrder : null;
 
   const placeOrder = async () => {
     if (!supabase || !userId || isOrdering) return;
@@ -128,7 +128,7 @@ export default function RoomServicePanel({ userId, guestRoom, currentNight, onKe
     }
     const keptOrder = data as unknown as RoomServiceOrder;
     setOrders((previous) => previous.map((order) => order.id === keptOrder.id ? keptOrder : order));
-    setNotice("This menu has been filed in your kept papers.");
+    setNotice("This menu has been filed in your kept receipts.");
     onKept?.();
   };
 

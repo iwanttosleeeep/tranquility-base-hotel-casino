@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Search, Compass, Radio } from "lucide-react";
+import { BookOpen, Search, Compass, Radio } from "lucide-react";
 import { HotelRoom } from "./types";
 import { supabase } from "./lib/supabase";
 import type { Session } from "@supabase/supabase-js";
@@ -21,6 +21,7 @@ import GlobalSearch from "./components/GlobalSearch";
 import FrontPage from "./components/FrontPage";
 import RegisterPage from "./components/RegisterPage";
 import SuiteView from "./components/SuiteView";
+import HotelGuide from "./components/HotelGuide";
 
 // ─── Hash routing: #/library, #/library/star-treatment, #/casino … ───
 const ROOM_SLUGS: Record<HotelRoom, string> = {
@@ -55,7 +56,7 @@ function writeHash(room: HotelRoom, sub?: string | null) {
 
 
 const LOBBY_DIRECTORY = [
-  { key: "SUITE", label: "Your Suite", desc: "Your private room, night counter & kept papers" },
+  { key: "SUITE", label: "Your Suite", desc: "Your private room, night counter & kept receipts" },
   { key: "LOBBY", label: "G. The Lobby", desc: "Main entrance & hotel directory" },
   { key: "RECEPTION", label: "01. Reception Desk", desc: "Guest register, room keys & house welcome" },
   { key: "LOUNGE", label: "02. The Lounge", desc: "Chronological interview archive with sourced quotes" },
@@ -94,6 +95,7 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [isGuestLoading, setIsGuestLoading] = useState(Boolean(supabase));
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [isFrontPage, setIsFrontPage] = useState(true);
   const [isRegisterPage, setIsRegisterPage] = useState(false);
   const [isElevatorCollapsed, setIsElevatorCollapsed] = useState(false);
@@ -306,10 +308,19 @@ export default function App() {
         
         {/* Navigation Header */}
         <header className="flex items-center justify-between p-6 md:px-10 border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-0 z-30">
-          <div className="flex flex-col cursor-pointer" onClick={() => handleRoomChange("LOBBY")}>
-            <h1 className="text-lg md:text-xl font-tbhc tracking-wider text-glow mt-1">
-              Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1.5">&</span> Casino
-            </h1>
+          <div className="flex min-w-0 items-center gap-3 md:gap-5">
+            <button type="button" className="min-w-0 text-left" onClick={() => handleRoomChange("LOBBY")}>
+              <h1 className="truncate text-base md:text-xl font-tbhc tracking-wider text-glow mt-1">
+                Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1.5">&</span> Casino
+              </h1>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsGuideOpen(true)}
+              className="shrink-0 inline-flex items-center gap-1.5 border-l border-[#c5a059]/20 pl-3 md:pl-5 font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/60 hover:text-[#c5a059]"
+            >
+              <BookOpen size={13} /> <span className="hidden sm:inline">Guest Guide</span><span className="sm:hidden">Guide</span>
+            </button>
           </div>
 
           <div className="flex items-center gap-4">
@@ -497,6 +508,7 @@ export default function App() {
 
       {/* Global Search Dialog Modal */}
       <AnimatePresence>
+        {isGuideOpen && <HotelGuide onClose={() => setIsGuideOpen(false)} />}
         {isSearchOpen && (
           <GlobalSearch
             onNavigateToRoom={handleRoomChange}
