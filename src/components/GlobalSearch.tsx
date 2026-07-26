@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { Search, MoveRight, Music, HelpCircle, FileText, Film } from "lucide-react";
+import { useState } from "react";
+import { Search, MoveRight, Music, HelpCircle, Film } from "lucide-react";
 import { SONGS_DATA } from "../data/songs";
 import { INTERVIEWS_DATA } from "../data/interviews";
 import { CINEMA_REFERENCES } from "../data/references";
-import { ESSAYS_DATA } from "../data/essays";
 import { HotelRoom } from "../types";
 
 interface SearchResult {
   title: string;
   category: string;
-  type: "Song" | "Interview" | "Reference" | "Essay";
+  type: "Song" | "Interview" | "Reference";
   room: HotelRoom;
   snippet: string;
 }
@@ -60,35 +59,17 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
       }
     });
 
-    // Search verified Cinema references
+    // Search the Verified Reference Catalogue in the Hotel Archive.
     CINEMA_REFERENCES.forEach((reference) => {
       const matches = `${reference.title} ${reference.creator} ${reference.medium} ${reference.connection} ${reference.evidence} ${reference.topics.join(" ")}`.toLowerCase().includes(lowerQuery);
 
       if (matches) {
         results.push({
           title: reference.title,
-          category: `Cinema · ${reference.category}`,
+          category: `Hotel Archive · ${reference.category}`,
           type: "Reference",
-          room: "CINEMA",
+          room: "ARCHIVE",
           snippet: `${reference.creator} · ${reference.connection}`
-        });
-      }
-    });
-
-    // Search Essays
-    ESSAYS_DATA.forEach((essay) => {
-      const titleMatch = essay.title.toLowerCase().includes(lowerQuery);
-      const contentMatchLine = essay.content
-        ? essay.content.split("\n").find((line) => line.toLowerCase().includes(lowerQuery))
-        : null;
-
-      if (titleMatch || contentMatchLine) {
-        results.push({
-          title: essay.title,
-          category: "Rooftop Readings",
-          type: "Essay",
-          room: "ROOFTOP_GARDEN",
-          snippet: contentMatchLine ? `"...${contentMatchLine.trim()}..."` : essay.summary
         });
       }
     });
@@ -107,7 +88,7 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
           <Search className="text-[#c5a059]" size={20} />
           <input
             type="text"
-            placeholder="Search songs, quotes, films, themes, essays..."
+            placeholder="Search songs, interviews, films, references..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="flex-1 bg-transparent border-none focus:outline-none text-base font-serif text-[#f5f2ed] placeholder-[#f5f2ed]/30"
@@ -154,7 +135,6 @@ export default function GlobalSearch({ onNavigateToRoom, onClose }: GlobalSearch
                   {res.type === "Song" && <Music size={16} />}
                   {res.type === "Interview" && <HelpCircle size={16} />}
                   {res.type === "Reference" && <Film size={16} />}
-                  {res.type === "Essay" && <FileText size={16} />}
                 </div>
 
                 <div className="flex-1 min-w-0">

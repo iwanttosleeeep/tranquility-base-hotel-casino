@@ -5,13 +5,13 @@ import { RoomServiceOrder } from "../data/roomService";
 import { formatGuestNight, guestNight } from "../lib/guestTime";
 import { supabase } from "../lib/supabase";
 
-interface KeptPapersProps {
+interface KeptReceiptsProps {
   userId: string;
   checkedInAt: string | null;
   refreshToken: number;
 }
 
-type KeptPaper =
+type KeptReceipt =
   | { kind: "menu"; timestamp: string; record: RoomServiceOrder }
   | { kind: "casino"; timestamp: string; record: CasinoRecord };
 
@@ -19,19 +19,19 @@ function formatCredits(value: number): string {
   return Number.isInteger(value) ? value.toString() : value.toFixed(2);
 }
 
-function paperNight(checkedInAt: string | null, timestamp: string): string {
+function receiptNight(checkedInAt: string | null, timestamp: string): string {
   if (!checkedInAt) return "NIGHT ---";
   return formatGuestNight(guestNight(new Date(checkedInAt), new Date(timestamp)));
 }
 
-export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPapersProps) {
+export default function KeptReceipts({ userId, checkedInAt, refreshToken }: KeptReceiptsProps) {
   const [menus, setMenus] = useState<RoomServiceOrder[]>([]);
   const [casinoRecords, setCasinoRecords] = useState<CasinoRecord[]>([]);
   const [isLoading, setIsLoading] = useState(Boolean(userId));
   const [deletingKey, setDeletingKey] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
 
-  const loadPapers = useCallback(async () => {
+  const loadReceipts = useCallback(async () => {
     if (!supabase || !userId) {
       setMenus([]);
       setCasinoRecords([]);
@@ -66,30 +66,30 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
   }, [userId]);
 
   useEffect(() => {
-    void loadPapers();
-  }, [loadPapers, refreshToken]);
+    void loadReceipts();
+  }, [loadReceipts, refreshToken]);
 
-  const papers = useMemo<KeptPaper[]>(() => [
-    ...menus.map((record): KeptPaper => ({ kind: "menu", timestamp: record.ordered_at, record })),
-    ...casinoRecords.map((record): KeptPaper => ({ kind: "casino", timestamp: record.spun_at, record })),
+  const receipts = useMemo<KeptReceipt[]>(() => [
+    ...menus.map((record): KeptReceipt => ({ kind: "menu", timestamp: record.ordered_at, record })),
+    ...casinoRecords.map((record): KeptReceipt => ({ kind: "casino", timestamp: record.spun_at, record })),
   ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()), [menus, casinoRecords]);
 
-  const deleteReceipt = async (paper: KeptPaper) => {
+  const deleteReceipt = async (receipt: KeptReceipt) => {
     if (!supabase || !userId || deletingKey) return;
     if (!window.confirm("Discard this receipt? This cannot be undone.")) return;
-    const key = `${paper.kind}-${paper.record.id}`;
+    const key = `${receipt.kind}-${receipt.record.id}`;
     setDeletingKey(key);
     setNotice("");
-    const operation = paper.kind === "menu"
-      ? supabase.from("room_service_orders").update({ kept: false, discarded: true }).eq("id", paper.record.id).eq("user_id", userId)
-      : supabase.from("casino_records").delete().eq("id", paper.record.id).eq("user_id", userId);
+    const operation = receipt.kind === "menu"
+      ? supabase.from("room_service_orders").update({ kept: false, discarded: true }).eq("id", receipt.record.id).eq("user_id", userId)
+      : supabase.from("casino_records").delete().eq("id", receipt.record.id).eq("user_id", userId);
     const { error } = await operation;
     if (error) {
       setNotice(error.message);
-    } else if (paper.kind === "menu") {
-      setMenus((current) => current.filter((record) => record.id !== paper.record.id));
+    } else if (receipt.kind === "menu") {
+      setMenus((current) => current.filter((record) => record.id !== receipt.record.id));
     } else {
-      setCasinoRecords((current) => current.filter((record) => record.id !== paper.record.id));
+      setCasinoRecords((current) => current.filter((record) => record.id !== receipt.record.id));
     }
     setDeletingKey(null);
   };
@@ -102,7 +102,7 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
           <h3 className="font-serif italic text-lg text-[#f5f2ed]/80">Kept Receipts</h3>
         </div>
         <span className="font-panel text-[9px] uppercase tracking-[0.2em] text-[#c5a059]/45">
-          {papers.length.toString().padStart(2, "0")} filed
+          {receipts.length.toString().padStart(2, "0")} filed
         </span>
       </div>
 
@@ -110,16 +110,16 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
         <p className="font-serif italic text-sm leading-relaxed text-[#f5f2ed]/40">The drawer requires an active room key.</p>
       ) : isLoading ? (
         <p className="font-serif italic text-sm text-[#f5f2ed]/40">Opening the drawer…</p>
-      ) : papers.length === 0 ? (
+      ) : receipts.length === 0 ? (
         <p className="font-serif italic text-sm text-[#f5f2ed]/40">The drawer is empty.</p>
       ) : (
         <div className="flex flex-col gap-2 max-h-[28rem] overflow-y-auto pr-1">
-          {papers.map((paper) => {
-            const isMenu = paper.kind === "menu";
+          {receipts.map((receipt) => {
+            const isMenu = receipt.kind === "menu";
             const title = isMenu
-              ? paper.record.courses.cocktail.name
-              : `${paper.record.outcome === "jackpot" ? "Jackpot" : "Pair"} · ${paper.record.reels.map((reel) => CASINO_SYMBOL_LABELS[reel] || reel).join(" / ")}`;
-            const receiptKey = `${paper.kind}-${paper.record.id}`;
+              ? receipt.record.courses.cocktail.name
+              : `${receipt.record.outcome === "jackpot" ? "Jackpot" : "Pair"} · ${receipt.record.reels.map((reel) => CASINO_SYMBOL_LABELS[reel] || reel).join(" / ")}`;
+            const receiptKey = `${receipt.kind}-${receipt.record.id}`;
             return (
               <details key={receiptKey} className="group border border-[#c5a059]/15 bg-[#0d0b09]/75 px-4 py-3">
                 <summary className="list-none cursor-pointer flex items-start justify-between gap-3">
@@ -128,7 +128,7 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
                     <div className="min-w-0">
                       <p className="font-serif text-sm text-[#f5f2ed]/75 truncate">{title}</p>
                       <p className="font-panel text-[8px] uppercase tracking-wider text-[#c5a059]/45 mt-1">
-                        {paperNight(checkedInAt, paper.timestamp)} · {new Date(paper.timestamp).toLocaleDateString()}
+                        {receiptNight(checkedInAt, receipt.timestamp)} · {new Date(receipt.timestamp).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
@@ -137,20 +137,20 @@ export default function KeptPapers({ userId, checkedInAt, refreshToken }: KeptPa
 
                 {isMenu ? (
                   <div className="mt-4 border-t border-[#c5a059]/10 pt-3 space-y-2 font-serif text-xs leading-relaxed text-[#f5f2ed]/55">
-                    <p>{paper.record.courses.appetizer}</p>
-                    <p>{paper.record.courses.mainCourse}</p>
-                    <p>{paper.record.courses.dessert}</p>
-                    <p>{paper.record.courses.cocktail.build}</p>
-                    <p>{paper.record.courses.wine}</p>
-                    <p className="border-l border-[#c5a059]/30 pl-3 italic text-[#f5f2ed]/40">{paper.record.courses.chefsNote}</p>
-                    <p className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/65">Final bill · {formatCredits(paper.record.bill.total)} LC</p>
+                    <p>{receipt.record.courses.appetizer}</p>
+                    <p>{receipt.record.courses.mainCourse}</p>
+                    <p>{receipt.record.courses.dessert}</p>
+                    <p>{receipt.record.courses.cocktail.build}</p>
+                    <p>{receipt.record.courses.wine}</p>
+                    <p className="border-l border-[#c5a059]/30 pl-3 italic text-[#f5f2ed]/40">{receipt.record.courses.chefsNote}</p>
+                    <p className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/65">Final bill · {formatCredits(receipt.record.bill.total)} LC</p>
                   </div>
                 ) : (
-                  <p className="mt-4 border-t border-[#c5a059]/10 pt-3 font-serif italic text-xs leading-relaxed text-[#f5f2ed]/50">{paper.record.message}</p>
+                  <p className="mt-4 border-t border-[#c5a059]/10 pt-3 font-serif italic text-xs leading-relaxed text-[#f5f2ed]/50">{receipt.record.message}</p>
                 )}
                 <button
                   type="button"
-                  onClick={() => void deleteReceipt(paper)}
+                  onClick={() => void deleteReceipt(receipt)}
                   disabled={deletingKey === receiptKey}
                   className="mt-4 inline-flex items-center gap-2 border-t border-[#c5a059]/10 pt-3 font-panel text-[8px] uppercase tracking-wider text-[#f5f2ed]/35 hover:text-[#d97706] disabled:opacity-35"
                 >

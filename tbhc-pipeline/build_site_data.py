@@ -52,10 +52,10 @@ ALBUM_TRACK_ORDER = {
     "star-treatment": 1,
     "one-point-perspective": 2,
     "american-sports": 3,
-    "tranquility-base-hotel-casino": 4,
+    "tranquility-base-hotel-and-casino": 4,
     "golden-trunks": 5,
     "four-out-of-five": 6,
-    "the-world-s-first-ever-monster-truck-front-flip": 7,
+    "the-worlds-first-ever-monster-truck-front-flip": 7,
     "science-fiction": 8,
     "she-looks-like-fun": 9,
     "batphone": 10,
@@ -89,7 +89,11 @@ def slugify(name: str) -> str:
     slug = "".join(cleaned)
     while "--" in slug:
         slug = slug.replace("--", "-")
-    return slug.strip("-")
+    slug = slug.strip("-")
+    return {
+        "tranquility-base-hotel-casino": "tranquility-base-hotel-and-casino",
+        "the-world-s-first-ever-monster-truck-front-flip": "the-worlds-first-ever-monster-truck-front-flip",
+    }.get(slug, slug)
 
 
 def digit_string(values: list[float], reference: float) -> str:

@@ -18,12 +18,12 @@ type FloorEntry = { key: HotelRoom; label: string; floor: string; desc: string }
 // The guest suite has no floor of its own — it takes the empty cell beside the
 // Lobby and wears the guest's own room number on its brass tag.
 const buildRooms = (guestRoom: string): FloorEntry[] => [
-  { key: "ROOFTOP_GARDEN", label: "Rooftop Garden", floor: "10", desc: "Residents' Readings & Transmissions" },
+  { key: "ROOFTOP_GARDEN", label: "Rooftop Garden", floor: "10", desc: "Critical Reception & Guest Book" },
   { key: "OBSERVATORY", label: "The Observatory", floor: "09", desc: "Conceptual Frameworks & Theory" },
   { key: "ARCHIVE", label: "Hotel Archive", floor: "08", desc: "Timeline & Reference Catalogue" },
   { key: "CASINO", label: "Clavius Casino", floor: "07", desc: "Lunar Slots & Stray Transmissions" },
   { key: "BALLROOM", label: "Grand Ballroom", floor: "06", desc: "Tour & Live Performances" },
-  { key: "LIBRARY", label: "The Library", floor: "05", desc: "Song Dossiers & Annotations" },
+  { key: "LIBRARY", label: "The Library", floor: "05", desc: "Song Dossiers & Sources" },
   { key: "COCKTAIL_BAR", label: "Cocktail Bar", floor: "04", desc: "Tutorials & Arrangement Service" },
   { key: "CINEMA", label: "Hotel Cinema", floor: "03", desc: "Music-Video Projection Room" },
   { key: "LOUNGE", label: "The Lounge", floor: "02", desc: "Press & Interview Archives" },

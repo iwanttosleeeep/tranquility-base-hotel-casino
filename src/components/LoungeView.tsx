@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { INTERVIEWS_DATA } from "../data/interviews";
-import { Radio, Search, ExternalLink, BookOpen, Quote, UserRound } from "lucide-react";
+import { Radio, Search, ExternalLink, BookOpen, UserRound } from "lucide-react";
 
 export default function LoungeView() {
   const [selectedInterview, setSelectedInterview] = useState(
@@ -11,7 +11,7 @@ export default function LoungeView() {
   const hasInterviews = INTERVIEWS_DATA.length > 0;
 
   const filteredInterviews = INTERVIEWS_DATA.filter((item) => {
-    const searchString = `${item.title} ${item.publication} ${item.interviewee} ${item.interviewer || ""} ${item.quotes.join(" ")} ${item.transcript || ""} ${item.topics.join(" ")}`.toLowerCase();
+    const searchString = `${item.title} ${item.publication} ${item.interviewee} ${item.interviewer || ""} ${item.transcript || ""} ${item.topics.join(" ")}`.toLowerCase();
     return searchString.includes(searchQuery.toLowerCase());
   });
 
@@ -26,7 +26,7 @@ export default function LoungeView() {
           The Lounge
         </h2>
         <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
-          Settle down with the easy listening and the free-flowing honey. This press archive captures verified interviews, quotes, and cultural reflections of the era.
+          Settle down with the easy listening and the free-flowing honey. This press archive gathers verified interviews, publication records, and cultural reflections from the era.
         </p>
       </div>
 
@@ -191,23 +191,6 @@ export default function LoungeView() {
                           [ View Original Source ]
                         </a>
                       )}
-                    </div>
-                  )}
-
-                  {/* In their own words */}
-                  {selectedInterview.quotes.length > 0 && (
-                    <div className="flex flex-col gap-3">
-                      <span className="font-panel text-[11px] uppercase tracking-wider text-[#c5a059]/50 flex items-center gap-1.5">
-                        <Quote size={11} /> In their own words
-                      </span>
-                      {selectedInterview.quotes.map((quote) => (
-                        <blockquote key={quote} className="border-l-2 border-[#c5a059]/40 pl-4 font-serif italic text-[#f5f2ed]/80 leading-relaxed text-sm">
-                          &ldquo;{quote}&rdquo;
-                          <footer className="font-panel not-italic text-[10px] text-[#c5a059]/55 mt-1.5">
-                            {selectedInterview.interviewee}, {selectedInterview.publication}
-                          </footer>
-                        </blockquote>
-                      ))}
                     </div>
                   )}
 

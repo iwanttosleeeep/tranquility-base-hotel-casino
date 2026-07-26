@@ -5,10 +5,10 @@ import { motion } from "motion/react";
 const FLOORS = [
   ["G", "The Lobby", "Main entrance, hotel directory and the quickest overview of every floor."],
   ["01", "Reception Desk", "Register, change your name or room number, check out, and leave feedback for Reception."],
-  ["02", "The Lounge", "A chronological archive of interviews, sourced quotations and official recordings."],
-  ["03", "Hotel Cinema", "Music-video shot, colour and music-image analysis with timecoded viewing notes."],
+  ["02", "The Lounge", "A chronological archive of interviews, publication records and official recordings."],
+  ["03", "Hotel Cinema", "Machine-generated music-video shot, colour and light readouts with timecoded viewing notes."],
   ["04", "Cocktail Bar", "Instrument tutorials and measured arrangement readouts from privately analysed audio."],
-  ["05", "The Library", "Song dossiers, verified annotations, references and links to official lyrics."],
+  ["05", "The Library", "Song dossiers cross-linked to interviews, criticism and verified references."],
   ["06", "Grand Ballroom", "Tour history, performance records, setlists and live arrangement notes."],
   ["07", "Clavius Casino", "A lunar slot machine for collecting stray hotel transmissions."],
   ["08", "Hotel Archive", "The album-era timeline and evidence-graded catalogue of verified references."],
@@ -57,7 +57,7 @@ export default function HotelGuide({ onClose }: { onClose: () => void }) {
           <section>
             <div className="mb-4 flex items-center gap-3"><KeyRound size={16} className="text-[#c5a059]" /><h3 className="font-serif italic text-xl text-[#f5f2ed]">Your stay</h3></div>
             <p className="max-w-3xl font-serif text-sm leading-relaxed text-[#f5f2ed]/60">
-              The archive is open to everyone. Checking in by email gives you a three-digit room key, a private Suite, Room Service, Kept Receipts and permission to sign the Garden guest book. Your Suite number can be changed at Reception.
+              An email check-in is required to enter the hotel. It gives you a three-digit room key, a private Suite, Room Service, Kept Receipts and permission to sign the Garden guest book. Your Suite number can be changed at Reception.
             </p>
           </section>
 
@@ -72,7 +72,7 @@ export default function HotelGuide({ onClose }: { onClose: () => void }) {
               ))}
               <div className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-3 border-b border-white/[0.06] py-3">
                 <span className="font-tbhc text-sm tracking-wider text-[#c5a059]">KEY</span>
-                <div><h4 className="font-serif italic text-[#f5f2ed]/85">Your Suite</h4><p className="mt-1 font-serif text-xs leading-relaxed text-[#f5f2ed]/45">Your night counter, private Room Service and the papers you choose to keep.</p></div>
+                <div><h4 className="font-serif italic text-[#f5f2ed]/85">Your Suite</h4><p className="mt-1 font-serif text-xs leading-relaxed text-[#f5f2ed]/45">Your night counter, private Room Service and the receipts you choose to keep.</p></div>
               </div>
             </div>
           </section>
