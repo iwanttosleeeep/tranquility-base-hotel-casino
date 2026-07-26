@@ -105,7 +105,6 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
             </h1>
 
             <motion.p {...rise(1.15)} className="relative font-serif italic text-xl md:text-3xl leading-snug text-[#f5f2ed]/85 max-w-xl">
-              <span aria-hidden="true" className="lobby-quote-mark">“</span>
               “Hotel room Holy Bible / Hotel room free love revival”
             </motion.p>
 
