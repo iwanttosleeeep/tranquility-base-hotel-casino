@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Book, ChevronDown, Edit3, ExternalLink, MessageSquare, PenLine, Quote, Send, Trash2, UserRound } from "lucide-react";
 import type { HotelRoom } from "../types";
 import { CRITICAL_CLAIMS, CRITICAL_THEMES } from "../data/criticism";
@@ -25,9 +25,14 @@ function formatDate(date: string) {
   return new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(new Date(date));
 }
 
+const POSTS_PER_PAGE = 10;
+
 export default function RooftopGardenView({ guestName, guestRoom, userId, onNavigateToRoom }: RooftopGardenViewProps) {
   const isAdmin = useHotelAdmin(userId);
   const [posts, setPosts] = useState<GardenPost[]>([]);
+  const [postPage, setPostPage] = useState(0);
+  const [postCount, setPostCount] = useState(0);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -45,18 +50,18 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
   );
   const outletCount = useMemo(() => new Set(CRITICAL_CLAIMS.map((claim) => claim.outlet)).size, []);
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      if (!supabase) return;
-      const { data, error } = await supabase
-        .from("forum_posts")
-        .select("id, author_id, author_name, title, body, created_at")
-        .order("created_at", { ascending: false })
-        .limit(20);
-      if (error) {
-        setPostError(error.message);
-        return;
-      }
+  const loadPosts = useCallback(async () => {
+    if (!supabase) return;
+    setIsLoadingPosts(true);
+    const from = postPage * POSTS_PER_PAGE;
+    const { data, error, count } = await supabase
+      .from("forum_posts")
+      .select("id, author_id, author_name, title, body, created_at", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, from + POSTS_PER_PAGE - 1);
+    if (error) {
+      setPostError(error.message);
+    } else {
       setPosts((data || []).map((post) => ({
         id: post.id,
         authorId: post.author_id,
@@ -65,9 +70,14 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
         body: post.body,
         createdAt: post.created_at,
       })));
-    };
+      setPostCount(count || 0);
+    }
+    setIsLoadingPosts(false);
+  }, [postPage]);
+
+  useEffect(() => {
     void loadPosts();
-  }, []);
+  }, [loadPosts]);
 
   const resetComposer = () => {
     setTitle("");
@@ -100,7 +110,13 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
         setPostError(error?.message || "Unable to save this entry.");
         return;
       }
-      setPosts([{ id: data.id, authorId: data.author_id, author: data.author_name, title: data.title, body: data.body, createdAt: data.created_at }, ...posts]);
+      const newPost = { id: data.id, authorId: data.author_id, author: data.author_name, title: data.title, body: data.body, createdAt: data.created_at };
+      if (postPage === 0) {
+        setPosts((current) => [newPost, ...current].slice(0, POSTS_PER_PAGE));
+        setPostCount((current) => current + 1);
+      } else {
+        setPostPage(0);
+      }
     }
     setPostError("");
     resetComposer();
@@ -127,11 +143,14 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
     if (error) {
       setPostError(error.message);
     } else {
-      setPosts((current) => current.filter((entry) => entry.id !== post.id));
       if (editingId === post.id) resetComposer();
+      if (posts.length === 1 && postPage > 0) setPostPage((current) => current - 1);
+      else void loadPosts();
     }
     setDeletingId(null);
   };
+
+  const postPages = Math.max(1, Math.ceil(postCount / POSTS_PER_PAGE));
 
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
@@ -247,9 +266,11 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
         <div className="flex items-center gap-3 border-b border-[#c5a059]/20 pb-3">
           <MessageSquare size={17} className="text-[#c5a059]" />
           <h3 className="font-serif italic text-2xl text-[#f5f2ed]">Guest Book</h3>
-          <span className="font-panel text-[10px] text-[#c5a059]/60">{posts.length} {posts.length === 1 ? "entry" : "entries"}</span>
+          <span className="font-panel text-[10px] text-[#c5a059]/60">{postCount} {postCount === 1 ? "entry" : "entries"}</span>
         </div>
-        {posts.length === 0 ? (
+        {isLoadingPosts && posts.length === 0 ? (
+          <div className="p-10 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 text-center font-serif italic text-sm text-[#f5f2ed]/40">Opening the guest book…</div>
+        ) : posts.length === 0 ? (
           <div className="p-10 rounded-lg glass-panel border border-[#c5a059]/20 bg-[#120e0a]/40 flex flex-col items-center text-center">
             <div className="w-12 h-12 rounded-full border border-dashed border-[#c5a059]/30 flex items-center justify-center opacity-60 mb-4 animate-pulse"><Book size={24} className="text-[#c5a059]" /></div>
             <span className="font-serif italic text-xs uppercase tracking-widest text-[#c5a059] mb-2">Nobody has signed yet</span>
@@ -272,6 +293,13 @@ export default function RooftopGardenView({ guestName, guestRoom, userId, onNavi
             <p className="whitespace-pre-wrap font-serif text-[#f5f2ed]/75 leading-relaxed">{post.body}</p>
           </article>
         ))}
+        {postCount > POSTS_PER_PAGE && (
+          <div className="flex items-center justify-between gap-4 border-t border-[#c5a059]/15 pt-4">
+            <button type="button" onClick={() => setPostPage((current) => Math.max(0, current - 1))} disabled={postPage === 0 || isLoadingPosts} className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/65 disabled:opacity-25">Previous</button>
+            <span className="font-panel text-[8px] uppercase tracking-wider text-[#f5f2ed]/35">Page {postPage + 1} of {postPages}</span>
+            <button type="button" onClick={() => setPostPage((current) => Math.min(postPages - 1, current + 1))} disabled={postPage >= postPages - 1 || isLoadingPosts} className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/65 disabled:opacity-25">Next</button>
+          </div>
+        )}
       </section>
     </div>
   );

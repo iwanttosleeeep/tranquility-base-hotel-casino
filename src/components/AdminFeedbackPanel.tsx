@@ -22,26 +22,43 @@ const STATUS_LABELS: Record<FeedbackStatus, string> = {
   resolved: "Resolved",
 };
 
+const PAGE_SIZE = 8;
+const EMPTY_COUNTS: Record<"all" | FeedbackStatus, number> = { all: 0, open: 0, in_review: 0, resolved: 0 };
+
 export default function AdminFeedbackPanel({ userId }: { userId: string }) {
   const isAdmin = useHotelAdmin(userId);
   const [entries, setEntries] = useState<AdminFeedback[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | FeedbackStatus>("all");
+  const [page, setPage] = useState(0);
+  const [counts, setCounts] = useState(EMPTY_COUNTS);
   const [notice, setNotice] = useState("");
 
   const loadFeedback = useCallback(async () => {
     if (!supabase || !userId) return;
     setIsLoading(true);
     setNotice("");
-    const { data, error } = await supabase.rpc("get_admin_feedback");
-    if (error) {
-      setNotice(error.message);
+    const [feedbackResult, countsResult] = await Promise.all([
+      supabase.rpc("get_admin_feedback", {
+        p_limit: PAGE_SIZE,
+        p_offset: page * PAGE_SIZE,
+        p_status: filter === "all" ? null : filter,
+      }),
+      supabase.rpc("get_admin_feedback_counts"),
+    ]);
+    if (feedbackResult.error || countsResult.error) {
+      setNotice(feedbackResult.error?.message || countsResult.error?.message || "The management ledger could not be opened.");
     } else {
-      setEntries((data || []) as AdminFeedback[]);
+      setEntries((feedbackResult.data || []) as AdminFeedback[]);
+      const nextCounts = { ...EMPTY_COUNTS };
+      for (const row of (countsResult.data || []) as { status: keyof typeof EMPTY_COUNTS; total: number | string }[]) {
+        nextCounts[row.status] = Number(row.total);
+      }
+      setCounts(nextCounts);
     }
     setIsLoading(false);
-  }, [userId]);
+  }, [filter, page, userId]);
 
   useEffect(() => {
     if (isAdmin) void loadFeedback();
@@ -59,12 +76,13 @@ export default function AdminFeedbackPanel({ userId }: { userId: string }) {
     if (error) {
       setNotice(error.message);
     } else {
-      setEntries((current) => current.map((item) => item.id === entry.id ? { ...item, status, updated_at: updatedAt } : item));
+      if (page === 0) await loadFeedback();
+      else setPage(0);
     }
     setUpdatingId(null);
   };
 
-  const visibleEntries = filter === "all" ? entries : entries.filter((entry) => entry.status === filter);
+  const totalPages = Math.max(1, Math.ceil(counts[filter] / PAGE_SIZE));
 
   if (!isAdmin) return null;
 
@@ -90,15 +108,14 @@ export default function AdminFeedbackPanel({ userId }: { userId: string }) {
 
       <div className="flex flex-wrap gap-2">
         {(["all", "open", "in_review", "resolved"] as const).map((status) => {
-          const count = status === "all" ? entries.length : entries.filter((entry) => entry.status === status).length;
           return (
             <button
               key={status}
               type="button"
-              onClick={() => setFilter(status)}
+              onClick={() => { setFilter(status); setPage(0); }}
               className={`border px-3 py-1.5 font-panel text-[9px] uppercase tracking-wider transition-colors ${filter === status ? "border-[#c5a059]/60 bg-[#c5a059]/10 text-[#c5a059]" : "border-white/10 text-[#f5f2ed]/40 hover:border-[#c5a059]/30"}`}
             >
-              {status === "all" ? "All" : STATUS_LABELS[status]} · {count}
+              {status === "all" ? "All" : STATUS_LABELS[status]} · {counts[status]}
             </button>
           );
         })}
@@ -106,11 +123,11 @@ export default function AdminFeedbackPanel({ userId }: { userId: string }) {
 
       {isLoading && entries.length === 0 ? (
         <p className="font-serif italic text-sm text-[#f5f2ed]/40">Opening the management ledger…</p>
-      ) : visibleEntries.length === 0 ? (
+      ) : entries.length === 0 ? (
         <p className="font-serif italic text-sm text-[#f5f2ed]/40">No messages are waiting in this tray.</p>
       ) : (
         <div className="flex flex-col gap-3 max-h-[34rem] overflow-y-auto pr-1">
-          {visibleEntries.map((entry) => (
+          {entries.map((entry) => (
             <article key={entry.id} className="border border-[#c5a059]/15 bg-black/25 p-4 flex flex-col gap-3">
               <div className="flex flex-wrap items-center justify-between gap-2 font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/55">
                 <span className="inline-flex items-center gap-2 text-[#c5a059]/75">
@@ -135,6 +152,14 @@ export default function AdminFeedbackPanel({ userId }: { userId: string }) {
               </div>
             </article>
           ))}
+        </div>
+      )}
+
+      {counts[filter] > PAGE_SIZE && (
+        <div className="flex items-center justify-between gap-4 border-t border-[#c5a059]/15 pt-3">
+          <button type="button" onClick={() => setPage((current) => Math.max(0, current - 1))} disabled={page === 0 || isLoading} className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/65 disabled:opacity-25">Previous</button>
+          <span className="font-panel text-[8px] uppercase tracking-wider text-[#f5f2ed]/35">Page {page + 1} of {totalPages}</span>
+          <button type="button" onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))} disabled={page >= totalPages - 1 || isLoading} className="font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/65 disabled:opacity-25">Next</button>
         </div>
       )}
 

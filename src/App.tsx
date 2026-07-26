@@ -314,16 +314,17 @@ export default function App() {
                 Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1.5">&</span> Casino
               </h1>
             </button>
-            <button
-              type="button"
-              onClick={() => setIsGuideOpen(true)}
-              className="shrink-0 inline-flex items-center gap-1.5 border-l border-[#c5a059]/20 pl-3 md:pl-5 font-panel text-[9px] uppercase tracking-wider text-[#c5a059]/60 hover:text-[#c5a059]"
-            >
-              <BookOpen size={13} /> <span className="hidden sm:inline">Guest Guide</span><span className="sm:hidden">Guide</span>
-            </button>
           </div>
 
           <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => setIsGuideOpen(true)}
+              className="p-2 border border-white/10 hover:border-[#c5a059] rounded text-glow hover:text-[#c5a059] transition-all flex items-center gap-2 text-xs font-serif italic tracking-wider uppercase"
+            >
+              <BookOpen size={14} />
+              <span className="hidden sm:inline">Guest Guide</span>
+            </button>
             {/* Search Trigger */}
             <button
               onClick={() => setIsSearchOpen(true)}
