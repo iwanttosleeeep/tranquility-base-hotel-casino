@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, KeyRound } from "lucide-react";
+import AmpersandEgg from "./AmpersandEgg";
 import albumCoverAvif from "../../assets/TBHC.avif";
 import albumCoverWebp from "../../assets/TBHC.webp";
 import albumCoverPng from "../../assets/TBHC.png";
@@ -27,6 +29,7 @@ function RatingStar({ filled = false }: { filled?: boolean }) {
 
 export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegister, onEnterHotel, onVisitHotel }: FrontPageProps) {
   const reduceMotion = useReducedMotion();
+  const [titleSettled, setTitleSettled] = useState(false);
 
   // Arrival sequence: the lobby lights come on in order.
   const at = (t: number) => (reduceMotion ? 0 : t);
@@ -77,8 +80,8 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
               Welcome to
             </motion.p>
 
-            <h1 className="font-tbhc text-4xl leading-[1.15] md:text-7xl tracking-wide glow-bloom mb-7">
-              <span className="block overflow-hidden">
+            <h1 aria-label="Tranquility Base Hotel & Casino" className="font-tbhc text-4xl leading-[1.15] md:text-7xl tracking-wide glow-bloom mb-7">
+              <span className={`block ${titleSettled ? "overflow-visible" : "overflow-hidden"}`}>
                 <motion.span
                   className="block"
                   initial={{ y: reduceMotion ? 0 : "105%" }}
@@ -94,8 +97,9 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
                   initial={{ y: reduceMotion ? 0 : "105%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: reduceMotion ? 0 : 0.85, delay: at(0.82), ease: [0.16, 1, 0.3, 1] }}
+                  onAnimationComplete={() => setTitleSettled(true)}
                 >
-                  Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1.5">&amp;</span> Casino
+                  Hotel <AmpersandEgg /> Casino
                 </motion.span>
               </span>
             </h1>
