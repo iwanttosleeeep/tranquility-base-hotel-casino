@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { KeyRound, Hourglass, BookMarked, ArrowUpRight } from "lucide-react";
+import { KeyRound, Hourglass, ArrowUpRight } from "lucide-react";
 import { HotelRoom } from "../types";
 import { formatGuestNight, guestNight } from "../lib/guestTime";
 import RoomServicePanel from "./RoomServicePanel";
+import KeptPapers from "./KeptPapers";
 
 interface SuiteViewProps {
   guestName: string;
@@ -12,32 +13,9 @@ interface SuiteViewProps {
   onNavigateToRoom: (room: HotelRoom) => void;
 }
 
-/** Placeholder plaque for fittings that have not been installed yet. */
-function PendingPanel({
-  icon: Icon,
-  title,
-  note,
-}: {
-  icon: typeof Hourglass;
-  title: string;
-  note: string;
-}) {
-  return (
-    <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/15 bg-black/20 flex flex-col gap-3">
-      <div className="flex items-center gap-3 border-b border-[#c5a059]/20 pb-3">
-        <Icon className="text-[#c5a059]/60" size={18} />
-        <h3 className="font-serif italic text-lg text-[#f5f2ed]/70">{title}</h3>
-      </div>
-      <p className="font-serif italic text-sm leading-relaxed text-[#f5f2ed]/40">{note}</p>
-      <span className="font-panel text-[9px] uppercase tracking-[0.3em] text-[#c5a059]/40">
-        Awaiting installation
-      </span>
-    </div>
-  );
-}
-
 export default function SuiteView({ guestName, guestRoom, userId, checkedInAt, onNavigateToRoom }: SuiteViewProps) {
   const [now, setNow] = useState(() => new Date());
+  const [keptRevision, setKeptRevision] = useState(0);
   useEffect(() => {
     const nextMidnight = new Date(now);
     nextMidnight.setHours(24, 0, 0, 50);
@@ -53,7 +31,7 @@ export default function SuiteView({ guestName, guestRoom, userId, checkedInAt, o
       {/* Suite header */}
       <div>
         <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">
-          Ground Floor • Private Key
+          Private Key
         </span>
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           Suite {guestRoom}
@@ -97,13 +75,14 @@ export default function SuiteView({ guestName, guestRoom, userId, checkedInAt, o
             Counted from the night the register was first signed. Check-out does not stop the house clock.
           </p>
         </div>
-        <PendingPanel
-          icon={BookMarked}
-          title="Kept Papers"
-          note="Menus you decide to keep, and anything worth remembering from the Clavius Casino, will be filed in this drawer."
-        />
+        <KeptPapers userId={userId} checkedInAt={checkedInAt} refreshToken={keptRevision} />
         <div className="md:col-span-2">
-          <RoomServicePanel userId={userId} guestRoom={guestRoom} currentNight={currentNight} />
+          <RoomServicePanel
+            userId={userId}
+            guestRoom={guestRoom}
+            currentNight={currentNight}
+            onKept={() => setKeptRevision((revision) => revision + 1)}
+          />
         </div>
       </div>
     </div>

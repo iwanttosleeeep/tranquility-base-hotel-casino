@@ -1,6 +1,8 @@
 import { useRef, useState, type ComponentType } from "react";
-import { Trophy, RefreshCw, Star, Info, Hexagon, Martini, Crown, Moon, Radio, Volume2, Bell, Landmark, Newspaper, Cpu, Telescope, Film, BookOpen } from "lucide-react";
+import { Trophy, RefreshCw, Star, Info, Hexagon, Martini, Crown, Moon, Radio, Volume2, Bell, Landmark, Newspaper, Cpu, Telescope, Film, BookOpen, Bookmark, Check } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { CasinoOutcome } from "../data/casinoRecords";
+import { supabase } from "../lib/supabase";
 
 type ReelItem = { id: string; icon: ComponentType<{ size?: number; strokeWidth?: number }>; label: string; bonus: string; frequency: number; waveform: OscillatorType };
 
@@ -44,11 +46,15 @@ function playTransmission(context: AudioContext, item: ReelItem, jackpot: boolea
   });
 }
 
-export default function CasinoView({ guestRoom }: { guestRoom: string }) {
+export default function CasinoView({ guestRoom, userId }: { guestRoom: string; userId: string }) {
   const [reels, setReels] = useState(["front-desk", "lunar-surface", "martini"]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [winMsg, setWinMsg] = useState<string | null>(null);
   const [payoutQuote, setPayoutQuote] = useState<string | null>(null);
+  const [recordCandidate, setRecordCandidate] = useState<{ reels: string[]; outcome: CasinoOutcome; message: string } | null>(null);
+  const [isKeeping, setIsKeeping] = useState(false);
+  const [isKept, setIsKept] = useState(false);
+  const [keepNotice, setKeepNotice] = useState("");
   const [credits, setCredits] = useState(100);
   const audioContextRef = useRef<AudioContext | null>(null);
   const getItem = (id: string) => REEL_ITEMS.find((item) => item.id === id) ?? REEL_ITEMS[0];
@@ -64,7 +70,7 @@ export default function CasinoView({ guestRoom }: { guestRoom: string }) {
   const handleSpin = () => {
     if (isSpinning || credits < 10) return;
     const audio = ensureAudio();
-    setIsSpinning(true); setWinMsg(null); setPayoutQuote(null); setCredits((previous) => previous - 10);
+    setIsSpinning(true); setWinMsg(null); setPayoutQuote(null); setRecordCandidate(null); setIsKept(false); setKeepNotice(""); setCredits((previous) => previous - 10);
     let counter = 0;
     const interval = window.setInterval(() => {
       setReels(Array.from({ length: 3 }, () => REEL_ITEMS[Math.floor(Math.random() * REEL_ITEMS.length)].id));
@@ -76,16 +82,76 @@ export default function CasinoView({ guestRoom }: { guestRoom: string }) {
       const matching = finalReels.find((item) => finalReels.filter((candidate) => candidate.id === item.id).length >= 2);
       if (!matching) return;
       const isJackpot = finalReels.every((item) => item.id === matching.id);
+      const outcome: CasinoOutcome = isJackpot ? "jackpot" : "pair";
+      const resultMessage = isJackpot ? `JACKPOT! Three ${matching.label}s! ${matching.bonus}` : `PAIR MATCH! ${matching.bonus}`;
+      const intercomMessage = intercomLines(guestRoom)[Math.floor(Math.random() * intercomLines(guestRoom).length)];
       setCredits((previous) => previous + (isJackpot ? 150 : 25));
-      setWinMsg(isJackpot ? `JACKPOT! Three ${matching.label}s! ${matching.bonus}` : `PAIR MATCH! ${matching.bonus}`);
-      setPayoutQuote(intercomLines(guestRoom)[Math.floor(Math.random() * intercomLines(guestRoom).length)]);
+      setWinMsg(resultMessage);
+      setPayoutQuote(intercomMessage);
+      setRecordCandidate({ reels: finalReels.map((item) => item.id), outcome, message: `${resultMessage} ${intercomMessage}` });
       if (audio) playTransmission(audio, matching, isJackpot);
     }, 100);
+  };
+
+  const keepRecord = async () => {
+    if (!supabase || !userId || !recordCandidate || isKeeping || isKept) return;
+    setIsKeeping(true);
+    setKeepNotice("");
+    const { error } = await supabase.from("casino_records").insert({
+      user_id: userId,
+      reels: recordCandidate.reels,
+      outcome: recordCandidate.outcome,
+      message: recordCandidate.message,
+    });
+    if (error) {
+      setKeepNotice(error.message);
+    } else {
+      setIsKept(true);
+      setKeepNotice("This payout record has been filed in your Suite.");
+    }
+    setIsKeeping(false);
   };
 
   return <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
     <div><span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 07 • Room 07</span><h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">Clavius Casino</h2><p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">“Do you celebrate your dark side?” Spin the lunar reels to align original hotel transmissions from around the casino.</p></div>
     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start"><div className="md:col-span-7 flex flex-col gap-6"><div className="p-8 rounded-2xl border-4 border-neutral-700 bg-gradient-to-b from-neutral-900 to-neutral-950 shadow-2xl relative overflow-hidden flex flex-col gap-8 items-center"><div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[#c5a059]/40 to-transparent"/><div className="w-full flex justify-between items-center bg-black/60 px-4 py-2.5 rounded border border-[#c5a059]/20"><div className="flex flex-col"><span className="font-panel text-[10px] uppercase tracking-wider text-[#c5a059]/50">Lunar Credits</span><span className="font-tbhc text-xl text-[#d97706] text-glow">${credits}</span></div><span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">$10 PER SPIN</span></div><div className="flex gap-4">{reels.map((id, index) => { const Icon = getItem(id).icon; return <motion.div key={index} animate={isSpinning ? { y: [0, -10, 10, 0] } : {}} transition={{ duration: 0.1, repeat: isSpinning ? Infinity : 0 }} className="w-20 h-24 md:w-24 md:h-28 rounded-lg bg-black border-2 border-[#c5a059]/30 flex items-center justify-center shadow-inner relative overflow-hidden"><div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-black/40 pointer-events-none"/><Icon size={42} strokeWidth={1.25}/></motion.div>; })}</div><button onClick={handleSpin} disabled={isSpinning || credits < 10} className={`w-full max-w-xs py-4 rounded-lg font-panel text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all ${isSpinning ? "bg-[#c5a059]/20 border border-[#c5a059]/30 text-[#c5a059]/40 cursor-not-allowed" : credits < 10 ? "bg-red-950 border border-red-900/40 text-red-400 cursor-not-allowed" : "bg-gradient-to-r from-[#c5a059] to-[#d97706] hover:brightness-110 active:scale-95 text-black font-semibold shadow-lg shadow-[#c5a059]/10"}`}><RefreshCw size={14} className={isSpinning ? "animate-spin" : ""}/>{isSpinning ? "Spinning Reels..." : credits < 10 ? "Insufficient Credits" : "Pull Lever (Spin)"}</button></div></div>
-      <div className="md:col-span-5"><div className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/20 flex flex-col gap-6 min-h-[300px]"><div className="flex items-center gap-2 border-b border-[#c5a059]/20 pb-3"><Trophy className="text-[#c5a059]" size={16}/><span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">Payout Registry</span></div><AnimatePresence mode="wait">{winMsg ? <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col gap-4"><div className="p-4 rounded border border-[#c5a059]/30 bg-[#c5a059]/5 text-glow font-serif italic text-xs text-[#c5a059]">{winMsg}</div>{payoutQuote && <div className="flex flex-col gap-2 p-4 rounded bg-white/5 border border-white/5"><span className="font-panel text-[10px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1"><Radio size={10} className="text-[#c5a059]"/>Hotel Intercom • Overheard</span><p className="font-serif italic text-sm text-[#f5f2ed]/90">{payoutQuote}</p></div>}</motion.div> : <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4 text-xs font-serif text-[#f5f2ed]/60 leading-relaxed"><div className="flex items-start gap-2 text-glow text-[#c5a059]/80"><Info size={14} className="mt-0.5 shrink-0"/><span>Transmission rules:</span></div><p>Align any 3 matching symbols for 150 credits and a full original lunar fanfare. Any pair earns 25 credits and a short transmission.</p><div className="grid grid-cols-2 gap-x-3 gap-y-2 border-y border-[#c5a059]/10 py-3">{REEL_ITEMS.map((item) => { const Icon = item.icon; return <div key={item.id} className="min-w-0 flex items-center gap-2 text-[#c5a059]/70"><Icon size={15} strokeWidth={1.25} className="shrink-0"/><span className="font-panel text-[8px] uppercase tracking-wide truncate text-[#f5f2ed]/45">{item.label}</span></div>; })}</div><p className="flex items-center gap-2 text-[#f5f2ed]/40"><Volume2 size={12} className="text-[#c5a059]"/>All casino sounds are original browser synthesis.</p>{credits < 10 && <button onClick={() => setCredits(100)} className="mt-2 font-panel text-[10px] uppercase text-[#c5a059] hover:text-[#d97706] transition-colors border border-[#c5a059]/20 rounded py-2 text-center">[ Request Complimentary 100 Credits ]</button>}</motion.div>}</AnimatePresence></div></div></div>
+      <div className="md:col-span-5">
+        <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/20 bg-black/20 flex flex-col gap-6 min-h-[300px]">
+          <div className="flex items-center gap-2 border-b border-[#c5a059]/20 pb-3">
+            <Trophy className="text-[#c5a059]" size={16}/>
+            <span className="font-panel text-[11px] uppercase tracking-widest text-[#c5a059]">Payout Registry</span>
+          </div>
+          <AnimatePresence mode="wait">
+            {winMsg ? (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex flex-col gap-4">
+                <div className="p-4 rounded border border-[#c5a059]/30 bg-[#c5a059]/5 text-glow font-serif italic text-xs text-[#c5a059]">{winMsg}</div>
+                {payoutQuote && (
+                  <div className="flex flex-col gap-2 p-4 rounded bg-white/5 border border-white/5">
+                    <span className="font-panel text-[10px] uppercase tracking-wider text-[#f5f2ed]/40 flex items-center gap-1"><Radio size={10} className="text-[#c5a059]"/>Hotel Intercom • Overheard</span>
+                    <p className="font-serif italic text-sm text-[#f5f2ed]/90">{payoutQuote}</p>
+                  </div>
+                )}
+                {recordCandidate && userId && (
+                  <button onClick={keepRecord} disabled={isKeeping || isKept} className="self-start inline-flex items-center gap-2 border border-[#c5a059]/35 px-3 py-2 rounded font-panel text-[9px] uppercase tracking-wider text-[#c5a059] disabled:opacity-45">
+                    {isKept ? <Check size={12}/> : <Bookmark size={12}/>} {isKept ? "Kept" : isKeeping ? "Filing record" : "Keep this"}
+                  </button>
+                )}
+                {keepNotice && <p className="border-l border-[#c5a059]/35 pl-3 font-serif italic text-xs text-[#f5f2ed]/50">{keepNotice}</p>}
+              </motion.div>
+            ) : (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4 text-xs font-serif text-[#f5f2ed]/60 leading-relaxed">
+                <div className="flex items-start gap-2 text-glow text-[#c5a059]/80"><Info size={14} className="mt-0.5 shrink-0"/><span>Transmission rules:</span></div>
+                <p>Align any 3 matching symbols for 150 credits and a full original lunar fanfare. Any pair earns 25 credits and a short transmission.</p>
+                <div className="grid grid-cols-2 gap-x-3 gap-y-2 border-y border-[#c5a059]/10 py-3">
+                  {REEL_ITEMS.map((item) => { const Icon = item.icon; return <div key={item.id} className="min-w-0 flex items-center gap-2 text-[#c5a059]/70"><Icon size={15} strokeWidth={1.25} className="shrink-0"/><span className="font-panel text-[8px] uppercase tracking-wide truncate text-[#f5f2ed]/45">{item.label}</span></div>; })}
+                </div>
+                <p className="flex items-center gap-2 text-[#f5f2ed]/40"><Volume2 size={12} className="text-[#c5a059]"/>All casino sounds are original browser synthesis.</p>
+                {credits < 10 && <button onClick={() => setCredits(100)} className="mt-2 font-panel text-[10px] uppercase text-[#c5a059] hover:text-[#d97706] transition-colors border border-[#c5a059]/20 rounded py-2 text-center">[ Request Complimentary 100 Credits ]</button>}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
   </div>;
 }

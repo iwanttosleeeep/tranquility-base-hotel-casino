@@ -8,6 +8,7 @@ interface RoomServicePanelProps {
   userId: string;
   guestRoom: string;
   currentNight: number | null;
+  onKept?: () => void;
 }
 
 const ORDER_FIELDS = "id, ordered_at, courses, bill, kept";
@@ -17,7 +18,7 @@ function formatCredits(value: number): string {
   return Number.isInteger(value) ? value.toString() : value.toFixed(2);
 }
 
-export default function RoomServicePanel({ userId, guestRoom, currentNight }: RoomServicePanelProps) {
+export default function RoomServicePanel({ userId, guestRoom, currentNight, onKept }: RoomServicePanelProps) {
   const [orders, setOrders] = useState<RoomServiceOrder[]>([]);
   const [ordersToday, setOrdersToday] = useState(0);
   const [isLoading, setIsLoading] = useState(Boolean(userId));
@@ -128,6 +129,7 @@ export default function RoomServicePanel({ userId, guestRoom, currentNight }: Ro
     const keptOrder = data as unknown as RoomServiceOrder;
     setOrders((previous) => previous.map((order) => order.id === keptOrder.id ? keptOrder : order));
     setNotice("This menu has been filed in your kept papers.");
+    onKept?.();
   };
 
   if (!userId) {

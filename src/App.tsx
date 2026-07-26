@@ -463,7 +463,7 @@ export default function App() {
                   {currentRoom === "OBSERVATORY" && <ObservatoryView />}
                   {currentRoom === "LIBRARY" && <LibraryView />}
                   {currentRoom === "BALLROOM" && <BallroomView />}
-                  {currentRoom === "CASINO" && <CasinoView guestRoom={guestRoom} />}
+                  {currentRoom === "CASINO" && <CasinoView guestRoom={guestRoom} userId={session?.user.id ?? ""} />}
                   {currentRoom === "ROOFTOP_GARDEN" && <RooftopGardenView guestName={guestName} guestRoom={guestRoom} userId={session?.user.id || ""} onNavigateToRoom={handleRoomChange} />}
                   {currentRoom === "ARCHIVE" && <ArchiveView />}
                 </motion.div>
