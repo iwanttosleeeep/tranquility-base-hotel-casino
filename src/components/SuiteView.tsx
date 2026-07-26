@@ -36,7 +36,7 @@ export default function SuiteView({ guestName, guestRoom, userId, checkedInAt, o
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           Suite {guestRoom}
         </h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           Registered to <span className="font-serif italic text-[#c5a059]">{guestName || "Guest"}</span>.
           The door answers only to your key. Everything you choose to keep during your stay is kept here.
         </p>

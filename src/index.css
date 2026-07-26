@@ -22,6 +22,15 @@
   --tbhc-orange: #d97706;
 }
 
+/* Cormorant's x-height is deliberately low; a slightly larger desktop root
+   keeps the archive comfortable without changing the mobile density. Because
+   Tailwind spacing is rem-based, cards and controls grow with their type. */
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
+  }
+}
+
 body {
   background-color: var(--tbhc-black);
   color: var(--tbhc-cream);
@@ -111,4 +120,43 @@ body {
   background: #c5a059;
   color: #090704;
   transform: translateY(-2px);
+}
+
+/* Reading scale for room content. Instrument labels stay compact, while prose,
+   captions and archive controls no longer fall below a comfortable size. */
+.hotel-content .font-serif.text-xs {
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.hotel-content .font-serif.text-sm {
+  font-size: 1rem;
+  line-height: 1.62;
+}
+
+.hotel-content [class~="text-[8px]"] {
+  font-size: 0.7rem;
+}
+
+.hotel-content [class~="text-[9px]"] {
+  font-size: 0.73rem;
+}
+
+.hotel-content [class~="text-[10px]"] {
+  font-size: 0.78rem;
+}
+
+.hotel-content [class~="text-[11px]"] {
+  font-size: 0.83rem;
+}
+
+.hotel-content [class~="text-[15px]"] {
+  font-size: 1rem;
+}
+
+.hotel-content .font-serif.room-intro {
+  width: 100%;
+  max-width: 85ch;
+  font-size: clamp(1.05rem, 0.98rem + 0.32vw, 1.22rem);
+  line-height: 1.65;
 }

@@ -25,7 +25,7 @@ export default function LibraryView() {
     <div>
       <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 05 • Room 05</span>
       <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">The Library</h2>
-      <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-3xl leading-relaxed">A source-led reading desk for the album songs and their companion B-side. Every note below comes from the verified reference catalogue or the interview archive; the Library does not reproduce full lyrics.</p>
+      <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">A source-led reading desk for the album songs and their companion B-side. Every note below comes from the verified reference catalogue or the interview archive; the Library does not reproduce full lyrics.</p>
     </div>
 
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">

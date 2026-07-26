@@ -42,7 +42,7 @@ export default function ObservatoryView() {
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           The Observatory
         </h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           The observatory scans the conceptual deep space around retro-futurist culture. Lock the
           sector dial onto a coordinate below to read its observation report.
         </p>

@@ -45,7 +45,7 @@ export default function ArchiveView() {
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           Hotel Archive
         </h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           The Hotel Archive houses the chronological record of Tranquility Base — from early writing sessions to the touring era — together with the verified reference catalogue of books, films, television, and visual culture behind the album.
         </p>
       </div>

@@ -62,7 +62,7 @@ export default function CocktailBarView() {
       <div>
         <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 04 &bull; Room 04</span>
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">Cocktail Bar</h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           A low-lit service counter for learning the arrangements: tutorials, instrumental details, and the changing mechanics of the record.
         </p>
       </div>

@@ -95,7 +95,7 @@ export default function ReceptionDesk({ guestName, guestRoom, guestEmail, isAuth
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           Reception Desk
         </h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           "Mark speaking, please tell me how may I direct your call?"
           Welcome to the digital residence of Arctic Monkeys' 2018 retro-futuristic masterpiece.
           Sign the guest register below to receive your room key and begin exploring.

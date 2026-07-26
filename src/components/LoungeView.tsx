@@ -25,7 +25,7 @@ export default function LoungeView() {
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           The Lounge
         </h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           Settle down with the easy listening and the free-flowing honey. This press archive captures verified interviews, quotes, and cultural reflections of the era.
         </p>
       </div>

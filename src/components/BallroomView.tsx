@@ -18,7 +18,7 @@ export default function BallroomView() {
       <div>
         <span className="text-[11px] uppercase tracking-[0.4em] text-[#c5a059] font-serif italic mb-2 block">Floor 06 • Room 06</span>
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">Grand Ballroom</h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-3xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           A live archive of the <i>Tranquility Base Hotel + Casino</i> era: debut nights, changing arrangements, covers, sessions, and the final signal from the ballroom.
         </p>
       </div>

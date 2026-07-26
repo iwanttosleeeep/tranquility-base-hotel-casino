@@ -31,7 +31,7 @@ export default function CinemaView() {
         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
           Hotel Cinema
         </h2>
-        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
           The hotel's projection room: machine-read shot rhythm and colour for the album's music videos, with timecoded viewing notes and source-linked context. The full reference catalogue now lives in the Hotel Archive.
         </p>
       </div>

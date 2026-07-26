@@ -344,12 +344,12 @@ export default function App() {
         </header>
 
         {/* Dynamic content split with elevator */}
-        <div className={`flex-1 w-full max-w-7xl mx-auto p-6 md:p-10 grid grid-cols-1 gap-8 items-start transition-[grid-template-columns] duration-300 ${
+        <div className={`flex-1 w-full px-6 py-8 md:px-10 md:py-10 grid grid-cols-1 gap-8 items-start transition-[grid-template-columns] duration-300 ${
           isElevatorCollapsed ? "lg:grid-cols-[4.5rem_minmax(0,1fr)]" : "lg:grid-cols-[minmax(28rem,4fr)_minmax(0,8fr)]"
         }`}>
           
           {/* Left / Elevator Column (4 cols) */}
-          <div className="lg:sticky lg:top-28 lg:-translate-x-3 flex flex-col gap-6">
+          <div className="lg:sticky lg:top-28 flex flex-col gap-6">
             <Elevator
               currentRoom={currentRoom}
               guestRoom={guestRoom}
@@ -373,7 +373,7 @@ export default function App() {
           </div>
 
           {/* Right / Main Room content Column (8 cols) */}
-          <div className="flex flex-col gap-6 min-w-0">
+          <div className="hotel-content flex flex-col gap-6 min-w-0">
             <AnimatePresence mode="wait">
               {isMoving ? (
                 /* Elevator travel animation screen */
@@ -421,7 +421,7 @@ export default function App() {
                         <h2 className="text-4xl md:text-6xl font-tbhc tracking-wide text-glow leading-tight mb-4">
                           The Lobby
                         </h2>
-                        <p className="text-sm md:text-lg text-[#f5f2ed]/70 font-serif max-w-2xl leading-relaxed">
+                        <p className="room-intro text-[#f5f2ed]/70 font-serif leading-relaxed">
                           You have checked into the <span className="font-semibold text-[#f5f2ed]">Tranquility Base Hotel <span className="font-serif italic normal-case text-[#c5a059] mx-1">&amp;</span> Casino</span> portal. Wander through the retro space lounge floors using the Otis Lift on the left.
                         </p>
                       </div>
