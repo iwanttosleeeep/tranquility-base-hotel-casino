@@ -1,27 +1,29 @@
-import { useState, useEffect } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { BookOpen, Search, Compass, Radio } from "lucide-react";
 import { HotelRoom } from "./types";
 import { supabase } from "./lib/supabase";
 import type { Session } from "@supabase/supabase-js";
 
-// Import custom views
+// Arrival and navigation stay in the initial bundle. Individual rooms and
+// archive-heavy overlays are fetched only when a guest opens them.
 import Elevator from "./components/Elevator";
-import ReceptionDesk from "./components/ReceptionDesk";
-import LoungeView from "./components/LoungeView";
-import CinemaView from "./components/CinemaView";
-import CocktailBarView from "./components/CocktailBarView";
-import ObservatoryView from "./components/ObservatoryView";
-import LibraryView from "./components/LibraryView";
-import BallroomView from "./components/BallroomView";
-import CasinoView from "./components/CasinoView";
-import RooftopGardenView from "./components/RooftopGardenView";
-import ArchiveView from "./components/ArchiveView";
-import GlobalSearch from "./components/GlobalSearch";
 import FrontPage from "./components/FrontPage";
 import RegisterPage from "./components/RegisterPage";
-import SuiteView from "./components/SuiteView";
-import HotelGuide from "./components/HotelGuide";
+
+const ReceptionDesk = lazy(() => import("./components/ReceptionDesk"));
+const LoungeView = lazy(() => import("./components/LoungeView"));
+const CinemaView = lazy(() => import("./components/CinemaView"));
+const CocktailBarView = lazy(() => import("./components/CocktailBarView"));
+const ObservatoryView = lazy(() => import("./components/ObservatoryView"));
+const LibraryView = lazy(() => import("./components/LibraryView"));
+const BallroomView = lazy(() => import("./components/BallroomView"));
+const CasinoView = lazy(() => import("./components/CasinoView"));
+const RooftopGardenView = lazy(() => import("./components/RooftopGardenView"));
+const ArchiveView = lazy(() => import("./components/ArchiveView"));
+const GlobalSearch = lazy(() => import("./components/GlobalSearch"));
+const SuiteView = lazy(() => import("./components/SuiteView"));
+const HotelGuide = lazy(() => import("./components/HotelGuide"));
 
 // ─── Hash routing: #/library, #/library/star-treatment, #/casino … ───
 const ROOM_SLUGS: Record<HotelRoom, string> = {
@@ -84,6 +86,16 @@ const ROOM_NAMES: Record<HotelRoom, string> = {
   ROOFTOP_GARDEN: "Rooftop Garden",
   ARCHIVE: "Hotel Archive",
 };
+
+function RoomLoading() {
+  return (
+    <div className="w-full min-h-[18rem] rounded-lg border border-[#c5a059]/15 bg-black/35 flex items-center justify-center">
+      <span className="font-serif italic text-[11px] uppercase tracking-[0.3em] text-[#c5a059]/60 animate-pulse">
+        Preparing Room...
+      </span>
+    </div>
+  );
+}
 
 export default function App() {
   const [currentRoom, setCurrentRoom] = useState<HotelRoom>(() => roomFromHash());
@@ -411,6 +423,7 @@ export default function App() {
                   transition={{ duration: 0.4 }}
                   className="w-full"
                 >
+                  <Suspense fallback={<RoomLoading />}>
                   {currentRoom === "LOBBY" && (
                     <div className="flex flex-col gap-8">
                       <div>
@@ -477,6 +490,7 @@ export default function App() {
                   {currentRoom === "CASINO" && <CasinoView guestRoom={guestRoom} userId={session?.user.id ?? ""} />}
                   {currentRoom === "ROOFTOP_GARDEN" && <RooftopGardenView guestName={guestName} guestRoom={guestRoom} userId={session?.user.id || ""} onNavigateToRoom={handleRoomChange} />}
                   {currentRoom === "ARCHIVE" && <ArchiveView />}
+                  </Suspense>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -507,15 +521,17 @@ export default function App() {
       </div>
 
       {/* Global Search Dialog Modal */}
-      <AnimatePresence>
-        {isGuideOpen && <HotelGuide onClose={() => setIsGuideOpen(false)} />}
-        {isSearchOpen && (
-          <GlobalSearch
-            onNavigateToRoom={handleRoomChange}
-            onClose={() => setIsSearchOpen(false)}
-          />
-        )}
-      </AnimatePresence>
+      <Suspense fallback={null}>
+        <AnimatePresence>
+          {isGuideOpen && <HotelGuide onClose={() => setIsGuideOpen(false)} />}
+          {isSearchOpen && (
+            <GlobalSearch
+              onNavigateToRoom={handleRoomChange}
+              onClose={() => setIsSearchOpen(false)}
+            />
+          )}
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 }
