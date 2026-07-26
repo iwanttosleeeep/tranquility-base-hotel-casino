@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { KeyRound, ConciergeBell, Hourglass, BookMarked, ArrowUpRight } from "lucide-react";
 import { HotelRoom } from "../types";
+import { formatGuestNight, guestNight } from "../lib/guestTime";
 
 interface SuiteViewProps {
   guestName: string;
   guestRoom: string;
+  checkedInAt: string | null;
   onNavigateToRoom: (room: HotelRoom) => void;
 }
 
@@ -31,7 +34,19 @@ function PendingPanel({
   );
 }
 
-export default function SuiteView({ guestName, guestRoom, onNavigateToRoom }: SuiteViewProps) {
+export default function SuiteView({ guestName, guestRoom, checkedInAt, onNavigateToRoom }: SuiteViewProps) {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const nextMidnight = new Date(now);
+    nextMidnight.setHours(24, 0, 0, 50);
+    const timeout = window.setTimeout(() => setNow(new Date()), nextMidnight.getTime() - now.getTime());
+    return () => window.clearTimeout(timeout);
+  }, [now]);
+
+  const nightLabel = checkedInAt
+    ? formatGuestNight(guestNight(new Date(checkedInAt), now))
+    : "NIGHT ---";
+
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
       {/* Suite header */}
@@ -64,13 +79,23 @@ export default function SuiteView({ guestName, guestRoom, onNavigateToRoom }: Su
         </button>
       </div>
 
-      {/* Fittings to be installed in later passes */}
+      {/* Suite fittings */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <PendingPanel
-          icon={Hourglass}
-          title="Length of Stay"
-          note="A brass night-counter is on order. It will count from the night you first signed the register, whether or not the room was occupied."
-        />
+        <div className="p-6 rounded-lg glass-panel border border-[#c5a059]/25 bg-black/20 flex flex-col gap-4 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#c5a059]/[0.04] to-transparent pointer-events-none" />
+          <div className="relative flex items-center gap-3 border-b border-[#c5a059]/20 pb-3">
+            <Hourglass className="text-[#c5a059]" size={18} />
+            <h3 className="font-serif italic text-lg text-[#f5f2ed]/80">Length of Stay</h3>
+          </div>
+          <div className="relative self-start border border-[#c5a059]/45 bg-[#15110c] px-5 py-3 shadow-[inset_0_0_18px_rgba(197,160,89,0.08)]">
+            <span className="font-tbhc text-2xl md:text-3xl tracking-[0.16em] text-[#c5a059] text-glow">
+              {nightLabel}
+            </span>
+          </div>
+          <p className="relative font-serif italic text-xs leading-relaxed text-[#f5f2ed]/40">
+            Counted from the night the register was first signed. Check-out does not stop the house clock.
+          </p>
+        </div>
         <PendingPanel
           icon={ConciergeBell}
           title="Room Service"

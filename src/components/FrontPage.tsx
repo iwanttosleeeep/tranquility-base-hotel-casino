@@ -5,6 +5,7 @@ import albumCover from "../../assets/TBHC.png";
 interface FrontPageProps {
   guestName: string;
   guestRoom: string;
+  isGuestLoading: boolean;
   onRegister: () => void;
   onEnterHotel: () => void;
 }
@@ -21,7 +22,7 @@ function RatingStar({ filled = false }: { filled?: boolean }) {
   );
 }
 
-export default function FrontPage({ guestName, guestRoom, onRegister, onEnterHotel }: FrontPageProps) {
+export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegister, onEnterHotel }: FrontPageProps) {
   return (
     <main className="front-page min-h-screen text-[#f5f2ed] relative overflow-hidden">
       <div className="absolute inset-0 bg-[#070604]" />
@@ -59,7 +60,11 @@ export default function FrontPage({ guestName, guestRoom, onRegister, onEnterHot
             </div>
 
             <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              {guestName ? (
+              {isGuestLoading ? (
+                <button disabled className="front-action-button opacity-60 cursor-wait">
+                  <KeyRound size={16} /> Retrieving room key
+                </button>
+              ) : guestName ? (
                 <button onClick={onEnterHotel} className="front-action-button">
                   Return to suite {guestRoom} <ArrowRight size={16} />
                 </button>
@@ -69,7 +74,7 @@ export default function FrontPage({ guestName, guestRoom, onRegister, onEnterHot
                 </button>
               )}
               <span className="font-serif italic text-sm text-[#f5f2ed]/60">
-                {guestName ? `Welcome back, ${guestName}.` : "A reservation is required before entry."}
+                {isGuestLoading ? "Consulting the guest register…" : guestName ? `Welcome back, ${guestName}.` : "A reservation is required before entry."}
               </span>
             </div>
           </motion.div>

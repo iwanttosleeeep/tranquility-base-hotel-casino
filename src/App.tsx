@@ -55,7 +55,8 @@ function writeHash(room: HotelRoom, sub?: string | null) {
 
 
 const LOBBY_DIRECTORY = [
-  { key: "SUITE", label: "G. Your Suite", desc: "Your private room, night counter & kept papers" },
+  { key: "SUITE", label: "Your Suite", desc: "Your private room, night counter & kept papers" },
+  { key: "LOBBY", label: "G. The Lobby", desc: "Main entrance & hotel directory" },
   { key: "RECEPTION", label: "01. Reception Desk", desc: "Guest register, room keys & house welcome" },
   { key: "LOUNGE", label: "02. The Lounge", desc: "Chronological interview archive with sourced quotes" },
   { key: "CINEMA", label: "03. Hotel Cinema", desc: "Music-video projection room & viewing notes" },
@@ -91,6 +92,7 @@ export default function App() {
   const [guestName, setGuestName] = useState("");
   const [guestRoom, setGuestRoom] = useState("505");
   const [session, setSession] = useState<Session | null>(null);
+  const [isGuestLoading, setIsGuestLoading] = useState(Boolean(supabase));
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isFrontPage, setIsFrontPage] = useState(true);
   const [isRegisterPage, setIsRegisterPage] = useState(false);
@@ -100,10 +102,12 @@ export default function App() {
     if (!supabase) return;
 
     const loadProfile = async (activeSession: Session | null) => {
+      setIsGuestLoading(true);
       setSession(activeSession);
       if (!activeSession) {
         setGuestName("");
         setGuestRoom("505");
+        setIsGuestLoading(false);
         return;
       }
 
@@ -115,6 +119,7 @@ export default function App() {
 
       setGuestName(data?.display_name || activeSession.user.user_metadata.display_name || "Guest");
       setGuestRoom(data?.room_number || activeSession.user.user_metadata.room_number || "505");
+      setIsGuestLoading(false);
     };
 
     void supabase.auth.getSession().then(({ data }) => loadProfile(data.session));
@@ -267,6 +272,7 @@ export default function App() {
       <FrontPage
         guestName={guestName}
         guestRoom={guestRoom}
+        isGuestLoading={isGuestLoading}
         onRegister={openReception}
         onEnterHotel={() => setIsFrontPage(false)}
       />
@@ -433,6 +439,7 @@ export default function App() {
                     <SuiteView
                       guestName={guestName}
                       guestRoom={guestRoom}
+                      checkedInAt={session?.user.created_at ?? null}
                       onNavigateToRoom={handleRoomChange}
                     />
                   )}

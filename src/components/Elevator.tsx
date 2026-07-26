@@ -28,8 +28,8 @@ const buildRooms = (guestRoom: string): FloorEntry[] => [
   { key: "CINEMA", label: "Hotel Cinema", floor: "03", desc: "Music-Video Projection Room" },
   { key: "LOUNGE", label: "The Lounge", floor: "02", desc: "Press & Interview Archives" },
   { key: "RECEPTION", label: "Reception Desk", floor: "01", desc: "Guest Register & Welcome" },
-  { key: "LOBBY", label: "The Lobby", floor: "G", desc: "Main Entrance & Directory" },
   { key: "SUITE", label: "Your Suite", floor: guestRoom, desc: "Private Key • Kept Papers" },
+  { key: "LOBBY", label: "The Lobby", floor: "G", desc: "Main Entrance & Directory" },
 ];
 
 export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomChange, isMoving, isCollapsed, onToggleCollapse }: ElevatorProps) {
@@ -38,7 +38,8 @@ export default function Elevator({ currentRoom, guestRoom, targetRoom, onRoomCha
   const targetFloorIdx = targetRoom ? ROOMS.findIndex((r) => r.key === targetRoom) : null;
   const currentFloorLabel = ROOMS[currentFloorIdx]?.floor || "G";
 
-  // Since ROOMS are ordered from top floor (idx 0, floor 10) to bottom floor (idx 10, floor G):
+  // ROOMS are ordered from the top floor to the Lobby, with the private suite
+  // inserted immediately before G.
   // Going UP means traveling to a HIGHER floor (so target index is smaller than current index)
   // Going DOWN means traveling to a LOWER floor (so target index is larger than current index)
   const isGoingUp = isMoving && targetFloorIdx !== null && targetFloorIdx < currentFloorIdx;
