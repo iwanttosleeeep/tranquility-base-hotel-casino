@@ -9,6 +9,7 @@ import type { Session } from "@supabase/supabase-js";
 // archive-heavy overlays are fetched only when a guest opens them.
 import Elevator from "./components/Elevator";
 import AmpersandEgg from "./components/AmpersandEgg";
+import MoonEgg from "./components/MoonEgg";
 import FrontPage from "./components/FrontPage";
 import RegisterPage from "./components/RegisterPage";
 
@@ -522,7 +523,7 @@ export default function App() {
               Transmitting Secure Line
             </span>
             <span>|</span>
-            <span>Terminal: The Moon</span>
+            <span>Terminal: <MoonEgg /></span>
           </div>
 
           <div className="flex items-center gap-4">
