@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, KeyRound } from "lucide-react";
 import AmpersandEgg from "./AmpersandEgg";
+import MoonEgg from "./MoonEgg";
 import albumCoverAvif from "../../assets/TBHC.avif";
 import albumCoverWebp from "../../assets/TBHC.webp";
 import albumCoverPng from "../../assets/TBHC.png";
@@ -170,7 +171,7 @@ export default function FrontPage({ guestName, guestRoom, isGuestLoading, onRegi
               Transmitting Secure Line
             </span>
             <span>|</span>
-            <span>Terminal: The Moon</span>
+            <span>Terminal: <MoonEgg /></span>
           </div>
           <span>Reception Desk · Floor 01</span>
         </motion.footer>
